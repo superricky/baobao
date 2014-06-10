@@ -1,0 +1,96 @@
+.alert.alert-warning
+  友情提示：腾讯微信公众帐号最多允许新建3个一级菜单，每个一级菜单最多包含5个子菜单.
+  %br/
+  %strong 请在每次修改菜单选项后务必点击“同步微信客户端菜单”使您的菜单生效
+.col-md-12
+  %div{:style => "float:left;width:30%"}
+    %h1
+      = t "Listing menus"
+      %small= @system_config.public_account_name
+  %div{:style => "float:right;width:70%;height: 60px;line-height: 60px;text-align:right;"}
+    = link_to '新建根菜单', new_backend_shop_system_config_menu_path(@current_shop.slug, @system_config), :class => 'btn btn-success'
+    = link_to t('async menu with weixin client'), async_backend_shop_system_config_menus_path(@current_shop.slug, @system_config), :class => 'btn btn-primary'
+    .btn-group
+      %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+        其他
+        %span.caret
+      %ul.dropdown-menu.pull-right{:role => "menu"}
+        %li
+          = link_to t('preview menu json'), preview_json_backend_shop_system_config_menus_path(@current_shop.slug, @system_config) ,:target => '_blank'
+        %li
+          = link_to "复制菜单到其他公众号", '#copy-to-system-config-modal', :"data-toggle"=>"modal"
+%table.table.table-striped
+  %thead
+    %tr
+      %th 父菜单
+      %th
+        素材名或关键词或#{Menu.human_attribute_name('url')}
+      %th= t "operation btn"
+  %tbody
+    - @root_menus.each do |menu|
+      %tr
+        %td{:rowspan => "2"}= menu.name
+        %td
+          = (menu.event_type == 'click') ? menu.key_value_name : menu.url
+        %td
+          = link_to '新建子菜单', new_backend_shop_system_config_menu_path(@current_shop.slug, @system_config, :parent_menu_id=>menu.id), :class => 'btn btn-success'
+          .btn-group
+            %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+              操作
+              %span.caret
+            %ul.dropdown-menu.pull-right{:role => "menu"}
+              %li= link_to t('Show'), backend_shop_system_config_menu_path(@current_shop.slug,@system_config ,menu)
+              %li
+                = link_to t('Edit'), edit_backend_shop_system_config_menu_path(@current_shop.slug,@system_config, menu)
+              %li= link_to "从当前公众账号中移除该菜单按钮", backend_shop_system_config_menu_path(@current_shop.slug,@system_config, menu, delete: false), method: :delete, data: { confirm: "确定要从当前公众账号中移除该菜单按钮\"#{menu.name}\"吗?" }
+              %li= link_to "从所有公众账号中中删除该菜单按钮", backend_shop_system_config_menu_path(@current_shop.slug,@system_config, menu, delete: true), method: :delete, data: { confirm: "确定要从所有公众账号中中删除该菜单按钮\"#{menu.name}\"吗?" }
+      %tr
+        %td{:colspan => "2"}
+          - if menu.submenus.empty?
+            无子菜单
+          - else
+            %table.table.table-striped
+              %thead
+                %tr
+                  %th 子菜单
+                  %th
+                    素材名或关键词或#{Menu.human_attribute_name('url')}
+                  %th= t "operation btn"
+              %tbody
+                - menu.submenus.each do |submenu|
+                  %tr
+                    %td.col-xs-4
+                      = submenu.name
+                    %td.col-xs-4
+                      = (submenu.event_type == 'click') ? submenu.key_value_name : truncate(submenu.url, length: 70)
+                    %td.col-xs-4
+                      .btn-group
+                        %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+                          操作
+                          %span.caret
+                        %ul.dropdown-menu.pull-right{:role => "menu"}
+                          %li
+                            = link_to t('Show'), backend_shop_system_config_menu_path(@current_shop.slug,@system_config ,submenu)
+                          %li
+                            = link_to t('Edit'), edit_backend_shop_system_config_menu_path(@current_shop.slug,@system_config, submenu)
+                          %li= link_to "从当前公众账号中移除该菜单按钮", backend_shop_system_config_menu_path(@current_shop.slug,@system_config, submenu, delete: false), method: :delete, data: { confirm: "确定要从当前公众账号中移除该菜单按钮\"#{submenu.name}\"吗?" }
+                          %li= link_to "从所有公众账号中中删除该菜单按钮", backend_shop_system_config_menu_path(@current_shop.slug,@system_config, submenu, delete: true), method: :delete, data: { confirm: "确定要从所有公众账号中中删除该菜单按钮\"#{submenu.name}\"吗?" }
+#copy-to-system-config-modal.modal.fade
+  %form{:action => copy_menu_to_other_backend_shop_system_config_path(@current_shop.slug, @system_config), "data-remote" => "true", :method => "put", :role => "form"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4.modal-title 复制菜单到其他公众号
+        %div
+          #copy-to-system-config-error.alert.alert-danger{:style => "display:none"}
+          #copy-to-system-config-success.alert.alert-success{:style => "display:none"}
+        .modal-body
+          - @current_shop.system_configs.where.not(id:@system_config.id).each do|system_config|
+            .checkbox
+              %label
+                %input{:name => "target_system_config_ids[]", :type => "checkbox", :value => system_config.id}/
+                = system_config.public_account_name
+        .modal-footer
+          %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} 关闭
+          %input.btn.btn-primary{:type => "submit", :value => "开始复制"}/

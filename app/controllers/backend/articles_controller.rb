@@ -11,11 +11,11 @@ class Backend::ArticlesController < BackendApplicationController
     respond_to do |format|
       if @article.save
         @article.set_position(params[:article][:position])
-        format.js {}
+        format.html {redirect_to backend_shop_materials_path(@current_shop)}
       else
         logger.error "errors are #{@article.errors.to_json}"
         @errors = @article.errors
-        format.js {}
+        format.html {redirect_to [backend_shop_materials_path(@current_shop), "error=#{@article.errors.full_messages.join ","}"].join("?")}
       end
     end
   end

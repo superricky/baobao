@@ -171,7 +171,8 @@ module Backend::ApplicationHelper
     menus.merge!({weixin_config: {
         icon: "phone",
         title: "微信",
-        menus: weixin_config
+        menus: weixin_config,
+        oths: %w{menus_index menus_new}
       },
       payment: {
         icon: "cart",
