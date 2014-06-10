@@ -1,0 +1,6 @@
+<% if @article.errors.size > 0 %>
+  $("#article_modal .modal-body").html("<%= escape_javascript(render 'backend/articles/form', {remote: true, article: @article, form_url: backend_shop_material_article_path(@current_shop.slug, @material, @article) } )%>");
+<% else %>
+  $("#article_list_show #material_<%= @material.id%> .widget-body .widget-main").empty().html('<%= escape_javascript(render "backend/articles/list", {material: @material} )%>');
+  $('#article_modal').modal('hide')
+<% end %>

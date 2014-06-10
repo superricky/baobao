@@ -1,0 +1,67 @@
+- if notice.present?
+  %p.alert.alert-warnning#notice= notice
+
+%div.panel.panel-default
+  %div.panel-heading 代理定制
+  %div.panel-body
+    %p
+      %b
+        = Theme.human_attribute_name(:theme_type)
+        \:
+        = @theme.theme_type_name
+    - if @theme.is_custom?
+      %p
+        %b
+          = Theme.human_attribute_name(:background_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.background_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:text_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.text_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:header_bg_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.header_bg_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:header_text_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.header_text_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:navbar_bg_color)
+          \:
+        %div
+          %span.color-block{:style=>"background-color:#{@theme.navbar_bg_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:navbar_text_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.navbar_text_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:menu_bg_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.menu_bg_color};"} &nbsp;
+      %p
+        %b
+          = Theme.human_attribute_name(:menu_text_color)
+          \:
+          %div
+            %span.color-block{:style=>"background-color:#{@theme.menu_text_color};"} &nbsp;
+    = link_to t('Edit'), edit_backend_shop_theme_path(@current_shop.slug), :class=>"btn btn-primary"
+
+%div.panel.panel-default
+  %div.panel-heading 店铺首页
+  %div.panel-body
+    = form_for @current_shop, url: change_branch_index_backend_shop_path(@current_shop) do |f|
+      = f.select :show_detail_for_branch, options_for_select([['显示产品', false], ['显示欢迎首页', true]], selected: f.object.show_detail_for_branch), {class: "form-control"}, onchange: "this.form.submit();"

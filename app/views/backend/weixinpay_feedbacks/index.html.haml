@@ -1,0 +1,16 @@
+.alert.alert-info 根据腾讯微信开通微信支付的相关要求，开通微信支付的认证公众服务号必须同时开放用户维权请求渠道，以确保用户的维权请求能够被公众账号经营者所接受和处理
+%h1 微信用户维权请求
+%table.table.table-striped
+  %thead
+    %th= WeixinpayFeedback::human_attribute_name(:feedback_id)
+    %th= WeixinpayFeedback::human_attribute_name(:system_config)
+    %th= WeixinpayFeedback::human_attribute_name(:trade_id)
+    %th= WeixinpayFeedback::human_attribute_name(:created_at)
+  %tbody
+    - if @weixinpay_feedbacks.present?
+      - @weixinpay_feedbacks.each do |weixinpay_feedback|
+        %tr
+          %td= weixinpay_feedback.feedback_id
+          %td= weixinpay_feedback.system_config.public_account_name rescue nil
+          %td= link_to weixinpay_feedback.trade, [:backend, @current_shop, weixinpay_feedback.trade]
+          %td= weixinpay_feedback.created_at.strftime("%Y-%m-%d %H:%M:%S")

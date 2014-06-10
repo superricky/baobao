@@ -1,0 +1,19 @@
+%table.table.table-striped
+  %tr
+    %th= WalletLog.human_attribute_name("wallet_log_type")
+    %th= WalletLog.human_attribute_name("money")
+    %th= WalletLog.human_attribute_name("note")
+    %th
+
+  - @wallet_logs.each do |wallet_log|
+    %tr
+      %td= get_wallet_logs_type_name(wallet_log.wallet_log_type)
+      %td= "#{@current_shop.current_currency_symbol}#{wallet_log.money}"
+      %td= wallet_log.note
+      %td
+        - if wallet_log.is_recharge_log?
+          = link_to t('Edit'), edit_backend_shop_wallet_log_path(@current_shop.slug, wallet_log), :class=>"btn btn-default"
+        - if wallet_log.wallet_log_type == WalletLog::WALLET_LOG_TYPE_RECHARGE && (not wallet_log.back_recharge_log.present?) && wallet_log.recharge_can_rollback
+          = link_to "余额充值回退", rollback_recharge_backend_shop_wallet_log_path(@current_shop.slug, wallet_log), method: :delete, data: { confirm: "你确定要收回充值余额！" }, :class=>"btn btn-danger"
+
+%br

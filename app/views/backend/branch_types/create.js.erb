@@ -1,0 +1,9 @@
+<% if @branch_type.errors.size > 0 %>
+  $('#barnch_type_modal .modal-body').html('<%= escape_javascript(render "form",{remote: true })%>');
+<% else %>
+  $('#barnch_type_modal').modal('hide');
+  $("#branch_branch_type_id").append($('<option>', {
+        value: "<%= @branch_type.id%>",
+        text : "<%= @branch_type.name%>"
+    })).val("<%= @branch_type.id%>");
+<% end %>

@@ -1,0 +1,48 @@
+= render layout: 'branch_form' do |f|
+  .panel.panel-default
+    .panel-heading
+      基本信息
+    .panel-body
+      .form-group
+        = f.label :product_list_style , class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.select :product_list_style, Branch::PRODUCT_LIST_STYLES, {}, {class: "form-control"}
+          %small 缩略图风格显示产品使得产品更为生动文本风格省流量
+      .form-group
+        = f.label :brand_chain_id , class: "col-sm-3 control-label no-padding-right"
+        .col-sm-5
+          = f.select :brand_chain_id, options_for_select(@current_shop.brand_chains.map{|brand_chain| [brand_chain.name, brand_chain.id] }, selected: f.object.brand_chain_id), {:include_blank=>true}, {class: "form-control col-sm-4"}
+          %span.help-inline.col-sm-5
+            %span.middle
+              = link_to "新建连锁品牌", new_backend_shop_brand_chain_path(@current_shop.slug), remote: true
+      .form-group
+        = f.label :zone_ids, class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.select :zone_ids, grouped_options_for_select(@current_shop.zones.root_zones.map{|zone| [zone.name, zone.sub_zones.map{|sub_zone| [sub_zone.name, sub_zone.id]}] }, selected: f.object.zone_ids), {}, class: "selectpicker col-xs-5 show-tick form-control", multiple: true, :include_blank=>true, data: {:"live-search" => "true"}
+          %span.help-inline.col-sm-5
+            %span.middle
+              = link_to "新建服务区域", new_backend_shop_zone_path(@current_shop.slug), target: "_blank"
+      .form-group
+        = f.label :branch_type_id , class: "col-sm-3 control-label no-padding-right"
+        .col-sm-5
+          = f.select :branch_type_id, options_for_select(@current_shop.branch_types.map{|branch_type| [branch_type.name, branch_type.id] }, selected: f.object.branch_type_id), {:include_blank=>true}, {class: "form-control col-sm-4"}
+          %span.help-inline.col-sm-5
+            %span.middle
+              = link_to "新建商户分类", new_backend_shop_branch_type_path(@current_shop.slug), remote: true, id: "branch_type_create"
+      .form-group
+        = f.label :check_stock, class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.check_box :check_stock, class: "ace ace-switch ace-switch-2"
+          %span.lbl
+      .form-group
+        = f.label :notice, class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.text_area :notice, :rows=>4, :cols=> 50, class: "form-control col-sm-4"
+    .panel.panel-footer
+      %center
+        - if params[:edit]
+          = f.submit :class=>"btn btn-primary"
+        - else
+          = link_to '上一步', previous_wizard_path, :class=>"btn btn-default"
+          = f.submit "下一步" ,:class=>"btn btn-primary"
+          = link_to '跳过这一步', next_wizard_path, :class=>"btn btn-primary"

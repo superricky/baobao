@@ -1,0 +1,18 @@
+%tr{"data-order-id" => order.id}
+  %td
+    %div{data: {id: order.id}}
+      %a{:href => detail_mobile_shop_branch_order_path(@current_shop.slug, @current_branch, order), :style => "display:block;overflow:hidden;"}
+        %strong
+          订单日期：#{order.created_at.strftime('%Y/%m/%d %H:%M')}
+        %span
+          店铺：#{order.branch.name}
+        %br/
+        %span
+          订单号：#{order.id}
+        %br/
+        %span.notice
+          类型：#{order.order_type_name}
+        %span.notice
+          状态：#{order.state_name}
+      %br/
+      = link_to "", cancel_mobile_shop_branch_order_path(@current_shop.slug, @current_branch, order.id), :class =>"icon icon-with-out-border icon-rubbish icon-3 icon-hover right", :remote=>true, :method=>"patch" if order.allow_change_state_for_user?.include? Order::CANCELED

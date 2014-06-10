@@ -1,0 +1,9 @@
+<% if @material.errors.size > 0 %>
+  $("#material_modal .modal-body").html("<%= escape_javascript(render 'backend/materials/form', {remote: true } )%>")
+<% else %>
+  $("#new_material").append("<%= escape_javascript(render 'backend/materials/material', {material: @material})%>");
+  $('#material_modal').modal('hide')
+  <% if @material.msg_type == "news" %>
+    $("#material_<%= @material.id%> #add_article").trigger('click')
+  <% end %>
+<% end %>

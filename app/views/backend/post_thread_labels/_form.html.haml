@@ -1,0 +1,13 @@
+= form_for [:backend, @post_thread_label] do |f|
+  - if @post_thread_label.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@post_thread_label.errors.count, "error")} prohibited this post_thread_label from being saved:"
+      %ul
+        - @post_thread_label.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .actions
+    = f.submit '保存', :class=>"btn btn-default"

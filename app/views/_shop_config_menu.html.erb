@@ -1,0 +1,25 @@
+<div id="outer-menu" style="width:100%;background-color:#459935;">
+	<div id="inner-menu" style="width:980px;margin:auto;">
+		<ul style="padding-left: 0;list-style-type: none;">
+			<li <% if controller_name == 'system_configs' %>class="selected"<% end %>>
+				<%= link_to "系统配置", backend_shop_system_configs_path(@current_shop.slug) %>
+			</li>
+			<% if @current_branch.present? %>
+				<li <% if controller_name == 'branches' %>class="selected"<% end %>>
+		    		<%= link_to "商户管理", backend_shop_branches_path(@current_shop.slug) %>
+		    </li>
+		  <%end%>
+		  <% if @system_config.present? && !@system_config.is_subscribe_account? %>
+				<li <% if controller_name == 'menus' %>class="selected"<% end %>>
+					<%= link_to "菜单设置", backend_shop_system_config_menus_path(@current_shop.slug, @system_config) %>
+				</li>
+			<% end %>
+			<% if @current_account.is_boss? %>
+				<li <% if controller_name == 'account' %>class="selected"<% end %>><%= link_to "个人设置", get_show_my_account_path %></li>
+			<%elsif @current_account.is_admin? %>
+				<li <% if controller_name == 'accounts'%> class="selected"<%end%>><%= link_to "账户配置", backend_shop_accounts_path(@current_shop.slug) %></li>
+			<%end%>
+		</ul>
+	</div>
+</div>
+

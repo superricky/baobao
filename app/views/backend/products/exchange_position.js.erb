@@ -1,0 +1,8 @@
+<% if @errors.nil? %>
+
+$('tr[data-product-position="<%= @first_product.position -%>"]').replaceWith($("<%= escape_javascript(render 'backend/products/table_record', { product: @first_product, index:@products.index(@first_product)}) %>"))
+$('tr[data-product-position="<%= @second_product.position -%>"]').replaceWith($("<%= escape_javascript(render 'backend/products/table_record', { product: @second_product, index:@products.index(@second_product)}) %>"))
+
+<%else %>
+	alert('<%= @errors -%>')
+<%end%>

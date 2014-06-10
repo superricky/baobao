@@ -1,0 +1,17 @@
+- if @current_shop.is_multipe_base_version?
+  .alert.alert-danger 对不起，电话下单功能仅对独立商户版和多店旗舰版用户开放。
+- else
+  .branches
+    .row
+      - @branch_list.each do |branch|
+        .col-sm-4.col-md-3
+          .thumbnail
+            %p.text-right
+              - if branch.is_open && branch.is_on_service?
+                %span.label.label-lg.label-success.arrowed-id 营业中
+              - else
+                %span.label.label-lg.label-success.arrowed-id 休息中
+            = image_tag branch.image.medium.url, width: "90%"
+            .caption
+              %h5.text-center
+                = link_to branch.name, category_list_backend_shop_phone_order_path(@current_shop,branch)

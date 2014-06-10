@@ -1,0 +1,9 @@
+<% if @current_shop.hide_support_company && @current_shop.support_link_name %>
+  <div class="well" style="text-align:center;margin:10px 0px;">
+    <%= link_to "#{@current_shop.support_link_name}提供技术支持", @current_shop.support_link%>
+  </div>
+<% else %>
+  <div class="well" style="text-align:center;margin:10px 0px;">
+  	<%= link_to "融商为#{@current_shop.name}提供技术支持", "http://www.tuodanbao.com"%>
+  </div>
+<% end %>

@@ -1,0 +1,53 @@
+<table class="table table-striped">
+  <tr>
+    <th class="right"><%= Branch.human_attribute_name("notify_new_order")%></th>
+    <td class="left" >
+      <% if @current_shop.get_mail_setting.enable_mail %>
+        <% if @branch.notify_new_order %>已启用邮件通知<%else%>未启用邮件通知<%end%>
+      <%else%>
+        点号管理员已关闭所有帐号的邮件通知功能
+      <%end%>
+    </td>
+    <th class="right"><%= Branch.human_attribute_name("use_sms")%></th>
+    <td class="left" ><%= @branch.use_sms ? "已启用": "未启用"%></td>
+    <th class="right"><%= Branch.human_attribute_name("sms_to")%></th>
+    <td class="left" >
+      <%= @branch.sms_to %>
+    </td>
+  </tr>
+  <tr>
+    <th class="right">
+      <%= Branch.human_attribute_name("supported_send_sms_order_types")%>
+    </th>
+    <td class="left" >
+      <%= @branch.supported_send_sms_order_types_name.present? ? @branch.supported_send_sms_order_types_name : "未设置"  %>
+    </td>
+    <th class="right"><%= Branch.human_attribute_name("use_sms_validation")%></th>
+    <td class="left" >
+      <%= @branch.use_sms_validation ? "已启用":"未启用"%>
+    </td>
+    <th class="right"><%= Branch.human_attribute_name("allow_remind_order_msg")%></th>
+    <td class="left" >
+      <%= @branch.allow_remind_order_msg ? "已启用" : "未启用"%>
+    </td>
+  </tr>
+  <tr>
+    <th class="right">已购买</th>
+    <td class="left" >
+      <%= @branch.max_sms_count%>条
+    </td>
+    <th class="right">已使用</th>
+    <td class="left" >
+      <%= @branch.sms_msgs_count%>条
+    </td>
+    <th class="right">剩余</th>
+    <td class="left" ><%= @branch.max_sms_count - @branch.sms_msgs_count%></td>
+  </tr>
+  <tr>
+    <th class="right"><%= Branch.human_attribute_name(:terms) %></th>
+    <td class="left" >
+      <%= @current_branch.terms.present? ? @current_branch.terms : "<空>"%>
+    </td>
+  </tr>
+
+</table>

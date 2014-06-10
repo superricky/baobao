@@ -1,0 +1,65 @@
+<% unless notice.nil? %>
+<p id="notice" class="alert alert-info"><%= notice %></p>
+<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">分类详情</div>
+  <div class="panel-body">
+    <form class="form-horizontal" role="form">
+      <div class="form-group">
+        <label class="col-lg-2 control-label">当前<%= Category.human_attribute_name("name") %></label>
+        <div class="col-lg-10">
+          <p class="form-control-static"><%= @category.name %></p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">更多二级分类设置</label>
+        <div class="col-lg-10">
+          <p class="form-control-static">
+            <% if @category.category %>
+              <% @category.category.categories.each do |c| %>
+                <% next if c.id == @category.id %>
+                <%= link_to [c.name, "(#{c.products.length}个产品)"].join, backend_shop_branch_category_path(@current_shop.slug, @current_branch, c), class: "btn btn-warning" %>
+              <% end %>
+            <% else %>
+              <% @category.categories.each do |c| %>
+                <%= link_to [c.name, "(#{c.products.length}个产品)"].join, backend_shop_branch_category_path(@current_shop.slug, @current_branch, c), class: "btn btn-warning" %>
+              <% end %>
+            <% end %>
+          </p>
+          <strong style="color:red;">*请点击以上二级分类，设置二级分类的相关产品</strong>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-2 control-label">所含产品</label>
+        <div class="col-lg-10">
+      		<%= render 'backend/products/table'%>
+        </div>
+        <div class="pull-right">
+          <%= will_paginate @products, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+        </div>
+      </div>
+    </form>
+	</div>
+  <div class="panel-footer">
+    <%= form_tag add_product_backend_shop_branch_category_path(@current_shop.slug,@current_branch, @category) do %>
+      <div class="form-group">
+        <%= select_tag :product_ids, options_from_collection_for_select(@branch_products, :id, :name, selected: @category.product_ids), class: "selectpicker show-tick form-control", multiple: true, data: {"live-search" => "true"}%>
+        <%= submit_tag "添加商品",  class:"btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= link_to t('Edit'), edit_backend_shop_branch_category_path(@current_shop.slug, @current_branch, @category), :class=>"btn btn-default" %> |
+<% if @category.category %>
+  <%= link_to ["返回一级分类:",@category.category.name].join, backend_shop_branch_category_path(@current_shop.slug, @current_branch, @category.category), class: "btn" %> |
+<% end %>
+<%= link_to t('Back'), backend_shop_branch_categories_path, :class=>"btn btn-default" %>
+
+<script>
+  $(window).on('load', function () {
+    $('.selectpicker').selectpicker({
+      'selectedText': 'cat'
+    });
+  });
+</script>

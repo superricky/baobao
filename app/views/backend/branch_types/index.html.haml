@@ -1,0 +1,20 @@
+%h1 商户分类列表
+
+%table.table.table-striped
+  %tr
+    %th= BranchType.human_attribute_name(:name)
+    %th= BranchType.human_attribute_name(:branches_count)
+    %th
+
+  - @branch_types.each do |branch_type|
+    %tr
+      %td= branch_type.name
+      %td= "#{branch_type.branches_count||0}家"
+      %td
+        = link_to t('Show'), backend_shop_branch_type_path(@current_shop.slug, branch_type), :class=>"btn btn-default"
+        = link_to t('Edit'), edit_backend_shop_branch_type_path(@current_shop.slug, branch_type), :class=>"btn btn-default"
+        = link_to t('Destroy'), backend_shop_branch_type_path(@current_shop.slug, branch_type), :method => :delete, :data => { :confirm => t('Are you sure?') }, :class=>"btn btn-danger"
+
+%br
+
+= link_to '新建商户分类', new_backend_shop_branch_type_path(@current_shop.slug)

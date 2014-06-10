@@ -1,0 +1,88 @@
+<%= form_for(@mail_setting, url: backend_shop_mail_setting_update_path(@current_shop.slug, @mail_setting)) do |f| %>
+  <% if @mail_setting.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= @mail_setting.errors.count%>个错误导致无法正确保存邮件设置:</h2>
+
+      <ul>
+      <% @mail_setting.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+
+    <%= f.check_box :enable_mail , :onchange=>"change_enable_mail()"%>
+    <%= f.label :enable_mail %>
+  </div>
+  <div class="field">
+  	<%= f.check_box :notify_shop_manager%><%= f.label :notify_shop_manager%><br/>(若选中：新订单到来时既通知商户经营者也通知您，不选中：仅通知商户经营者)
+  </div>
+  <% if @current_account.is_admin? or @current_account.is_boss? %>
+  <div class="field enable_mail_field">
+    <%= f.check_box :use_system_setting, :onchange=>"change_use_system_setting()" %><%= f.label :use_system_setting %>
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :delivery_method %><br>
+    <%= f.object.delivery_method.upcase %> 请确保您的邮箱设置已经开通相应协议，如SMTP或IMAP
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :address %><br>
+    <%= f.text_field :address %> 例如: qq邮箱可设置(smtp.exmail.qq.com)
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :port %><br>
+    <%= f.number_field :port %> 例如: 25
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :domain %><br>
+    <%= f.text_field :domain %> 例如: qq邮箱可设置(qq.com)
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :user_name %><br>
+    <%= f.text_field :user_name %> 例如: example@qq.com
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :password %><br>
+    <%= f.password_field :password %> QQ邮箱密码，如果设有独立密码，此处请填写独立密码
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :authentication %><br>
+    <%= f.object.authentication.upcase %>
+  </div>
+  <div class="field system_setting_field">
+    <%= f.check_box :enable_starttls_auto %><%= f.label :enable_starttls_auto  %>
+
+  </div>
+  <div class="field system_setting_field">
+    <%= f.label :reply_to %><br>
+    <%= f.text_field :reply_to %> 例如: example@qq.com
+  </div>
+  <%end%>
+  <div class="actions">
+    <%= f.submit '保存', :class=>"btn btn-primary"%>
+  </div>
+<% end %>
+<script type="text/javascript">
+	function change_enable_mail(){
+		if ($("#mail_setting_enable_mail").is(":checked")){
+			$('#mail_setting_notify_shop_manager').closest('.field').show();
+			$('#mail_setting_use_system_setting').closest('.field').show();
+		}else{
+			$('#mail_setting_notify_shop_manager').closest('.field').hide();
+			$('#mail_setting_use_system_setting').closest('.field').hide();
+		}
+		change_use_system_setting();
+	}
+
+	function change_use_system_setting(){
+		if((!$('#mail_setting_use_system_setting').is(":checked")) &&
+			$("#mail_setting_enable_mail").is(":checked")){
+			$('.system_setting_field').show();
+		}else{
+			$('.system_setting_field').hide();
+		}
+	}
+	change_enable_mail();
+</script>

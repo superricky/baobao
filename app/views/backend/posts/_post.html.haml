@@ -1,0 +1,10 @@
+.panel.panel-default
+  .panel-heading
+    = post.account.name rescue nil
+    回复于
+    - if post.created_at < 3.days.ago
+      = post.created_at.strftime("%Y-%m-%d %H:%M:%S")
+    - else
+      = "#{time_ago_in_words(post.created_at)}前"
+  .panel-body
+    = raw post.content

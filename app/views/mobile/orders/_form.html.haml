@@ -1,0 +1,80 @@
+= form_tag "#{request.original_url}", remote: true, method: "get", id: "set_delivery_zone",style: "display: none" do
+  .input= text_field_tag :delivery_zone_id
+= simple_form_for(@order, url: mobile_shop_branch_orders_path(@current_shop.slug, @current_branch, {:order_type => params[:order_type]})) do |f|
+  - if @order.errors.any?
+    #error_explanation.alert.alert-danger
+      %ul.list-unstyled
+        - @order.errors.full_messages.each do |msg|
+          %li
+            = msg
+  = f.hidden_field :order_type, :value=>params[:order_type]||Order::ORDERTYPE_DELIVERY
+  - if params[:order_type] == Order::ORDERTYPE_DELIVERY or params[:order_type] == Order::ORDERTYPE_ORDER_SEAT
+    .field
+      = f.label :name
+      .input= f.text_field :name, :value => @order.name||@user.name
+    .field
+      = f.label :phone
+      - if @current_branch.support_validation?
+        .input= f.text_field :phone, :value => @order.phone||@user.phone, :onkeyup =>"change_phone(this)"
+        %br/
+        #validation_part{"data-phone" => @user.phone, :style => "display:none"}
+          = link_to "获取短信验证码", 'javascript:void(0)', :class=>"btn btn-commit right", :onclick=>"send_validation_code()" , :id=>"order_fetch_validation_code_btn"
+          %div{:style => "width:40%;display:inline-block;"}
+            %input.form-control{:max => "999999", :min => "100000", :name => "order[validation_code]", :placeholder => "验证码", :type => "number"}/
+      - else
+        .input= f.text_field :phone,:value => @order.phone||@user.phone
+  - if params[:order_type] == Order::ORDERTYPE_DELIVERY
+    - if @current_branch.fixed_delivery_time
+      .field
+        = f.label :delivery_period
+        = f.select :delivery_period, options_for_select(@current_branch.select_delivery_times.map{|delivery_time| "#{delivery_time.delivery_time_start.strftime("%H:%M")}~~#{delivery_time.delivery_time_end.strftime("%H:%M")}"}), {}
+    - else
+      .field
+        = f.label :delivery_time
+        = f.time_select :delivery_time, {}
+        %br/
+
+      %strong 请至少给予店家30分钟以上的配送时间
+    - if @current_branch.delivery_zones.count > 0
+      .field
+        = f.label :delivery_zone
+        = f.select :delivery_zone_id, options_from_collection_for_select(@current_branch.delivery_zones, 'id', 'zone_name'), {}
+    .field
+      = f.label :address
+      .input= f.text_area :address, :value => @order.address||@user.default_address, :rows => 2
+  - elsif params[:order_type] == Order::ORDERTYPE_ORDER_SEAT
+    .field
+      = f.label :arrive_time
+      = f.datetime_select :arrive_time, {}
+  - if params[:order_type] == Order::ORDERTYPE_EAT_IN_HALL or params[:order_type] == Order::ORDERTYPE_ORDER_SEAT
+    .field
+      = f.label :guest_num
+      .input= f.number_field :guest_num, :value => @order.guest_num||2
+  - if params[:order_type] == Order::ORDERTYPE_EAT_IN_HALL
+    .field
+      = f.label :desk_no
+      .input= f.number_field :desk_no, :value => @order.desk_no
+  .field
+    = f.label :note
+    .input= f.text_area :note, :rows => 3
+  = f.fields_for :form_contents do |fc|
+    .field
+      = fc.hidden_field :form_element_id
+      = fc.hidden_field :label
+      - fe = @forms.select{|form| form.id == fc.object.form_element_id}.last
+      %label= fe.statement
+      -if fe.is_a? FormElementText
+        .input= fc.text_area :content, placeholder: fe.placeholder
+      -if fe.is_a? FormElementSelect
+        = fc.select :content, options_from_collection_for_select(fe.options, 'statement', 'statement');
+  .field
+    = f.label :pay_type
+    -@current_branch.supported_pay_types_array_with_ui_setting(@current_user.system_config, @custom_ui_setting, @tenpay.use_tenpay, @mobile_alipay.use_mobile_alipay).each_with_index do |type, i|
+      .radio{class: i == 0 ? "checked" : ""}
+        = f.radio_button :pay_type, type.last, checked: (i == 0 ? true : false), class: "hide"
+        = type.first
+  .actions
+    = f.submit (params[:order_type] == Order::ORDERTYPE_ORDER_SEAT) ? '预定':'提交订单', :class=>"btn btn-commit"
+    = link_to "继续挑选", list_mobile_shop_branch_products_path(@current_shop.slug, @current_branch),:class=> "btn btn-default"
+    - if can_make_a_call
+      = link_to "拨打电话", "tel:#{@current_branch.telephone}", class: "btn btn-default"

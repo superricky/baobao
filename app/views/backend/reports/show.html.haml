@@ -1,0 +1,16 @@
+%p#notice= notice
+
+%p
+  %b= Report.human_attribute_name("title")
+  = @report.title
+%p
+  %b= Report.human_attribute_name(:author)
+  = @report.author
+%p
+  %b
+    = Report.human_attribute_name("content")
+  = raw @report.content
+
+= link_to t('Edit'), edit_backend_shop_report_path(@current_shop.slug, @report), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_reports_path(@current_shop.slug), :class=>"btn btn-default"

@@ -1,0 +1,87 @@
+<table class="table table-striped">
+  <tr>
+    <th class="right"><%= Branch.human_attribute_name("use_scrachpad")%></th>
+    <td class="left" >
+      <%= @branch.use_scrachpad ? "启用" : "不启用"%>
+    </td>
+    <th class="right">&nbsp;</th>
+    <td class="left" >&nbsp;</td>
+    <th class="right">&nbsp;</th>
+    <td class="left" >&nbsp;</td>
+  </tr>
+  <% if @branch.use_scrachpad %>
+    <tr>
+      <th class="right">
+        <%= Branch.human_attribute_name("separate_notice_of_praise_and_new_order")%></th>
+      <td class="left" >
+        <%= @branch.separate_notice_of_praise_and_new_order ? "是" : "否"%>
+      </td>
+      <th class="right">
+        <%= Branch.human_attribute_name("valid_before")%>
+      </th>
+      <td class="left" >
+        </strong><%= @branch.valid_before.strftime("%Y-%m-%d %H:%M:%S")%>
+      </td>
+      <th class="right">&nbsp;</th>
+      <td class="left" >&nbsp;</td>
+    </tr>
+      <tr>
+        <th class="right">
+          <%= Branch.human_attribute_name("first_prize_possibility")%>
+        </th>
+        <td class="left" >
+          <%= @branch.first_prize_possibility %>%
+        </td>
+        <th class="right">
+          <%= Branch.human_attribute_name("second_prize_possibility")%>
+        </th>
+        <td class="left" ><%= @branch.third_prize_possibility %>%</td>
+        <th class="right">
+          <%= Branch.human_attribute_name("third_prize_possibility")%>
+        </th>
+        <td class="left" ><%= @branch.third_prize_possibility %>%</td>
+      </tr>
+      <tr>
+        <th class="right"><%= Branch.human_attribute_name("first_prize")%></th>
+        <td class="left" >
+          <%= @branch.first_prize %>
+        </td>
+        <th class="right"><%= Branch.human_attribute_name("second_prize")%></th>
+        <td class="left" ><%= @branch.second_prize %></td>
+        <th class="right"><%= Branch.human_attribute_name("third_prize")%></th>
+        <td class="left" ><%= @branch.third_prize %></td>
+      </tr>
+      <tr>
+        <th class="right"><%= Branch.human_attribute_name("no_prize")%></th>
+        <td class="left" >
+          <% if @branch.no_prize.nil? or @branch.no_prize.empty? %>
+            无奖品
+          <% else %>
+            <%= @branch.no_prize %>
+          <%end%>
+        </td>
+        <th class="right">
+          <%= Branch.human_attribute_name("min_charge_for_scratch")%>
+        </th>
+        <td class="left" >
+          <%= number_to_currency(@branch.min_charge_for_scratch, :unit=>'¥')%>
+        </td>
+        <th class="right">
+          <%= Branch.human_attribute_name("max_scratch_times_in_day")%>
+        </th>
+        <td class="left" ><%= @branch.max_scratch_times_in_day%>次</td>
+      </tr>
+      <tr>
+        <th class="right">
+          <%= Branch.human_attribute_name("supported_scratchpad_order_types")%>
+        </th>
+        <td class="left" >
+          <%= @branch.supported_scratchpad_order_types_name %>
+        </td>
+        <th class="right">&nbsp;</th>
+        <td class="left" >&nbsp;</td>
+        <th class="right">&nbsp;</th>
+        <td class="left" >&nbsp;</td>
+      </tr>
+  <% end %>
+</table>

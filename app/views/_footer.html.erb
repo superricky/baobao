@@ -1,0 +1,52 @@
+<div class="footer" id="footer">
+	<p>Copyright © 2013-2014 Sumeng. All Rights Reserved.</p>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+        <% if @current_account && @current_account.is_worker? %>
+          PrivatePub.subscribe("/messages/branch/#{@current_branch.id rescue nil}", notifyNewMsg);
+        <% elsif @current_account && @current_account.is_boss? %>
+          PrivatePub.subscribe("/messages/shop/#{@current_shop.slug}", notifyNewMsg);
+        <% end %>
+          var oldTitle = document.title;
+          var interval = null;
+          var isOldTitle = true;
+          var newTitle = null;
+          var link = null;
+          $('#messages').on('click', function(){
+            $('#messages').fadeOut();
+          });
+          function notifyNewMsg(data, channel) {
+              $('#messages').fadeIn();
+              newTitle = data.msg.title;
+              content = data.msg.content;
+              link = data.msg.link;
+              $('#message_title').text(newTitle);
+              $('#message_content').text(content);
+              $('#message_link').attr('href', link);
+              interval = setInterval(changeTitle, 700);
+              soundPlay();
+            }
+
+          function changeTitle() {
+              document.title = isOldTitle ? oldTitle : newTitle;
+              isOldTitle = !isOldTitle;
+          }
+
+          var soundEmbed = null;
+          //======================================================================
+          function soundPlay() {
+            var which = "#{audio_url 'new_message.mp3'}"
+              document.getElementById("sound").innerHTML='<audio autoplay="autoplay"><source src="'
+                + which
+                + '" type="audio/mpeg" /><embed hidden="true" autostart="true" loop="false" src="'
+                + which
+                +'" /></audio>';
+            }
+
+          $(window).focus(function () {
+              clearInterval(interval);
+              document.title = oldTitle;
+          });
+        });
+</script>

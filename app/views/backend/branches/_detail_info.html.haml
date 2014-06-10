@@ -1,0 +1,43 @@
+%div
+%table.table.table-striped
+  %tr
+    %th.right= Branch.human_attribute_name("product_list_style")
+    %td.left= @branch.product_list_style_name
+    %th.right= Branch.human_attribute_name("brand_chain_id")
+    %td.left= @branch.shop.name
+    %th.right= Branch.human_attribute_name("branch_type_id")
+    %td.left= @branch.branch_type.present? ? @branch.branch_type.name : "尚未选择商户分类"
+  %tr
+    %th.right= Branch.human_attribute_name("check_stock")
+    %td.left
+      = @branch.check_stock_name
+    %th.right= Branch.human_attribute_name("product_list_style")
+    %td.left= @branch.product_list_style_name
+    %th.right= Branch.human_attribute_name("brand_chain_id")
+    %td.left= @branch.shop.name
+.space.space-20
+.row
+  .col-xs-12.col-sm-4
+    .widget-box.transparent.left
+      .widget-header.widget-header-small
+        %h4.smaller
+          %i.icon-check.bigger-110
+          = Branch.human_attribute_name("notice")
+      .widget-body
+        = raw(@branch.notice)
+  .col-xs-12.col-sm-4
+    .widget-box.transparent.left
+      .widget-header.widget-header-small
+        %h4.smaller
+          %i.icon-check.bigger-110
+          = Branch.human_attribute_name("zones")
+      .widget-body
+        %dl.list-unstyled
+          - @branch.zones.group_by(&:parent_zone).each do |key, value|
+            %dt
+              = key.name
+            %dd
+              - value.each do |zone|
+                = zone.name
+            %li
+              %ul.list-unstyled

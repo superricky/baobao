@@ -1,0 +1,32 @@
+%p#notice= notice
+
+%p
+  %b
+    = ServiceProduct.human_attribute_name(:subject)
+    \:
+  = @service_product.subject
+%p
+  %b
+    = ServiceProduct.human_attribute_name(:product_type)
+    \:
+  = @service_product.product_type_name
+%p
+  %b
+    = ServiceProduct.human_attribute_name(:available_shop_versions)
+    \:
+  = @service_product.available_shop_versions.map{|version|  Shop::version_name(version)}.join("、")
+%p
+  %b
+    = ServiceProduct.human_attribute_name(:price)
+    \:
+  = number_to_currency(@service_product.amount, :unit=>"¥")
+  \元
+%p
+  %b
+    = ServiceProduct.human_attribute_name(:description)
+    \:
+  = @service_product.description
+
+= link_to t('Edit'), edit_backend_service_product_path(@service_product), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_service_products_path, :class=>"btn btn-default"

@@ -1,0 +1,36 @@
+%li{:class=>("active" if controller_name == 'site_configs')}
+  %a{:href => "#{backend_site_configs_path}"}
+    %i.icon-pencil
+    %span.menu-text 网站配置
+%li{:class=>("active" if controller_name == 'shops')}
+  %a{:href => "#{backend_shops_path}"}
+    %i.icon-list
+    %span.menu-text 点号配置
+%li{:class=>("active" if controller_name == 'product_units')}
+  %a{:href=>"#{backend_product_units_path}"}
+    %i.icon-puzzle-piece
+    %span.menu-text 计量单位
+%li{:class=>("active" if controller_name == 'service_products')}
+  %a{:href=>"#{backend_service_products_path}"}
+    %i.icon-shopping-cart
+    %span.menu-text 服务套餐
+%li{:class=>("active" if controller_name == 'service_sale_orders')}
+  %a{:href=>"#{backend_service_sale_orders_path}"}
+    %i.icon-dollar
+    %span.menu-text 服务订单
+%li{:class=>("active" if controller_name == 'transaction_logs')}
+  %a{:href=>"#{backend_transaction_logs_path}"}
+    %i.icon-calendar-empty
+    %span.menu-text 购买日志
+%li
+  %a{:href => "#{backend_sidekiq_web_path}"}
+    %i.icon-rocket
+    %span.menu-text Sidekiq
+%li{:class=>("active" if controller_name == 'agents')}
+  %a{:href => "#{backend_agents_path}"}
+    %i.icon-rocket
+    %span.menu-text 代理商
+%li{:class=>("active" if controller_name == 'agent_zones')}
+  %a{:href => "#{backend_agent_zones_path}"}
+    %i.icon-rocket
+    %span.menu-text 代理区域

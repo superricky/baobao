@@ -1,0 +1,7 @@
+%h1 编辑新闻
+
+= render 'form'
+
+= link_to t('Show'), backend_shop_report_path(@current_shop.slug, @report), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_reports_path(@current_shop.slug), :class=>"btn btn-default"

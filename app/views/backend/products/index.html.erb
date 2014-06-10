@@ -1,0 +1,99 @@
+<% if flash[:error].present? %>
+<div class="alert alert-danger">
+	对不起，无法为您完成操作，原因为：<%= flash[:error]%>
+</div>
+<%elsif flash[:success].present? %>
+	<div class="alert alert-info">
+		<%= flash[:success] %>
+	</div>
+<% end %>
+<div class="alert alert-warning">
+	<p><strong>注意：</strong></p>
+	<p>1、导入产品的用户请先使用“导出功能”获得产品导入模板，并在其上进行修改.</p>
+<p>2、请勿使用微软Office打开导出文件，会导致乱码。请务必使用<a href="https://www.openoffice.org/zh-cn/" target="_blank">OpenOffice</a>打开导出的文件，且打开时仅选择“逗号”或“，”作为分割符.</p>
+<p>3、产品一，二级分类之间请使用“*”号隔开，多个产品分类请使用“|”隔开，列如：生活电器*个人护理|生活电器*厨房小电|生活电器*饮水设备</p>
+</div>
+<div class="row">
+	<h1><%= t('Listing products') %>
+	</h1>
+	<%= render "search"%>
+</div>
+<div class="row">
+<div class="pull-right">
+	<%= will_paginate @products, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+<div class="col-md-10 col-lg-10 title">
+	<div class="btn-group">
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+		      导入导出<span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		    <li><%= link_to "导出产品",backend_shop_branch_products_path(@current_shop.slug, @current_branch, format: 'csv') %></li>
+		    <li><%= link_to "导入产品", "", id: "upload_csv_file"%></li>
+		  </ul>
+		</div>
+
+		<div class="btn-group">
+			<%= link_to t('New Product'), new_backend_shop_branch_product_path, :class=>"btn btn-primary" %>
+		</div>
+		<div class="btn-group">
+		  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+		  	批量<span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		  	<%if @current_account.is_admin? or @current_account.is_boss? %>
+					<li><%= link_to "复制产品", "javascript:void(0)", :onclick=>"click_copy_product_btn()" %></li>
+				<%end%>
+				<li><%= link_to "批量删除产品", "javascript:void(0)",:onclick=>"remove_selected_product()" %></li>
+		 	</ul>
+		</div>
+
+		<div class="btn-group">
+		  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+		  	批量上下架<span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu">
+		  	<li>
+		  	<%= link_to "批量产品上架", "javascript:void(0)", :onclick=>"batch_added_product()" %>
+		  	</li>
+		  	<li>
+				<%= link_to "批量产品下架", "javascript:void(0)", :onclick=>"batch_shelve_product()" %>
+		  	</li>
+		  </ul>
+		</div>
+
+
+		<%= form_tag batch_remove_backend_shop_branch_products_path(@current_shop.slug, @current_branch), method:'delete', :id=>'batch_remove_form' do%>
+		<% end %>
+		<%= form_tag batch_added_backend_shop_branch_products_path(@current_shop.slug, @current_branch), method:'post', :id=>'batch_added_form' do%>
+		<% end %>
+		<%= form_tag batch_shelve_backend_shop_branch_products_path(@current_shop.slug, @current_branch), method:'post', :id=>'batch_shelve_form' do%>
+		<% end %>
+	</div>
+</div>
+<div id="upload_proudct" title="上传产品文件">
+	<%= form_tag import_product_backend_shop_branch_products_path(@current_shop.slug, @current_branch), method: "post", multipart: true, role: "form"  do %>
+		<div class="form-group">
+		  <label for="exampleInputFile">File input</label>
+		  <%= file_field_tag "file"%>
+		</div>
+		<%= submit_tag "上传文件"%>
+	<% end %>
+</div>
+<%= render 'table' %>
+<div class="pull-right">
+	<%= will_paginate @products, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+
+<script>
+$(function(){
+	$("#upload_proudct").dialog({
+		autoOpen: false,
+		width: 350
+	});
+	$("#upload_csv_file").click(function(event){
+		event.preventDefault(event);
+		$("#upload_proudct").dialog("open");
+	});
+});
+</script>

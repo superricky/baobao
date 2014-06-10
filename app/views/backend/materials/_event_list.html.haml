@@ -1,0 +1,18 @@
+%h6.blue
+  %span.middle
+    回复用户本素材需要用户输入:
+    - if material.events.where(event: "KEYWORD_AUTOREPLY").count > 0
+      - material.events.where(event: "KEYWORD_AUTOREPLY").each do |event|
+        .btn-group
+          %button.btn.btn-inverse.btn-xs.dropdown-toggle{data: {toggle: "dropdown"}}
+            = event.event_key
+            %span.icon-caret-down.icon-on-right
+          %ul.dropdown-menu.dropdown-inverse
+            %li
+              = link_to "移除", backend_shop_event_path(@current_shop, event), method: :delete, data: {remote: true, confirm: "确定要关键词吗？"}
+    - else
+      %span.label
+        未设置
+    %br
+    - if material.events.where(event: "unmatch").count > 0
+      = "已设置为: #{t('unmatch')}"

@@ -1,0 +1,43 @@
+<% unless flash[:error].nil? %>
+	<div class="alert alert-danger">
+		<strong>操作失败：</strong><%= flash[:error]%>
+	</div>
+<% end %>
+
+<% unless current_account.is_worker? %>
+  <div class="alert alert-warning">
+    尊敬的用户，您需要点击从以下商户中选择商户后才能对该商户进行产品设置以及订单管理等
+  </div>
+<% end %>
+
+<% unless notice.nil? %>
+  <div class="alert alert-success" id="notice"><%= notice %></div>
+<% end %>
+<% if current_account.is_admin? or current_account.is_boss?%>
+  <div class="pull-left col-md-9 col-lg-9 title"><%= t("Listing branches")%><small style="font-weight:normal;color:#aaaaaa;">
+  	(您的账户最多开设<%= @current_shop.max_branches_count %>家商户，当前开设<%= @current_shop.branches_count%>家)</small></div>
+  <div class="pull-right col-md-6 col-lg-6 title">
+  		<%= link_to t('New branch'), new_backend_shop_branch_path, :class=>"btn btn-primary pull-right" %>
+  </div>
+<% end %>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= Branch.human_attribute_name("name")%></th>
+      <th><%= Branch.human_attribute_name("is_open")%></th>
+      <th>剩余配额</th>
+      <th><%= Branch.human_attribute_name("telephone")%></th>
+      <th><%= t("operation btn")%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @branches.each_with_index do |branch, index| %>
+      <%= render 'backend/branches/table_record', {branch: branch, index:index, branches: @branches}%>
+    <% end %>
+  </tbody>
+</table>
+<div class="pull-right">
+	<%= will_paginate @branches , renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>

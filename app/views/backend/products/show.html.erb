@@ -1,0 +1,91 @@
+<% unless notice.nil? %>
+  <div class="alert alert-success" id="notice">
+      <%= raw(notice)%>
+  </div>
+<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">产品详情</div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4">
+        <span class="profile-picture">
+           <%= image_tag @product.image.medium.url, :class=>"img-rounded", :width=>"100%" %>
+        </span>
+      </div>
+      <div class="col-xs-12 col-sm-8">
+        <table class="table table-striped">
+          <tr>
+            <th class="right"><%= Product.human_attribute_name('name') %></th>
+            <td class="left" ><%= @product.name %></td>
+            <th class="right"><%= Product.human_attribute_name('original_price') %></th>
+            <td class="left" >
+              <%= @product.original_price %>/<%= @product.product_unit%>
+            </td>
+            <th class="right"><%= Product.human_attribute_name('price') %></th>
+            <td class="left"><%= @product.price %>/<%= @product.product_unit%></td>
+          </tr>
+          <tr>
+            <th class="right"><%= Product.human_attribute_name('stock') %></th>
+            <td class="left" >
+              <%= @product.stock %>
+            </td>
+            <th class="right">
+              <%= Product.human_attribute_name('category') %>
+            </th>
+            <td class="left" >
+              <%if @product.categories.count > 0%>
+                <% @product.categories.each do |category| %>
+                  <%= link_to category.name, backend_shop_branch_category_path(@current_shop.slug, @current_branch, category)%>
+                <% end %>
+              <%else%>
+                未设置分类
+              <% end %>
+            </td>
+            <th class="right">
+              <%= Product.human_attribute_name('tag') %>
+            </th>
+            <td class="left" >
+              <%= @product.tag.name rescue  "未设置标签"%>
+            </td>
+          </tr>
+          <tr>
+            <% if get_current_product_promotion.present? %>
+              <th class="right"><%= Product.human_attribute_name('promotion') %></th>
+              <td class="left" >
+                  <%= link_to get_current_product_promotion.promotion.name, show_special_off_backend_shop_branch_promotion_path(@current_shop.slug, @current_branch, get_current_product_promotion.promotion) %>
+              </td>
+            <% end %>
+
+            <% if @current_shop.use_credits %>
+              <th class="right"><%= Product.human_attribute_name('credits_for_each_product') %>:</th>
+              <td class="left" >
+                <%= @product.credits_for_each_product %>
+              </td>
+            <%end%>
+          </tr>
+        </table>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6">
+
+            <div class="widget-box transparent">
+              <div class="widget-header widget-header-small">
+                <h4 class="smaller">
+                  <i class="icon-check bigger-110"></i>
+                  <%= Product.human_attribute_name('description') %>
+                </h4>
+              </div>
+
+              <div class="widget-body">
+                <div class="widget-main">
+                  <p class="muted"><%= raw(@product.description) || "暂无介绍" %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%= link_to t('Edit'), edit_backend_shop_branch_product_path(@current_shop.slug, @current_branch, @product), :class=>"btn btn-default" %> |
+<%= link_to t('Back'), backend_shop_branch_products_path(@current_shop.slug, @current_branch), :class=>"btn btn-default" %>

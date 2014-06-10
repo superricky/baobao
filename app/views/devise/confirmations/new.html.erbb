@@ -1,0 +1,22 @@
+<div class="col-md-6 col-md-offset-3 panel panel-default">
+  <div class="panel-heading">重发激活邮件</div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => confirmation_path(resource_name), :html => { :role=>"form", :class=>"form-horizontal",:method => :post }) do |f| %>
+
+      <div class="form-group">
+        <%= f.label :email , :class=>"col-md-3 control-label" %>
+        <div class="col-md-9">
+          <%= f.email_field :email, :autofocus => true %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-md-2">
+          <%= f.submit "重发激活邮件", :class=>"btn btn-primary" %>
+          </div>
+      </div>
+      <div class="form-group">
+        <%= render "devise/shared/links" %>
+      </div>
+    <% end %>
+  </div>
+</div>

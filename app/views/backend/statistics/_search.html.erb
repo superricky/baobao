@@ -1,0 +1,80 @@
+<div class="row-fluid">
+  <div class="tabbable" id="tabs-371950">
+    <ul class="nav nav-tabs">
+      <li class="<%= 'active' if action_name.include?("month") %>">
+        <a href="#according-month" data-toggle="tab">按月查看</a>
+      </li>
+      <li class="<%= 'active' if action_name.include?("year") %>">
+        <a href="#according-year" data-toggle="tab">按年查看</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane <%= 'active' if action_name.include?("month") %>" id="according-month">
+        <div>
+          <%= form_tag month_url, method: :get, class: "navbar-form" do %>
+            <div class="form-group">
+              <%= select_tag :year,
+                options_for_select(((@current_shop.created_at.year)..Time.now.year).to_a, @year),
+                {class: "form-control"}
+              %>
+            </div>
+            <div class="form-group">
+              <%= select_tag :month,options_for_select((1..12).to_a, (@first_day.month rescue nil)), {class: "form-control"} %>
+            </div>
+            <div class="form-group">
+              <%= submit_tag "按月查看", class: "form-control" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="tab-pane <%= 'active' if action_name.include?("year") %> " id="according-year">
+        <div>
+          <%= form_tag year_url, method: :get, class: "navbar-form " do %>
+            <div class="form-group">
+              <%= select_tag :year,
+                options_for_select((@current_shop.created_at.year..Time.now.year).to_a, @year),
+                {class: "form-control"}
+              %>
+            </div>
+            <div class="form-group">
+              <%= submit_tag "按年查看", class: "form-control"%>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <!-- <div class="col-xs-4 col-md-5 text-center">
+    <%= form_tag month_url, method: :get, class: "form-inline" do %>
+      <div class="form-group">
+        <%= select_tag :year,
+          options_for_select(((@current_shop.created_at.year)..Time.now.year).to_a, @year),
+          {class: "form-control"}
+        %>
+      </div>
+      <div class="form-group">
+        <%= select_tag :month,options_for_select((1..12).to_a, (@first_day.month rescue nil)), {class: "form-control"} %>
+      </div>
+      <div class="form-group">
+        <%= submit_tag "按月查看", class: "form-control" %>
+      </div>
+    <% end %>
+  </div> -->
+<!--   <div class="col-xs-4 col-md-5 text-center">
+    <%= form_tag year_url, method: :get, class: "form-inline" do %>
+      <div class="form-group">
+        <%= select_tag :year,
+          options_for_select((@current_shop.created_at.year..Time.now.year).to_a, @year),
+          {class: "form-control"}
+        %>
+      </div>
+      <div class="form-group">
+        <%= submit_tag "按年查看", class: "form-control"%>
+      </div>
+    <% end %>
+  </div> -->
+</div>

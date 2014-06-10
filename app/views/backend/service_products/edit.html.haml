@@ -1,0 +1,7 @@
+%h1 编辑服务套餐
+
+= render 'form'
+
+= link_to t('Show'), [:backend, @service_product], :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_service_products_path, :class=>"btn btn-default"

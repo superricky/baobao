@@ -1,0 +1,6 @@
+<h1><%= t('Editing category')%></h1>
+
+<%= render 'form' %>
+
+<%= link_to t('Show'), backend_shop_branch_category_path(@current_shop.slug, @current_branch, @category) %> |
+<%= link_to t('Back'), backend_shop_branch_categories_path %>

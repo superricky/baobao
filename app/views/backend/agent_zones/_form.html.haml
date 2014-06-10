@@ -1,0 +1,17 @@
+= form_for [:backend, @agent_zone] do |f|
+  - if @agent_zone.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@agent_zone.errors.count, "error")} prohibited this agent_zone from being saved:"
+      %ul
+        - @agent_zone.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :parent_agent_zone_id
+    = f.select :parent_agent_zone_id, options_for_select(AgentZone.all.select{|agent_zone| agent_zone.id != @agent_zone.id}.map{|agent_zone| [ agent_zone.name, agent_zone.id]}), {:include_blank=>true}
+  .actions
+    = f.submit t('Save'), :class=>"btn btn-primary"
+%br

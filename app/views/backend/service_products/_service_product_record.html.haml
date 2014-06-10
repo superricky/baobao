@@ -1,0 +1,45 @@
+%h3.header.smaller.red 可选套餐
+- if @current_shop and @current_shop.support_auto_buy_service?
+  .alert.alert-warning
+    注意：试用结束后如需购买多商户基本版，请另行联系
+    %a{:href=>"tel:1008611"} 1008611
+    进行购买
+
+.row
+  .col-xs-4.col-sm-3.pricing-span-header
+    .widget-box.transparent
+      .widget-header
+        %h5.bigger.lighter= ServiceProduct.human_attribute_name(:subject)
+      .widget-body
+        .widget-main.no-padding
+          %ul.list-unstyled.list-striped.pricing-table-header
+            %li= ServiceProduct.human_attribute_name(:price)
+            %li= ServiceProduct.human_attribute_name(:product_type)
+            %li= ServiceProduct.human_attribute_name(:available_shop_versions)
+            %li= ServiceProduct.human_attribute_name(:description)
+            - if @current_shop.present?
+              %li 当前账户是否可购买
+  .col-xs-8.col-sm-9.pricing-span-body
+    - @service_products.select{|service_product| is_able_to_show_for(service_product) }.each_with_index do |service_product, index|
+      .pricing-span
+        .widget-box.pricing-box-small
+          %div{:class=>"#{['widget-header header-color-red3', 'widget-header header-color-orange', 'widget-header header-color-blue', 'widget-header header-color-green', 'widget-header header-color-grey'][index]}"}
+            .bigger.lighter= service_product.subject
+          .widget-body
+            .widget-main.no-padding
+              %ul.list-unstyled.list-striped.pricing-table
+                %li= number_to_currency(service_product.amount, :unit=>"¥")
+                %li= service_product.product_type_name
+                %li
+                  = service_product.available_shop_versions.map{|version| Shop::version_name(version)}.join("、")
+                %li= raw service_product.description
+                - if @current_shop.present?
+                  %li
+                    - if service_product.is_availbale_for_shop(@current_shop)
+                      %span.label.label-success 可以购买
+                    - else
+                      %span.label.label-default 不可以购买
+            - if @current_shop.present?
+              %div
+                %a{:class=>["btn btn-block btn-sm",  ['btn-danger', 'btn-warning', 'btn-primary', 'btn-success', 'btn-grey'][index]].join(" ")  , :href=>backend_shop_service_sale_orders_path(@current_shop, {service_product_id: service_product.id}), :data=>{:method=>"POST"}}
+                  %span 购买

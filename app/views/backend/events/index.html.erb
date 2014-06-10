@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-sm-7">
+    <div class="widget-box">
+      <div class="widget-header widget-header-flat">
+        <h4 class="smaller">
+          关键词自动回复
+        </h4>
+        <div class="widget-toolbar">
+          <div id="enable_unrecognized_reply_message_link">
+            <%= render "enable_unrecognized_reply_message_link"%>
+          </div>
+        </div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-main">
+          <div id="unrecognized_reply_message">
+            <%= render "unrecognized_reply_message"%>
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <td colspan="3" align="center"><strong>自定关键词回复</strong></td>
+              </tr>
+              <tr>
+                <th><%= Event.human_attribute_name('event_key') %></th>
+                <th>关键词或素材名</th>
+                <th><%= t('operation btn') %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @keyword_autoreply_events.each do |event| %>
+                <tr>
+                  <td><%= event.event_key %></td>
+                  <td><%= event.material.material_name rescue Event::SYSTEM_KEY.select{|key| key[1] == "key_#{event.system_keyword}"}[0][0] rescue nil %></td>
+                  <td>
+                  <%= link_to t('Edit'), edit_backend_shop_event_path(@current_shop.slug, event), :class => 'btn btn-default' %>
+                  <%= link_to t('Destroy'), backend_shop_event_path(@current_shop.slug, event), method: :delete, data: { confirm: "确定要删除自动回复吗,一旦删除，绑定到该自动回复上的菜单也将被删除？"} , :class => 'btn btn-danger'%></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="hr hr8 hr-double"></div>
+            <%= link_to t('New event'), new_backend_shop_event_path, :class=>"btn  btn-default" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

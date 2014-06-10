@@ -1,0 +1,19 @@
+= form_for @wallet_log, url: @wallet_log.new_record? ? get_wallet_logs_path : get_wallet_log_path(@wallet_log) do |f|
+  - if @wallet_log.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@wallet_log.errors.count, "error")} prohibited this wallet_log from being saved:"
+      %ul
+        - @wallet_log.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :user
+    = f.object.user.name
+  .field
+    = f.label :money
+    = f.object.money
+  .field
+    = f.label :note
+    = f.text_area :note
+  .actions
+    = f.submit '保存', :class=>"btn btn-primary"

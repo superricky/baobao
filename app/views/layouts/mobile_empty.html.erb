@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= find_shop_or_branch_title  %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<%= stylesheet_link_tag  "mobile_empty", "data-turbolinks-track" => true %>
+	<%= javascript_include_tag "mobile_empty"%>
+	<%= csrf_meta_tags %>
+</head>
+<body>
+	<% if content_for :style %>
+		<%= yield :style %>
+	<% end %>
+	<div style="min-height:500px;">
+		<%= yield %>
+	</div>
+	<% if content_for :footer %>
+		<%= yield :footer %>
+	<% end %>
+</body>

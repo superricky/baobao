@@ -1,0 +1,38 @@
+<%= render 'messages_nav'%>
+<%= render "search"%>
+<h1><%= t("Listing message_threads") %></h1>
+<div class="pull-right">
+	<%= will_paginate @message_threads , renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+<table class="table table-striped" id="message-threads-table">
+  <thead>
+    <tr>
+      <th><%= MessageThread.human_attribute_name('user') %></th>
+      <th><%= MessageThread.human_attribute_name('updated_at')%></th>
+      <th><%= t 'operation btn'%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @message_threads.each do |message_thread| %>
+      <tr>
+        <td>
+        	<%= image_tag 'unknow.jpg', :width => 55, :height => 55 %>
+        	<span class="message-thread-user">
+        	<% if message_thread.user.name.nil? %>
+        		<%= link_to message_thread.user.fake_user_name, backend_shop_user_path(@current_shop.slug, message_thread.user )%>
+        	<% else %>
+        		<%= link_to message_thread.user.name, backend_shop_user_path(@current_shop.slug, message_thread.user) %>
+        	<% end%>
+        	</span>
+       	</td>
+        <td><span><%= message_thread.updated_at %></span></td>
+        <td><span><%= link_to t('Show'), backend_shop_message_thread_messages_path(@current_shop.slug, message_thread), :class => 'btn btn-default' %>
+			<%= link_to t('Destroy'), backend_shop_message_thread_path(@current_shop.slug, message_thread), method: :delete, data: { confirm: '你确定要删除所有有关该用户的聊天记录吗?' }, :class => 'btn btn-danger' %></span></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="pull-right">
+	<%= will_paginate @message_threads, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>

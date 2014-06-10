@@ -1,0 +1,6 @@
+<% if @event.errors.size > 0 %>
+  $("#event_modal .modal-body").html("<%= escape_javascript(render 'backend/events/material_event_form' )%>")
+<% else %>
+  $("#material_<%= @material.id%> .event_list").html("<%= escape_javascript(render 'backend/materials/event_list', {material: @material} )%>")
+  $('#event_modal').modal('hide')
+<% end %>

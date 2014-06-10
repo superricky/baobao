@@ -1,0 +1,22 @@
+<div class="col-md-10">
+  <% unless flash[:notice].nil? %>
+    <div class="alert alert-danger"><%= flash[:notice] %></div>
+  <% end %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      以下为您在微信后台配置的接口信息
+    </div>
+    <div class="panel-body">
+    <div><strong>URL:</strong><%= message_validate_root_url(@current_shop.slug)%></div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel panel-heading">
+      编辑微信公众号
+    </div>
+    <div class="panel panel-body">
+      <%= render 'form', {url: backend_shop_system_configs_path(@current_shop.slug)} %>
+    </div>
+  </div>
+  <%= link_to t('Back'), backend_shop_system_configs_path, :class=>"btn btn-default"  %>
+</div>

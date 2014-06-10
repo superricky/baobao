@@ -1,0 +1,60 @@
+<%= form_for(@message, url: message_thread_messages_path(@message_thread) ) do |f| %>
+  <% if @message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@message.errors.count, "error") %> prohibited this message from being saved:</h2>
+
+      <ul>
+      <% @message.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="field">
+    <h1><%= "与用户 #{@message.to_user_name} 对话" %></h1>
+  </div>
+  <div class="field">
+    <%= f.label :msg_type %><br>
+    <%= f.text_field :msg_type %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_field :content %>
+  </div>
+  <div class="field">
+    <%= f.label :pic_url %><br>
+    <%= f.text_field :pic_url %>
+  </div>
+  <div class="field">
+    <%= f.label :location_x %><br>
+    <%= f.text_field :location_x %>
+  </div>
+  <div class="field">
+    <%= f.label :location_y %><br>
+    <%= f.text_field :location_y %>
+  </div>
+  <div class="field">
+    <%= f.label :scale %><br>
+    <%= f.number_field :scale %>
+  </div>
+  <div class="field">
+    <%= f.label :label %><br>
+    <%= f.text_field :label %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_field :description %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br>
+    <%= f.text_field :url %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

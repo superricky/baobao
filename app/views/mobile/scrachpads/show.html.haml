@@ -1,0 +1,48 @@
+-content_for :title do
+  我的刮刮卡
+.body
+  .m-1
+    - unless notice.nil?
+      %p#notice= notice
+    .panel.panel-default
+      .panel.panel-body
+        %div{:style => "border-radius:5px;margin:auto;height:150px;padding:20px;background: #DBA901;margin-bottom:10px;"}
+          <div style="font-family:微软雅黑;font-weight:bold;color:#931212;padding:0 20px;font-size:25px;"
+          %p 开心刮!刮!刮!
+          %p{:style => "text-align: right;"} 大奖等你拿!
+        %div{:style => "position:absolute;background-color:#fff;text-align:center;font-weight:bold;width:200px;height:70px;line-height:70px;font-size:15pt;margin-left:50px;z-index:999;"}
+          = @scrachpad.card_result
+        #scrachpads_card_result{:style => "position:absolute;width:200px;height:70px;margin-left:50px;z-index:9999;"}
+      .radius-box.global-font.m_0010
+        - if @scrachpad.is_opened
+          有效期截止日期:
+          = @scrachpad.valid_before.strftime("%Y-%m-%d")
+          %br/
+          活动商户:
+          = @scrachpad.branch.name
+          %br/
+          状态
+          = @scrachpad.is_used ? "已使用":"未使用"
+          %br/
+        - else
+          - if @current_branch.has_first_prize?
+            一等奖奖品
+            \:
+            = @current_branch.first_prize
+            %br/
+          - if @current_branch.has_second_prize?
+            二等奖奖品
+            \:
+            = @current_branch.second_prize
+            %br/
+          - if @current_branch.has_third_prize?
+            三等奖奖品
+            \:
+            = @current_branch.third_prize
+            %br/
+          - unless @current_branch.no_prize.nil? or @current_branch.no_prize.empty?
+            参与奖
+            \:
+            = @current_branch.no_prize
+      = link_to "扔掉刮刮卡", mobile_shop_branch_scrachpad_path(@current_shop.slug, @current_branch, @scrachpad), method: :delete, data: { confirm: '确定要删除刮刮卡吗?' }, :class=>"btn btn-commit"
+      = link_to t('Back'), mobile_shop_branch_scrachpads_path(@current_shop.slug, @current_branch), :class=>"btn btn-default"

@@ -1,0 +1,61 @@
+- if flash[:notice].present?
+  .alert.alert-success
+    = flash[:notice]
+
+.panel.panel-default
+  .panel-heading
+    %strong 公众账号对应微信支付信息
+  .panel-body
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('public_account_name')
+        \:
+      = @wechat_pay.public_account_name
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('gonghao_type')
+        \:
+      认证服务号
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('token')
+        \:
+      = @wechat_pay.token
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('my_fake_id')
+        \:
+      = @wechat_pay.my_fake_id
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('support_weixin_pay')
+        \:
+      = @wechat_pay.support_weixin_pay? ? "支持" : "不支持"
+
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('appId')
+        \:
+      = @wechat_pay.appId
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('appSecret')
+        \:
+      = @wechat_pay.appSecret
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('paySignKey')
+        \:
+      = @wechat_pay.paySignKey
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('partnerId')
+        \:
+      = @wechat_pay.partnerId
+    %p
+      %strong
+        = SystemConfig.human_attribute_name('partnerKey')
+        \:
+      = @wechat_pay.partnerKey
+    = link_to t('Edit'), edit_backend_shop_wechat_pay_path(@current_shop, @wechat_pay), :class=>"btn btn-default"
+    = link_to t('Back'), backend_shop_wechat_pays_path(@current_shop), :class=>"btn btn-default"

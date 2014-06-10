@@ -1,0 +1,30 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>类型</th>
+      <th>积分数量</th>
+      <th>商户</th>
+      <th>备注</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @credits_logs.each do |credits_log| %>
+      <tr>
+        <td><%= credits_log.credit_log_type_name %></td>
+        <td><%= credits_log.credits %></td>
+        <td><%= credits_log.branch.name rescue nil %></td>
+        <td><%= credits_log.note %></td>
+        <td><%= link_to t('Show'), get_credits_log_path(credits_log), :class=>"btn btn-default"%>
+          <% if @current_branch.present? and credits_log.is_consume_type? %>
+            <%= link_to '编辑备注', edit_backend_shop_branch_credits_log_path(@current_shop.slug, @current_branch,credits_log), :class=>"btn btn-default" %>
+          <%end%>
+          <% if credits_log.credit_log_type == CreditsLog::CREDITS_LOG_TYPE_CONSUME && ( not credits_log.back_consume_log.present?) %>
+            <%= link_to '返还用户积分', rollback_credits_backend_shop_branch_credits_log_path(@current_shop.slug, credits_log.branch,credits_log),method: :delete,data: { confirm: "你确定要返还该用户的积分！" } , :class=>"btn btn-danger" %>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,84 @@
+%ul.nav.nav-tabs.hide
+  %li.active
+    %a{"data-toggle" => "tab", :href => "#auto-config"} 自动配置
+  %li
+    %a{"data-toggle" => "tab", :href => "#manual-config"} 手动配置
+.tab-content
+  #auto-config.tab-pane.hide
+    %h2 请在此输入您的微信公众账户信息:
+    = form_tag auto_config_create_backend_shop_system_configs_path(@current_shop), class: "form-horizontal", role: "form" do
+      - if flash[:error].present?
+        %alert.alert.alert-danger
+          = flash[:error]
+      - if @wechat.errors.present? and @wechat.errors.length > 0
+        #error_explanation.alert.alert-danger
+          %div
+            = @wechat.errors.count
+            个错误导致无法自动对接您的公众帐号:
+          %ul
+            - @wechat.errors.full_messages.each do |msg|
+              %li= msg
+      - if @system_config.present?
+        = hidden_field_tag :system_config_id, @system_config.id
+      .form-group
+        = label_tag :username, "用户名", class: "col-md-3 control-label"
+        .col-md-5
+          = text_field_tag :username, @wechat.username, class: "form-control"
+      .form-group
+        = label_tag :password, "密码", class: "col-md-3 control-label"
+        .col-md-5
+          = text_field_tag :password, @wechat.password, class: "form-control"
+      .form-group
+        .col-sm-offset-2.col-sm-5
+          = submit_tag "开始自动配置", class: "btn btn-primary"
+  #manual-config.tab-pane.active
+
+    = form_for(@system_config, url: [:backend, @current_shop, @system_config] ,:html => {class: "form-horizontal", role: "form"}) do |f|
+      - if @system_config.errors.any?
+        #error_explanation.alert.alert-danger
+          %div
+            = @system_config.errors.count
+            个错误导致无法保存系统设置:
+          %ul
+            - @system_config.errors.full_messages.each do |msg|
+              %li= msg
+      - if @system_config.new_record?
+        = f.hidden_field :id
+      .form-group
+        = f.label :public_account_name, class: "col-md-3 control-label"
+        .col-md-5
+          = f.text_field :public_account_name, class: "form-control"
+      .form-group
+        = f.label :token, class: "col-md-3 control-label required"
+        .col-md-5
+          = f.text_field :token, class: "form-control"
+          %small 即微信公众平台对应的token，须两者保持一致
+      .form-group
+        = f.label :my_fake_id, class: "col-md-3 control-label required"
+        .col-md-5
+          - if f.object.new_record?
+            = f.text_field :my_fake_id , :placeholder =>"gh_xxxxxxxxxxxx", class: "form-control"
+          - else
+            = f.object.my_fake_id
+      .form-group
+        = f.label :gonghao_type, :class=>"col-md-3 control-label"
+        .col-md-5
+          = f.select :gonghao_type, options_for_select([["订阅号", true],["服务号", false]], selected: @system_config.gonghao_type)
+      .form-group
+        = f.label :be_verified, class: "col-md-3 control-label"
+        .col-md-5
+          = f.check_box :be_verified
+      .row
+        .col-md-7
+          .form-group
+            = f.label :appId, class: "col-md-5 control-label"
+            .col-md-7
+              = f.text_field :appId ,class: "form-control col-md-3"
+          .form-group
+            = f.label :appSecret, class: "col-md-5 control-label"
+            .col-md-7
+              = f.text_field :appSecret ,class: "form-control col-md-5"
+      .form-group
+        %center
+          = link_to t('Back'), backend_shop_system_configs_path, :class=>"btn btn-default"
+          = f.submit class: "btn btn-primary"

@@ -1,0 +1,43 @@
+= form_for @theme, url: backend_shop_theme_path(@current_shop.slug) do |f|
+  - if @theme.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@theme.errors.count, "error")} prohibited this theme from being saved:"
+      %ul
+        - @theme.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :theme_type
+    = f.select :theme_type, Theme::THEME_TYPES
+
+  %p
+    %h1 以下自定义颜色只有在选择自定义主题时才能生效
+  .field
+    = f.label :background_color
+    = f.text_field :background_color, :class=>"color-picker form-control"
+  .field
+    = f.label :text_color
+    = f.text_field :text_color, :class=>"color-picker form-control"
+  .field
+    = f.label :header_bg_color
+    = f.text_field :header_bg_color, :class=>"color-picker form-control"
+  .field
+    = f.label :header_text_color
+    = f.text_field :header_text_color, :class=>"color-picker form-control"
+  .field
+    = f.label :navbar_bg_color
+    = f.text_field :navbar_bg_color, :class=>"color-picker form-control"
+  .field
+    = f.label :navbar_text_color
+    = f.text_field :navbar_text_color, :class=>"color-picker form-control"
+  .field
+    = f.label :menu_bg_color
+    = f.text_field :menu_bg_color, :class=>"color-picker form-control"
+  .field
+    = f.label :menu_text_color
+    = f.text_field :menu_text_color, :class=>"color-picker form-control"
+  .actions
+    = f.submit '保存', :class=>"btn btn-primary"
+
+:javascript
+  $('input[type=text].color-picker').minicolors({theme: 'bootstrap'});

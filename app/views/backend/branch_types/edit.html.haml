@@ -1,0 +1,7 @@
+%h1 修改商户分类
+
+= render 'form', {remote: false }
+
+= link_to t('Show'), backend_shop_branch_type_path(@current_shop.slug, @branch_type)
+\|
+= link_to t('Back'), backend_shop_branch_types_path(@current_shop.slug)

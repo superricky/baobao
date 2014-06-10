@@ -1,0 +1,28 @@
+---
+defaults: &defaults
+  poster:
+    address: smtp.exmail.qq.com
+    port: 25
+    domain: tuodanbao.com
+    authentication: login
+    user_name: no-reply@tuodanbao.com
+    password: tuodanbao2014
+    enable_starttls_auto: true
+  email:
+    default_from: exchange@tuodanbao.com
+    reply_to: exchange@tuodanbao.com
+    delivery_method: smtp
+    address: smtp.exmail.qq.com
+    port: 25
+    domain: tuodanbao.com
+    authentication: login
+    user_name: no-reply@tuodanbao.com
+    password: tuodanbao2014
+    enable_starttls_auto: true
+  public_account:
+    shop_slug: tuodanbao
+    my_fake_id: 1
+development:
+  <<: *defaults
+production:
+  <<: *defaults

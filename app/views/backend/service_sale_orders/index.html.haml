@@ -1,0 +1,33 @@
+%h1 服务订单列表
+%table.table.table-striped
+  %thead
+    %tr
+      %th.col-xs-2= ServiceSaleOrder.human_attribute_name(:out_trade_no)
+      %th.col-xs-4= ServiceSaleOrder.human_attribute_name(:subject)
+      %th.col-xs-1= ServiceSaleOrder.human_attribute_name(:amount)
+      %th.col-xs-2= ServiceSaleOrder.human_attribute_name(:created_at)
+      %th.col-xs-3= ServiceSaleOrder.human_attribute_name(:workflow_state)
+  %tbody
+    - @service_sale_orders.each do |service_sale_order|
+      %tr
+        %td= link_to service_sale_order.out_trade_no, @current_shop.present? ? [:backend, @current_shop, service_sale_order] : [:backend, service_sale_order]
+        %td
+          = service_sale_order.subject
+          \(
+          = ServiceSaleOrder.human_attribute_name(:shop)
+          \:
+          = link_to service_sale_order.shop.name, [:backend, service_sale_order.shop]
+          \)
+        %td= number_to_currency(service_sale_order.amount, :unit=>"¥")
+        %td= service_sale_order.created_at.strftime("%Y-%m-%d %H:%M")
+        %td
+          - if service_sale_order.current_state == :new
+            %span.label.label-default
+              = service_sale_order.workflow_state_name
+            = link_to '付款', pay_with_alipay_backend_shop_service_sale_order_path(@current_shop, service_sale_order), :class=>"btn btn-success"
+          - elsif service_sale_order.current_state == :finished
+            %span.label.label-success
+              = service_sale_order.workflow_state_name
+          - else
+            %span.label.label-danger
+              = service_sale_order.workflow_state_name

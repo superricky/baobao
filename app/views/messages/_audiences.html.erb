@@ -1,0 +1,15 @@
+<div class="row">
+  <% @audiences.each do |audience|%>
+    <div class="col-xs-3 col-md-3">
+      <img src="<%= audience.headimgurl.presence || "/assets/unknow.jpg"%>" alt="微信头像" height="54" width="54" class="img-circle">
+      <div class="caption">
+        <p class="text-center"><%= audience.nickname %></p>
+      </div>
+    </div>
+  <% end %>
+  <% if @user.audiences.count > @audiences.size %>
+    <div class="col-xs-3 col-md-3">
+    <%= link_to "更多..." ,user_get_audiences_info_path(@user.shop, @user, limit: @user.audiences.count), remote: true, class: "center-block"%>
+    </div>
+  <% end %>
+</div>

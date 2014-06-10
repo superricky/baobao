@@ -1,0 +1,39 @@
+.row{id: "article_list_show"}
+  - if @materials.size == 0
+    .col-sm-3.col-xs-12.col_material
+      .material{id: "new_material"}
+        %a{href: new_backend_shop_material_path(@current_shop), id:"add_material",title: "新建素材", data: {remote: true}}
+          %i.glyphicon.glyphicon-plus{style: "font-size:15pt;"}
+      .space-20
+  - @materials.in_groups(3, false).each_with_index do |group, group_index|
+    .col-sm-3.col-xs-12.col_material
+      - group.each_with_index do |material, material_index|
+        - if group_index == 0 && material_index == 0
+          .material{id: "new_material"}
+            %a{href: new_backend_shop_material_path(@current_shop), id:"add_material",title: "新建素材", data: {remote: true}}
+              %i.glyphicon.glyphicon-plus{style: "font-size:15pt;"}
+          .space-20
+        = render "material", {material: material}
+        .space-20
+
+#article_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "articleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4#articleModalLabel.modal-title 文章信息
+      .modal-body
+#material_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "articleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4#articleModalLabel.modal-title 素材信息
+      .modal-body
+#event_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "articleModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4#articleModalLabel.modal-title 自动回复
+      .modal-body

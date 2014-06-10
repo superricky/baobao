@@ -1,0 +1,33 @@
+= nested_form_for [:backend, @agent] do |f|
+  - if @agent.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@agent.errors.count, "error")} prohibited this agent from being saved:"
+      %ul
+        - @agent.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :aid
+    = f.text_field :aid
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :phone
+    = f.text_field :phone
+  .field
+    = f.label :balance
+    = f.text_field :balance
+  .field
+    = f.fields_for :agent_rels do |task_form|
+      = task_form.hidden_field :agent_id
+      = task_form.label :agent_zone_id
+      = task_form.select :agent_zone_id, options_for_select(AgentZone.all.map{|agent_zone| [agent_zone.name, agent_zone.id]}, selected: task_form.object.agent_zone_id)
+      = task_form.label :agent_from
+      = task_form.date_select :agent_from
+      ——
+      = task_form.date_select :agent_to
+      = task_form.link_to_remove "移除代理关系", :class=>"btn btn-danger"
+    = f.link_to_add "添加代理关系", :agent_rels, :class=>"btn btn-default"
+  .actions
+    = f.submit t('Save'), :class=>"btn btn-default"

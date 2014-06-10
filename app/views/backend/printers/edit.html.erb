@@ -1,0 +1,11 @@
+<h1><%= t('Edit printer') %></h1>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		打印机设置
+	</div>
+	<div class="panel-body">
+<%= render 'form' %>
+</div>
+</div>
+
+<%= link_to "商户打印机列表", backend_shop_branch_printers_path(@current_shop.slug, @current_branch), :class => "btn btn-default"%>

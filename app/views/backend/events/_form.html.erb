@@ -1,0 +1,62 @@
+<%= form_for([:backend, @current_shop, @event], :html => {class: "form-horizontal", role: "form"}) do |f| %>
+  <% if @event.errors.any? %>
+    <div  class="alert alert-danger">
+      <div><%= @event.errors.count %>个错误导致此次编辑无法成功保存:</div>
+
+      <ul>
+      <% @event.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field form-group">
+    <%= f.label :event , class: "col-sm-3 control-label"%>
+    <div class="col-sm-4">
+      <%= f.select :event, Event::EVENTTYPES[2..3], class: "form-control" %>
+    </div>
+  </div>
+  <div class="field form-group">
+    <%= f.label :event_key , class: "col-sm-3 control-label"%>
+    <div class="col-sm-9">
+      <%= f.text_field :event_key %>
+    </div>
+  </div>
+  <div class="field form-group">
+    <%= f.label "回复内容", class: "col-sm-3 control-label"%>
+    <div class="col-md-9">
+      <%= f.select :material_id, grouped_options_for_select(Event.data_for_select(@current_shop), selected: (@event.material ? @event.material : "#{Event::KEY_PREFIX}#{@event.system_keyword}")),{}, {class: "col-sm-4 control-label"} %>
+        <span class="middle">
+          <%= link_to "新建素材", backend_shop_materials_path(@current_shop), class: "btn btn-xs", target: "_blank"  %>
+        </span>
+    </div>
+  </div>
+  <div class="field form-group">
+    <div class="col-sm-offset-3 col-md-5">
+      <%= f.submit :class => 'btn btn-primary'%>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $(function(){
+  	function hideInput(){
+  	  	$('#event_event_key').closest('.field').hide();
+  	}
+
+  	function changeEvent(eventType){
+  		hideInput();
+  		if(eventType === '<%= Event::autoreply_event_str%>'){
+  			$('#event_event_key').closest('.field').show();
+  		}
+  	}
+
+    $('#event_event').change(function(e) {
+     	changeEvent(e.target.value);
+    });
+
+    changeEvent($('#event_event').val());
+  });
+
+</script>
+

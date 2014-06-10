@@ -1,0 +1,16 @@
+.order-new
+  .m-1
+    - if current_user.name.present? or current_user.phone.present? or current_user.default_address.present?
+      %section#profile-nav.alert.alert-info
+        %strong 温馨提示:
+        您可以点击页面右上角的下拉菜单里的"个人信息"来设置您的常用联系信息，这样就可以不用每次下单时都输入自己的地址信息了。
+      :javascript
+        setTimeout(function(){
+          $("#profile-nav").fadeOut("slow");
+        }, 6000);
+    #order_new
+      - unless @current_branch.got_scratchpad_condition.nil?
+        %section#got_scratchpad_condition.alert.alert-info= @current_branch.got_scratchpad_condition
+      %nav#order_amount_detail.combo= render "order_amount_detail"
+      %nav#order_item_list.combo.hide= render "order_items_list"
+      %section.m_1000= render 'form'

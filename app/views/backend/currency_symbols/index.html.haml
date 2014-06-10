@@ -1,0 +1,28 @@
+- if flash[:notice].present?
+  .alert.alert-success
+    = flash[:notice]
+.col-md-8.col-lg-8
+  .panel.panel-default
+    .panel-heading
+      货币类型列表
+    .panel-body
+      .col-md-12.col-lg-12
+        %table.table.table-striped
+          %thead
+            %tr
+              %th
+                货币名称
+              %th
+                货币符号
+              %th
+                操作
+          %tbody
+            - @currency_symbols.each do |currency_symbol|
+              %tr
+                %td= currency_symbol.decoration
+                %td= currency_symbol.symbol
+                %td
+                  = link_to t("Edit"), edit_backend_shop_currency_symbol_path(@current_shop, currency_symbol), class: "btn btn-primary"
+                  = link_to t("Destroy"), backend_shop_currency_symbol_path(@current_shop, currency_symbol), method: :delete, data: { confirm: '确定要删除吗？' }, :class=>"btn btn-danger"
+    .panel-footer
+      = link_to t("New currency_symbol"), new_backend_shop_currency_symbol_path(@current_shop), class: "btn btn-primary"

@@ -1,0 +1,8 @@
+%ul
+  %li
+    = link_to "", "javascript:void(0);", class: "icon-more icon right icon-2"
+    订单详情
+    %strong
+      总计:
+      - delivery_fee = params[:order_type] == "delivery" ? delivery_charge(params[:order_type], (@current_branch.delivery_zones.find(params[:delivery_zone_id]) rescue @current_branch.delivery_zones.first)) : 0
+      = number_to_currency(@amount+delivery_fee, :unit=>currency_symbol)

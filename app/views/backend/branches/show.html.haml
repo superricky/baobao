@@ -1,0 +1,20 @@
+- unless notice.nil?
+  #notice.alert.alert-success
+    = notice
+%h1 商户详情
+#branch_show.tabbable
+  %ul.nav.nav-tabs.padding-18
+    -i = 0
+    -{基本信息: "#branch_info", 详细信息: "#detail_info", 公司荣誉: "#awards", 外卖: "#delivery_setting", 接单设置: "#order_setting", 刮刮奖: "#scrachpad_setting"}.each do |title, href|
+      %li{class: i == 0 ? "active" : ""}= link_to title, href, {data: {toggle: "tab"}}
+      -i+=1
+  .tab-content.no-border.padding-24
+    -i = 0
+    -{基本信息: "#branch_info", 详细信息: "#detail_info", 公司荣誉: "#awards", 外卖: "#delivery_setting", 接单设置: "#order_setting", 刮刮奖: "#scrachpad_setting"}.each do |title, href|
+      .tab-pane{id: href.gsub("#", ""), class: i == 0 ? "in active" : ""}
+        = render href.gsub("#", "")
+        %center{style: "margin-top:10px;"}
+          = link_to t('Back'), backend_shop_branches_path , :class=>"btn btn-default"
+          = render "backend/branches/edit_link", {step: href.gsub("#", "").to_sym}
+      -i+=1
+= render "notice_create_product"

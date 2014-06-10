@@ -1,0 +1,111 @@
+<h1>
+	<% if @message_thread.user.name.nil? %>
+	<%= "与用户 #{@message_thread.user.fake_user_name} 对话记录" %>
+<% else %>
+	<%= "与用户 #{@message_thread.user.name} 对话记录" %>
+<% end%>
+</h1>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		会话信息
+	</div>
+	<div class="panel-body">
+		<div class="pull-right">
+			<%= will_paginate @messages, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+		</div>
+<table style="width:100%;">
+	<tbody>
+    <% @messages.each do |msg| %>
+		    <% if msg.from_user_name == @message_thread.user.fake_user_name %>
+		      <tr class="receive_msg">
+		      	<td>
+		      		<div>
+		      			<span><%= Time.at(msg.create_time) unless msg.create_time.nil? %></span>
+		      			<span>
+		      				<% if @message_thread.user.name.nil? %>
+					        	<%= link_to @message_thread.user.fake_user_name, backend_shop_user_path(@current_shop.slug, @message_thread.user) %>
+					        <% else %>
+					        	<%= link_to @message_thread.user.name, backend_shop_user_path(@current_shop.slug, @message_thread.user) %>
+					        <% end%>
+		      				<% if msg.msg_type == 'text' %>
+						    	说
+						    <% elsif msg.msg_type == 'image' %>
+						    	发来了图片
+						    <% elsif msg.msg_type == 'location' %>
+						    	发来了他的位置
+						    <% elsif msg.msg_type == 'link' %>
+						    	发来了链接
+						    <% elsif msg.msg_type == 'event' %>
+						    	发来了事件
+						    <% end %>
+		      				:</span>
+		      		</div>
+		      		<div class="msg-content well">
+		    <% else %>
+		      <tr class="send_msg">
+		      	<td>
+		      		<div>
+		      			<span><%= Time.at(msg.create_time) unless msg.create_time.nil? %></span>
+		      			<span><% if current_account.is_admin? %>店主<% else %>我<%end%>
+							<% if msg.msg_type == 'text' %>
+						    	回
+						    <% elsif msg.msg_type == 'image' %>
+						    	回复图片
+						    <% elsif msg.msg_type == 'location' %>
+						    	回复他的位置
+						    <% elsif msg.msg_type == 'link' %>
+						    	回复链接
+						    <% elsif msg.msg_type == 'news' %>
+						    	回复图文消息
+						    <% elsif msg.msg_type == 'music' %>
+						    	回复音频消息
+						    <% elsif msg.msg_type == 'event' %>
+						    	发来了事件
+						    <% end %>:</span>
+		      		</div>
+		      		<div class="msg-content well">
+		    <% end %>
+
+		    <% if msg.msg_type == 'text' %>
+		    	<span><%= msg.content %></span>
+		    <% elsif msg.msg_type == 'image' %>
+		    	<%= msg.pic_url %>
+		    <% elsif msg.msg_type == 'location' %>
+		    	<div style="width:40%;float:left;"><%= msg.label %></div>
+		    	<div style="border:1px solid;border-color: #ccc;float:right;"><img src="<%= location_img({:location_x => msg.location_x, :location_y => msg.location_y, :width=>300, :height =>240, :zoom=>14}) %>"></div>
+		    <% elsif msg.msg_type == 'link' %>
+		    	<span style="font-weight:bold;"><%= msg.title %></span><br/>
+		    	<span><%= link_to msg.description, msg.url %></span>
+		    <% elsif msg.msg_type == 'news' %>
+				    <div style="width:230px;border:5px solid #222222;float:right;">
+		    	<% msg.articles.each_with_index do|article, index| %>
+		    		<%= render :partial =>'articles/article_show', :locals=>{article:article, index:index}%>
+		    	<% end %>
+				    </div>
+			<%elsif msg.msg_type == 'music'%>
+				<div><strong><%= msg.title%></strong></div>
+				<div><%= msg.description%></div>
+				<% unless msg.music_url.nil? %>
+					<div><strong>音频地址：</strong><%=  link_to msg.music_url,msg.music_url %></div>
+				<% end %>
+				<% unless msg.hq_music_url.nil? %>
+					<div><strong>高清音频地址：</strong><%=  link_to msg.hq_music_url, msg.hq_music_url %></div>
+				<%end %>
+		    <% elsif msg.msg_type == 'event' %>
+		    	<span><%= Event::event_name(msg.event) %>
+		    	<% unless msg.event_key.empty? %>
+		    		<%= "(#{msg.event_key})" %>
+		    	<% end %>
+		    	</span>
+		    	<span></span>
+		    <% end %>
+		    	</div>
+		    	</td>
+		      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="pull-right">
+	<%= will_paginate @messages, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+</div></div>

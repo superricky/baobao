@@ -1,0 +1,17 @@
+= render "wizaid_step"
+- if @shop.errors.any?
+  #error_explanation.alert.alert-danger
+    %div
+      = @shop.errors.count
+    %ul
+      - @shop.errors.full_messages.each do |msg|
+        %li
+          = msg
+= form_for(@shop, url: (wizard_path + "?edit=#{params[:edit]}") , html: {class: "form-horizontal", role: "form", id: "branch_form", method: "patch"} ) do |f|
+  - if @shop && @shop.errors.any?
+    #error_explanation
+      %h2= @shop.errors.count
+      %ul
+        - @shop.errors.full_messages.each do |msg|
+          %li= msg
+  = yield f

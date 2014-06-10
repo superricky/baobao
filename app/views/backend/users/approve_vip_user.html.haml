@@ -1,0 +1,63 @@
+- unless notice.nil?
+  %div.alert.alert-success#notice= notice
+
+- if @user.errors.any?
+  %div#error_explanation.alert.alert-danger
+    %div= "#{@user.errors.count}个错误导致无法成功保存用户信息："
+    %ul
+      - @user.errors.full_messages.each do |msg|
+        %li= msg
+
+= form_for @user, url:create_vip_user_backend_shop_user_path(@current_shop.slug, @user), :html => {:class=>"form-horizontal", :role=>"form"}, :method=>'put' do |f|
+  %div.form-group.field
+    = f.label :id , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= f.object.id
+  %div.form-group.field
+    = f.label :name , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= f.object.name.present? ? f.object.name : "[未知]"
+
+  %div.form-group.field
+    = f.label :phone , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= f.object.phone.present? ? f.object.phone : "[未知]"
+
+  %div.form-group.field
+    = f.label :vip_no , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      = f.text_field :vip_no, :placeholder=>"会员卡号", class: "form-control"
+
+  %div.form-group.field
+    = f.label :vip_level_id , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      = f.select :vip_level_id, options_for_select(@current_shop.vip_levels.map{|vip_level| [vip_level.name, vip_level.id]}, selected: @user.vip_level_id), {:include_blank => '选择会员级别'}, {:class => "form-control" }
+
+  %div.form-group.field
+    = f.label :pay_password , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label 用户已自行设置
+
+  %div.form-group.field
+    = f.label :wallet , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= number_to_currency(f.object.wallet, :unit=>"¥")
+
+  %div.form-group.field
+    = f.label :credits , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= f.object.credits.present? ? f.object.credits : "[未知]"
+
+  %div.form-group.field
+    = f.label :email_address , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= f.object.email_address.present? ? f.object.email_address : "[未知]"
+
+  %div.form-group.field
+    = f.label :default_address , :class=>"col-md-4 control-label"
+    %div.col-md-8
+      %label= f.object.default_address.present? ? f.object.default_address : "[未知]"
+
+  %div.form-group.field
+    %div.col-sm-offset-2.col-sm-10
+      = f.submit '批准成为会员', class:"btn btn-primary"

@@ -1,0 +1,54 @@
+.container{style: "background:rgba(255, 255, 255, 0.3) none repeat scroll 0 0 !important;width:800px;margin:0 auto;border-radius:5px;padding:0;"}
+  .panel.panel-default{style: "margin:10px;"}
+    .panel-body{style: "padding:90px 0 50px 10px;"}
+      .page-header
+        %h1 注册帐号
+      = render "layouts/login_errors"
+      .row
+        .col-xs-12.col-md-12
+          = form_for(resource, :as => resource_name, :url => registration_path(resource_name), |
+            html: {class: "form-horizontal", role: "form"}) do |f|                             |
+            .form-group
+              = f.label :login_id , class: "col-md-3 control-label"
+              .col-md-8
+                = f.text_field :login_id, class: "form-control col-sm-4"
+                (须英文字母开头,且仅包含英文字母和数字)
+            .form-group
+              = f.label :name , class: "col-md-3 control-label"
+              .col-md-8
+                = f.text_field :name, class: "form-control col-sm-4"
+            - resource.build_shop if resource.shop.nil?
+            = f.fields_for :shop do |shop_form|
+              .form-group
+                = shop_form.label "name" , class: "col-md-3 control-label"
+                .col-md-8
+                  = shop_form.text_field :name, class: "form-control col-sm-4"
+            .form-group
+              = f.label :email , class: "col-md-3 control-label"
+              .col-md-6
+                = f.email_field :email, class: "form-control col-sm-4"
+            .form-group
+              = f.label :phone , class: "col-md-3 control-label"
+              .col-md-8
+                = f.text_field :phone, class: "form-control col-sm-4"
+            .form-group
+              = f.label :password , class: "col-md-3 control-label"
+              .col-md-8
+                = f.password_field :password, class: "form-control col-sm-4"
+            .form-group
+              = f.label :password_confirmation , class: "col-md-3 control-label"
+              .col-md-8
+                = f.password_field :password_confirmation, class: "form-control col-sm-4"
+            .form-group
+              = f.label :captcha, class: "col-md-3 control-label"
+              = captcha_tag
+              = f.text_field :captcha
+            .form-group
+              -if request.post?
+                .col-sm-offset-3.col-md-3
+                  = valid_captcha?(params[:account][:captcha]) ? '验证通过' : '验证失败'
+            .form-group
+              .col-md-3.col-xs-4.col-md-offset-3
+                = f.submit "注册帐号", :class=>"btn btn-primary"
+              .col-md-3.col-xs-4
+                = link_to "登录帐号", backend_login_path,:class=>"btn btn-default"

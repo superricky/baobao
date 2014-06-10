@@ -1,0 +1,7 @@
+<div class="alert alert-danger">
+	<strong>温馨提示：</strong>本预览效果仅作参考，并不代表在微信客户端程序中的真实效果，请以微信终端测试效果为准！
+</div>
+<div class="well" style="width:260px;margin:auto;margin-top:20px;margin-bottom:50px;">
+<% @articles.each_with_index do|article, index| %>
+	<%= render :partial =>'articles/article_show', :locals=>{article:article, index:index}%>
+<% end %>

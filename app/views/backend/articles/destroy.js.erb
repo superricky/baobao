@@ -1,0 +1,1 @@
+$("#article_list_show #material_<%= @material.id%> .widget-body .widget-main").html('<%= escape_javascript(render "backend/articles/list", {material: @material} )%>');

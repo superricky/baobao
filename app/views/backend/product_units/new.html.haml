@@ -1,0 +1,6 @@
+%h1= t('New product unit')
+.panel.panel-default
+  .panel-heading 计量单位信息
+  .panel-body
+    = render 'form'
+= link_to t('Back'), get_product_units_path, :class=>"btn btn-default"

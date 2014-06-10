@@ -1,0 +1,2 @@
+module MobileAlipaysHelper
+end

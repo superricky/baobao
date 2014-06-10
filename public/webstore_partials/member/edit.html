@@ -1,0 +1,52 @@
+<div ng-controller="memberController">
+  <div ng-include="'webstore_partials/aside_menu.html'"></div>
+  <div class="col-xs-9">
+    <section class="panel panel-default">
+      <div class="panel-body view_area">
+        <div ng-show="memberEditSuccess" class="alert alert-success">
+          {{memberEditSuccess}}
+        </div>
+        <div ng-show="memberEditError" class="alert alert-danger">
+          {{memberEditError}}
+        </div>
+        <form class="form-horizontal" role="form">
+          <fieldset>
+            <legend>账户信息修改</legend>
+            <div class="form-group">
+              <label class="control-label col-xs-2">
+                用户名
+              </label>
+              <div class="col-xs-6">
+                <input type="text" ng-model="member.name" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-xs-2">
+                联系电话
+              </label>
+              <div class="col-xs-6">
+                <input type="text" ng-model="member.phone" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label col-xs-2">
+                默认配送地址
+              </label>
+              <div class="col-xs-6">
+                <input type="text" ng-model="member.default_address" class="form-control"/>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <center>
+                <input type="submit" ng-click="submit(member)" class="btn btn-default" value="提交"/>
+              </center>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>

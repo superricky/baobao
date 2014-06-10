@@ -1,0 +1,54 @@
+<div class="alert alert-warning">
+	<strong>
+注意：
+</strong>由于微信公众帐号的菜单功能只支持<b>认证的订阅号</b>或者<b>服务号</b>，因此您只有在添加公众帐号且将其配置为认证的订阅号或者服务号后，您才能为对应的公众帐号进行菜单设置
+</div>
+	<% unless flash[:notice].nil? %>
+	  <div class="alert alert-success"><%= flash[:notice] %></div>
+	<% end %>
+		<h1>
+			公众帐号列表
+		</h1>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th><%= SystemConfig.human_attribute_name("public_account_name")%></th>
+				<th><%= SystemConfig.human_attribute_name("my_fake_id")%></th>
+				<th><%= SystemConfig.human_attribute_name("token")%></th>
+				<th><%= SystemConfig.human_attribute_name("gonghao_type")%></th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @system_configs.each do |system_config| %>
+				<tr>
+					<td><%= system_config.public_account_name%></td>
+					<td><%= system_config.my_fake_id%></td>
+					<td><%= system_config.token%></td>
+					<td><%= system_config.subscribe_account_str%>
+						<% if system_config.be_verified %>
+							<span class="label label-success">
+								已认证
+							</span>
+						<% else %>
+							<span class="label label-default">
+								未认证
+							</span>
+						<% end %>
+					</td>
+					<td>
+						<%= link_to t("Edit"), edit_backend_shop_system_config_path(@current_shop.slug, system_config), class: "btn btn-default" %>
+						<%= link_to t("Show"), backend_shop_system_config_path(@current_shop.slug, system_config), class: "btn btn-default" %>
+						<%= link_to t("Destroy"), backend_shop_system_config_path(@current_shop.slug, system_config), method: :delete, data: { confirm: '确定要删除吗？' }, class: "btn btn-danger" %>
+						<% if system_config.can_define_menu?%>
+							<%= link_to "菜单设置", backend_shop_system_config_menus_path(@current_shop.slug, system_config), class: "btn btn-default" %>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+	<div class="footer">
+		<%= link_to "新建公众号",new_backend_shop_system_config_path(@current_shop.slug), class: "btn btn-info"%>
+	</div>
+	<%= render "backend/shops/notice_config_in_deshboard" %>

@@ -1,0 +1,39 @@
+- if ["news", "promotion"].include?(material.msg_type)
+  %ul.list-unstyled
+    - material.articles.each_with_index do |article, index|
+      %li{id: "article_#{article.id}"}
+        - if index == 0
+          = image_tag article.image.medium.url,  width: "100%", height: 100
+        - else
+          .row
+            .col-sm-3
+              = image_tag article.image.thumb.url, width: 50, height: 50
+            .col-sm-6
+              %span.padding-20
+                = article.title
+        .tools.tools-bottom
+          %a{href: edit_backend_shop_material_article_path(@current_shop, material, article), data: {remote: true}}
+            %i.icon-pencil
+          = link_to raw('<i class="icon-remove red"></i>'), backend_shop_material_article_path(@current_shop, material, article), method: :delete, data: { confirm: '确定要删除吗？', remote: true }
+    - if material.articles.size <= 9
+      %li
+        %a{href: new_backend_shop_material_article_path(@current_shop, material), id:"add_article", title: "新建文章" ,data: {remote: true}}
+          %i.icon.icon-plus.icon-4x
+- elsif "text" == material.msg_type
+  = material.content
+- elsif "music" == material.msg_type
+  %dl
+    %dt= Material.human_attribute_name(:title)
+    %dd= material.title
+    %dt= Material.human_attribute_name(:music_url)
+    %dd
+      %pre= material.music_url
+    %dt= Material.human_attribute_name(:hq_music_url)
+    %dd
+      %pre= material.hq_music_url
+  .widget-box.transparent
+    .widget-header.widget-header-small
+      = Material.human_attribute_name(:description)
+    .widget-body
+      .widget-main
+        %p= material.description

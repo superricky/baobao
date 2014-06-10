@@ -1,0 +1,7 @@
+%h1 修改产品幻灯片
+
+= render 'form'
+
+= link_to t('Show'), backend_shop_branch_product_slider_path(@current_shop.slug, @current_branch, @product_slider)
+\|
+= link_to t('Back'), backend_shop_branch_product_sliders_path(@current_shop.slug, @current_branch)

@@ -1,0 +1,34 @@
+- if @shop.errors.any?
+  #error_explanation.alert.alert-danger
+    %div
+      = @shop.errors.count
+      个错误导致无法保存商户信息:
+    %ul
+      - @shop.errors.full_messages.each do |msg|
+        %li
+          = msg
+= render "backend/shop_steps/shop_info_field", {f: f}
+:javascript
+  function change_charge_method(way){
+  		if (way == "#{Shop::CHARGE_METHOD_BY_TIME}"){
+  			$('#shop_expiration_time_field').show();
+  			$('#shop_state_field').show();
+  			$('#shop_left_order_count').closest('.field').hide();
+  		}else if(way == "#{Shop::CHARGE_METHOD_BY_ORDER_COUNT}"){
+  			$('#shop_expiration_time_field').hide();
+  			$('#shop_state_field').hide();
+  			$('#shop_left_order_count').closest('.field').show();
+  		}else{
+  			$('#shop_expiration_time_field').hide();
+  			$('#shop_state_field').hide();
+  			$('#shop_left_order_count').closest('.field').hide();
+  		}
+  	}
+  
+  	function change_options(e){
+  		change_charge_method(e.value);
+  	}
+  
+  	$(document).ready(function(){
+  		change_charge_method("#{@shop.charge_method}");
+    });

@@ -1,0 +1,10 @@
+development:
+  server: "http://localhost:9292/faye"
+  secret_token: "secret"
+test:
+  server: "http://localhost:9292/faye"
+  secret_token: "secret"
+production:
+  server: "http://www.tuodanbao.com:9292/faye"
+  secret_token: "secret"#"50031c563f5b88b2040c826573b47e741b2e57d944ed23c1457d047e638ad299"
+  signature_expiration: 3600 # one hour

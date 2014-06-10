@@ -1,0 +1,75 @@
+<% if flash[:success].present? %>
+  <div class="alert alert-success">
+    <%= flash[:success] %>
+  </div>
+<% end %>
+<% if @system_config.can_define_menu?%>
+  <div class="alert alert-success">
+  您已经成功对接公众帐号，接下来您可以
+    <%= link_to "设置菜单", backend_shop_system_config_menus_path(@current_shop.slug, @system_config) %>了
+  </div>
+<% else %>
+<div class="alert alert-warning">
+  如果您是认证的订阅号或者是服务号（即：认证服务号或普通服务号），请<%= link_to "设置", edit_backend_shop_system_config_path(@current_shop.slug, @system_config) %>appId和appSecret，之后就可以设置您的微信导航菜单了</div>
+<% end %>
+
+<div class="col-md-10">
+  <div class="form-vertical">
+  <h1>微信公众账号系统参数</h1>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>请您在微信后台使用如下配置信息:</strong>
+    </div>
+    <div class="panel-body">
+    <div><strong>URL:</strong><%= message_validate_root_url(@current_shop.slug)%></div>
+    <div><strong>Token:</strong><%= @system_config.token %></div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      系统配置参数详情
+    </div>
+    <div class="panel-body">
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('public_account_name') %>:</strong>
+        <%= @system_config.public_account_name %>
+      </p>
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('gonghao_type') %>:</strong>
+        <%= @system_config.subscribe_account_str %>
+      </p>
+
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('token') %>:</strong>
+        <%= @system_config.token %>
+      </p>
+
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('my_fake_id') %></strong>
+        <%= @system_config.my_fake_id %>
+      </p>
+
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('appId') %>:</strong>
+        <%= @system_config.appId %>
+      </p>
+
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('appSecret') %>:</strong>
+        <%= @system_config.appSecret %>
+      </p>
+      <p>
+        <strong><%= SystemConfig.human_attribute_name('be_verified') %>:</strong>
+        <%= @system_config.be_verified ? "已认证" : "未认证" %>
+      </p>
+
+    </div>
+  </div>
+  <% if @system_config.can_define_menu?%>
+    <%= link_to "菜单设置", backend_shop_system_config_menus_path(@current_shop.slug, @system_config), class: "btn btn-success" %>
+  <% end %>
+  <%= link_to t('Edit'), edit_backend_shop_system_config_path(@current_shop.slug, @system_config), :class=>"btn btn-default" %>
+  <%= link_to t('Back'), backend_shop_system_configs_path, :class=>"btn btn-default" %>
+  </div>
+</div>
+<%= render "backend/shops/notice_config_in_deshboard" %>

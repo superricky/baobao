@@ -1,0 +1,69 @@
+%h1= t('Listing shops')
+.row-fluid
+  = link_to t('New shop'), new_backend_shop_path, :class=>"btn btn-primary"
+  = search_form_for([:backend, @q], :html=>{:class=>"form-inline pull-right", :role=>"form"}) do |f|
+    .form-group
+      = f.label :name
+      = f.text_field :name_cont, :class=>"form-control"
+    .form-group
+      = f.label :slug
+      = f.text_field :slug_cont, :class=>"form-control"
+    .form-group
+      = f.label :telephone
+      = f.text_field :telephone_cont, :class=>"form-control"
+    = f.submit "搜索", :class=>"btn btn-default"
+  %table.table.table-condensed.table-striped
+    %thead
+      %tr
+        %th= Shop.human_attribute_name("name")
+        %th= Shop.human_attribute_name("is_open")
+        %th 剩余配额
+        %th= Shop.human_attribute_name("orders_count")
+        %th= Shop.human_attribute_name("income")
+        %th= Shop.human_attribute_name(t("operation btn"))
+    %tbody
+      - @shops.each do |shop|
+        %tr
+          %td
+            - if shop.accounts.empty?
+              %span.label.label-danger 未配置管理员
+            = shop.name
+          %td
+            = shop.workflow_state_name
+          %td
+            - if shop.charge_method == Shop::CHARGE_METHOD_BY_ORDER_COUNT
+              剩余订单数：#{shop.left_order_count}
+            - elsif shop.charge_method == Shop::CHARGE_METHOD_BY_TIME
+              到期时间：#{shop.expiration_time.strftime('%Y-%m-%d')}
+          %td
+            = shop.orders_count
+            笔
+          %td= number_to_currency(shop.income, :unit=>"¥")
+          %td= link_to '进入修改', dashboard_backend_shop_path(shop.slug), :class=>"btn btn-default"
+  .pull-right
+    = will_paginate @shops , renderer: BootstrapPagination::Rails, bootstrap: 3
+  - if params[:export_accounts]
+    %button.btn.btn-primary.btn-lg{"data-target" => "#export_accounts_modal", "data-toggle" => "modal"}
+      导出账户信息
+  #export_accounts_modal.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4.modal-title 选择导出账户的时间
+        .modal-body
+          = form_tag backend_export_accounts_path(format: :csv), method: :post, :class=>"form-vertical"  do
+            .form-group
+              = label_tag(:created_date,"账户创建时间", :class=> "col-sm-4 control-label")
+              #created_date.input-group.col-sm-8
+                = select_year(Date.today, :field_name=>"year", class: "col-xs-2", placeholder: "2000" )
+                = select_month(Date.today, :field_name=>"month", class: "col-xs-2", placeholder: "12" )
+                = select_day(Date.today, :field_name=>"day", class: "col-xs-2", placeholder: "20" )
+            .form-group
+              .input-group.col-sm-8.col-sm-offset-4
+                %input.btn.btn-primary{:type => "submit", :value => "提交"}/
+        .modal-footer
+          %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} 关闭
+      / /.modal-content
+    / /.modal-dialog
+  / /.modal

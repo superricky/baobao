@@ -1,0 +1,16 @@
+= form_for(@product_unit, url: @product_unit.new_record? ? get_product_units_path: get_product_unit_path(@product_unit)) do |f|
+  - if @product_unit.errors.any?
+    #error_explanation
+      %h2
+        = @product_unit.errors.count
+        个错误导致无法正确保存:
+      %ul
+        - @product_unit.errors.full_messages.each do |msg|
+          %li= msg
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name, class: "form-control"
+  %center.actions{style: "margin-top:10px;"}
+    = link_to_back
+    = f.submit :class=>"btn btn-primary"

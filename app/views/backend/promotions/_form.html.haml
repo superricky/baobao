@@ -1,0 +1,101 @@
+= simple_form_for(@promotion, url: @promotion.new_record? ? create_special_off_backend_shop_branch_promotions_path(@current_shop.slug, @current_branch) : |
+  update_special_off_backend_shop_branch_promotion_path(@current_shop.slug, @current_branch, @promotion), html: {role: "form"})  do |f|                                  |
+  - if @promotion.errors.any?
+    #error_explanation
+      %h2
+        = @promotion.errors.count
+        个错误导致无法正确保存活动信息:
+      %ul
+        - @promotion.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.label :branch, class: "control-label"
+    = f.object.branch.name
+  .form-group
+    = f.label :name, class: "control-label"
+    = f.text_field :name, class: "form-control"
+  .form-group
+    = f.label :description, class: "control-label"
+    = f.text_area :description, :cols=>80, :rows =>5, class: "form-control"
+  .form-group
+    = f.label :image, class: "control-label"
+    = f.file_field :image
+    *图片大小不得超过0.5MB
+    - if not f.object.image.nil?
+      = image_tag f.object.image.medium.url
+  .form-group
+    = f.label :start_time, class: "control-label"
+    = f.datetime_select :start_time
+  .form-group
+    = f.label :end_time, class: "control-label"
+    = f.datetime_select :end_time
+  %table.table.table-striped
+    %thead
+      %tr
+        %th 产品
+        %th 原价
+        %th 促销价格
+        %th 操作
+    %tbody#promotion_details_body
+      = f.fields_for :promotion_details do |p|
+        %tr
+          %td
+            = p.hidden_field '_destroy', :value => 0, :class=>"destroy_field"
+            = p.select :product_id, options_for_select(@current_branch.products.map{|product| [product.name, product.id, :data=>{:price=>product.price, :"original-price"=>product.original_price}]}, p.object.product.nil? ? nil: p.object.product.id)
+          %td.original-price
+          %td= p.text_field :price, :class=>"special_price"
+          %td= link_to t("Destroy"), "javascript:void(0)", :onclick=>"remove_promotion_detail(this)", :class=>"btn btn-danger"
+    %tfoot
+      %tr
+        %td{:colspan => "4"}
+          = link_to "新建促销产品", "javascript:void(0)", :onclick=>'add_promotion_detail(this)', :class=>"btn btn-default pull-right"
+  .actions
+    = f.submit @promotion.new_record? ? "创建特价活动":"修改特价活动", :class=>"btn btn-primary"
+    = link_to t('Back'), index_special_off_backend_shop_branch_promotions_path(@current_shop, @current_branch), :class=>"btn btn-default"
+:javascript
+  function remove_promotion_detail(value){
+  		if ($('#promotion_details_body tr:visible').size()>1){
+  			var tr = $(value).closest('tr');
+  			if($('.destroy_field', tr).length>0){
+  				$('.destroy_field', tr).val(1);
+  				$(tr).hide();
+  			}else{
+  				$(tr).remove();
+  			}
+  		}else{
+  			alert('对不起，您至少需要设置一个特价产品');
+  		}
+
+  	}
+
+  	var last_special_off_index = #{@promotion.promotion_details.size};
+
+  	function add_promotion_detail(value){
+  		var str = '<tr><td><select name="promotion[promotion_details_attributes]['+last_special_off_index+'][product_id]">';
+  			str += '#{escape_javascript(options_for_select(@current_branch.products.map{|product| [product.name, product.id, :data=>{:price=>product.price, :"original-price"=>product.original_price}]}))}'
+  			str +=	'</select></td>'
+  			str += '<td class="original-price"></td><td><input class="special_price" name="promotion[promotion_details_attributes]['+last_special_off_index+'][price]" type="text"></td>'
+    			str +=	'<td><a class="btn btn-danger" href="javascript:void(0)" onclick="remove_promotion_detail(this)">删除</a></td></tr>'
+  		$('#promotion_details_body').append(str);
+  		$('#promotion_details_body tr:last select').on('change', on_change_product);
+  		$('#promotion_details_body tr:last select').trigger('change');
+  		last_special_off_index++;
+  	}
+
+  	function on_change_product(e){
+  		var node = e.target
+  		change_product(node)
+  	}
+
+  	function change_product(node){
+  		var price = $(node.selectedOptions).data('price')
+  		var original_price = $(node.selectedOptions).data('original-price')
+  		var tr = $(node).closest('tr')
+  		$('.original-price', tr).text("#{@current_shop.current_currency_symbol}"+original_price);
+  		$('.special_price', tr).val(price);
+  	}
+
+  	$(document).ready(function(){
+  		$('#promotion_details_body select').on('change', on_change_product);
+  		$('#promotion_details_body select').trigger('change');
+  	});

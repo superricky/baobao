@@ -1,0 +1,60 @@
+<% unless notice.nil? %>
+<div class="alert alert-success" id="notice">
+	<%= notice %>
+</div>
+<%end%>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		无线打印机参数
+	</div>
+	<div class="panel-body">
+		<p>
+			<strong><%= Printer.human_attribute_name('name')%></strong>
+			<%= @printer.name %>
+		</p>
+		<% if not @printer.print_on_order %>
+		<p>
+		  <strong><%= Printer.human_attribute_name('print_on_order') %>:</strong>
+		  未启动无线打印机设备(如果需要，请<a href="mailto:exchange@tuodanbao.com" class="label label-info">联系</a>购买)
+		</p>
+
+		<% else %>
+		<p>
+		  <strong><%= Printer.human_attribute_name('print_on_order') %>:</strong>
+		  已启动无线打印机设备
+		</p>
+
+
+		<p>
+			<strong><%= Printer.human_attribute_name('copy_count')%>:</strong>
+			<%= @printer.copy_count%>份
+		</p>
+
+		<p>
+			<strong><%= Printer.human_attribute_name('phone')%>:</strong>
+			<%= @printer.phone unless @printer.phone.nil?%>
+		</p>
+
+		<% if @printer.use_feiyin_printer? %>
+
+		<p>
+		  <strong><%= Printer.human_attribute_name('memberCode') %>:</strong>
+		  <%= @printer.memberCode %>
+		</p>
+		<p>
+		  <strong><%= Printer.human_attribute_name('deviceNo') %>:</strong>
+		  <%= @printer.deviceNo %>
+		</p>
+
+		<p>
+		  <strong><%= Printer.human_attribute_name('apiKey') %>:</strong>
+		  <%= @printer.apiKey %>
+		</p>
+		<% end %>
+
+		<% end %>
+	</div>
+</div>
+
+<%= link_to "编辑打印机参数", edit_backend_shop_branch_printer_path(@current_shop.slug, @current_branch, @printer), :class => "btn btn-info"%>
+<%= link_to "商户打印机列表", backend_shop_branch_printers_path(@current_shop.slug, @current_branch), :class => "btn btn-default"%>

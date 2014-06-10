@@ -1,0 +1,29 @@
+<div class="pull-left col-md-6 col-lg-6 title"><%= t('Listing special off') %></div>
+<div class="pull-right col-md-6 col-lg-6 title"><%= link_to t('New special off'), new_special_off_backend_shop_branch_promotions_path, :class=>"btn btn-primary pull-right" %></div>
+
+<table class="table table-striped">
+	<% if @promotions.empty? %>
+		<tr><td>当前没有设置任何促销特价活动</td></tr>
+	<%else%>
+		<thead><tr><th>活动名称</th><th>起止日期</th><th>活动状态</th><th>操作</th></tr></thead>
+		<% @promotions.each do |promotion| %>
+			<tr><td><%= promotion.name%></td>
+				<td><%= promotion.start_time.strftime("%Y-%m-%d %H:%M:%S")%>-<%= promotion.end_time.strftime("%Y-%m-%d %H:%M:%S")%></td>
+				<td><% if (promotion.start_time> Time.now )%>即将进行
+					<%elsif (promotion.start_time..promotion.end_time).cover? Time.now %>
+					进行中
+					<%elsif (promotion.end_time < Time.now)%>
+					已结束
+					<%end%>
+					</td>
+				<td>
+					<%= link_to t('Show'), show_special_off_backend_shop_branch_promotion_path(@current_shop.slug, @current_branch, promotion), :class=>"btn btn-default"%>
+					<%= link_to t('Edit'), edit_special_off_backend_shop_branch_promotion_path(@current_shop.slug, @current_branch, promotion), :class=>"btn btn-default"%>
+					<%= link_to t('Destroy'), destroy_special_off_backend_shop_branch_promotion_path(@current_shop.slug, @current_branch, promotion), method: :delete, data: { confirm: '确定要删除活动信息吗？' }, :class=>"btn btn-danger"%>
+
+				</td>
+			</tr>
+		<%end%>
+	<%end%>
+</table>
+

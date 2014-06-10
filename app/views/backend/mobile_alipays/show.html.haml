@@ -1,0 +1,29 @@
+%p#notice= notice
+- if @current_shop.is_multipe_base_version?
+  .alert.alert-danger 对不起，支付宝支付功能仅对独立商户版和多店旗舰版用户开放。
+- else
+  .panel.panel-default
+    .panel-heading 支付宝收款账户设置
+    .panel-body
+      %p
+        %b
+          = MobileAlipay.human_attribute_name(:use_mobile_alipay)
+          \:
+        = @mobile_alipay.use_mobile_alipay? ? "启用" : "不启用"
+      - if @mobile_alipay.use_mobile_alipay
+        %p
+          %b
+            = MobileAlipay.human_attribute_name(:pid)
+            \:
+          = @mobile_alipay.pid
+        %p
+          %b
+            = MobileAlipay.human_attribute_name(:pkey)
+            \:
+          = @mobile_alipay.pkey
+        %p
+          %b
+            = MobileAlipay.human_attribute_name(:email)
+            \:
+          = @mobile_alipay.email
+      = link_to t('Edit'), edit_backend_shop_mobile_alipay_path(@current_shop), :class=>"btn btn-default"

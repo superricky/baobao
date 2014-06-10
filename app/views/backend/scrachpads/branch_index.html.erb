@@ -1,0 +1,34 @@
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		刮刮卡结果
+	</div>
+	<div class="panel panel-body">
+		<%= render "search"%>
+		<table class="table table-striped">
+		  <thead>
+		    <tr>
+		      <th>用户</th>
+		      <th>刮奖结果</th>
+		      <th>有效期</th>
+		      <th>订单编号</th>
+		      <th>操作</th>
+		    </tr>
+		  </thead>
+
+		  <tbody>
+		  	<% if @scrachpads.empty? %>
+		  	  <tr>
+		        <td colspan="5">暂时没有获得刮刮卡的用户</td>
+		      </tr>
+		  	<%else%>
+			    <% @scrachpads.each do |scrachpad| %>
+			      <%= render 'scrachpad_result', {scrachpad: scrachpad}%>
+			    <% end %>
+		    <% end %>
+		  </tbody>
+		</table>
+		<div class="pull-right">
+			<%= will_paginate @scrachpads, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+		</div>
+	</div>
+</div>

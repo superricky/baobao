@@ -1,0 +1,29 @@
+<%= form_for(@sms_msg, url: backend_shop_branch_sms_msgs_path(@current_shop.slug, @current_branch)) do |f| %>
+  <% if @sms_msg.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= @sms_msg.errors.count %>个错误导致无法发送短消息:</h2>
+
+      <ul>
+      <% @sms_msg.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @error.present? %>
+  	<div class="alert alert-danger"><%= @error %></div>
+  <%end%>
+
+  <div class="field">
+    <%= f.label :to %><br>
+    <%= f.text_field :to %>
+  </div>
+  <div class="field">
+    <%= f.label :body %><br>
+    <%= f.text_area :body, :cols=>50, :rows=>8 %>
+  </div>
+  <div class="actions">
+    <%= f.submit :class=>"btn btn-primary"%>
+  </div>
+<% end %>

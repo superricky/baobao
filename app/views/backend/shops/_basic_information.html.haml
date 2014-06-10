@@ -1,0 +1,144 @@
+.row{style: "width:90%;"}
+  .col-sm-6
+    .widget-box.transparent
+      .widget-header.widget-header-small
+        %h4.smaller
+          %i.icon-check.bigger-110
+          = Shop.human_attribute_name("image")
+      .widget-body
+        .widget-main
+          = image_tag @shop.image.medium.url, :width => 360,:class=>"img-rounded"
+  .col-sm-6
+    .widget-box.transparent
+      .widget-header.widget-header-small
+        %h4.smaller
+          %i.icon-check.bigger-110
+          = Shop.human_attribute_name("qrcode")
+      .widget-body
+        .widget-main
+          = image_tag @shop.qrcode.medium.url, :alt=>"200x200", :class=>"img-rounded", :width=>200
+  .col-sm-12
+    .widget-box.transparent
+      .widget-header.widget-header-small
+        %h4.smaller
+          %i.icon-check.bigger-110
+          = Shop.human_attribute_name("introduction")
+      .widget-body
+        .widget-main
+          = @shop.introduction.present? ? @shop.introduction : "暂无介绍"
+    .widget-box.transparent
+      .widget-header.widget-header-small
+        %h4.smaller
+          %i.icon-check.bigger-110
+          = Shop.human_attribute_name("welcome_msg")
+      .widget-body
+        .widget-main
+          = welcome_msg || "暂无设置"
+  .col-sm-12
+    %table.table.table-striped
+      %tr
+        %th{style: "width:40%"}= Shop.human_attribute_name("name")
+        %td= @shop.name
+      %tr
+        %th{style: "width:40%"}= Shop.human_attribute_name("slug")
+        %td= @shop.slug
+      - if current_account.is_admin?
+        %tr
+          %th{style: "width:40%"}= Shop.human_attribute_name("agent")
+          %td
+            - if @shop.agent.present?
+              = link_to @shop.agent.name, [:backend, @shop.agent]
+      %tr
+        %th{style: "width:40%"}= Shop.human_attribute_name("is_open")
+        %td
+          - if @shop.is_open
+            运营状态
+          - else
+            暂停营业
+      %tr
+        %th{style: "width:40%"}
+          = Shop.human_attribute_name("reply_num_of_orders")
+        %td
+          = @shop.get_current_reply_orders_type_name
+      %tr
+        %th{style: "width:40%"}= Shop.human_attribute_name("charge_method")
+        %td= @shop.charge_method_name
+      %tr
+        - if @shop.charge_method == Shop::CHARGE_METHOD_BY_TIME
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("expiration_time")
+            \:
+          %td= @shop.expiration_time.strftime('%Y-%m-%d %H:%M')
+        - elsif @shop.charge_method == Shop::CHARGE_METHOD_BY_ORDER_COUNT
+          %th{style: "width:40%"}= Shop.human_attribute_name("left_order_count")
+          %td= @shop_order_count
+      - if current_account.is_admin?
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("support_auto_buy_service")
+          %td
+            = @shop.support_auto_buy_service? ? "支持" : "不支持"
+          %td
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("support_link")
+          %td
+            = link_to @shop.support_link_name||"#", @shop.support_link
+          %td
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("copy_right_footer")
+          %td
+            = raw @shop.copy_right_footer
+          %td
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("hide_support_company")
+          %td
+            - if @shop.hide_support_company
+              隐藏
+            - else
+              不隐藏
+          %td
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("product_image_limit")
+          %td
+            = @shop.product_image_limit
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("product_slider_limit")
+          %td
+            = @shop.product_slider_limit
+        %tr
+          %th{style: "width:40%"}
+            = Shop.human_attribute_name("max_branch_sliders")
+          %td
+            = @shop.max_branch_sliders
+            张
+      %tr
+        %th{style: "width:40%"}
+          = Shop.human_attribute_name("telephone")
+        %td
+          = @shop.telephone
+      %tr
+        %th{style: "width:40%"}
+          = Shop.human_attribute_name("orders_count")
+        %td
+          = @shop.orders_count
+      %tr
+        %th{style: "width:40%"}
+          = Shop.human_attribute_name("income")
+        %td
+          = number_to_currency(@shop.income, :unit=> @shop.current_currency_symbol)
+      %tr
+        %th{style: "width:40%"}
+          = Shop.human_attribute_name("max_branches_count")
+        %td
+          = @shop.max_branches_count
+          个
+      %tr
+        %th{style: "width:40%"}
+          = Shop.human_attribute_name("default_reply_content_type")
+        %td
+          = @shop.default_reply_content_type_name

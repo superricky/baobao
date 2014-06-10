@@ -1,0 +1,6 @@
+$('#account_branch .modal-body').html('<%= escape_javascript(render "backend/accounts/branch",{remote: true })%>');
+$('#account_branch').modal({
+  keyboard: false
+});
+
+$('#account_branch .modal-dialog').width("800px")

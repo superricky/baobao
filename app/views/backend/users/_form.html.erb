@@ -1,0 +1,107 @@
+  <%if flash[:error].present? %>
+    <div class="alert alert-danger">
+      <%= flash[:error]%>
+    </div>
+  <%end%>
+  <% if @user.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <div><%= @user.errors.count %>个错误导致无法成功保存用户信息：</div>
+
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group field">
+    <%= f.label :id , :class=>"col-xs-3 control-label" %>
+    <div class="col-xs-4">
+    	<label><%= f.object.id %></label>
+    </div>
+  </div>
+
+  <div class="form-group field">
+    <%= f.label :name , :class=>"col-xs-3 control-label" %>
+    <div class="col-xs-4">
+    <%= f.text_field :name, :class=>"form-control", :placeholder=>"张三" %>
+    </div>
+  </div>
+
+  <div class="form-group field">
+    <%= f.label :phone, :class=>"col-xs-3 control-label" %>
+    <div class="col-xs-4">
+    <%= f.text_field :phone, :class=>"form-control", :placeholder=>"1008611", class: "form-control" %>
+    </div>
+  </div>
+  <% if not @current_account.nil? %>
+    <% if @current_account.is_boss? or @current_account.is_admin? %>
+      <div class="form-group field">
+        <%= f.label :vip_no, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-4" >
+          <%= f.text_field :vip_no, :placeholder=>"会员卡号", class: "form-control" %>
+        </div>
+      </div>
+      <div class="form-group field">
+        <%= f.label "会员级别", :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-4 " >
+          <%= f.select :vip_level_id, options_for_select(@current_shop.vip_levels.map{|vip_level| [vip_level.name, vip_level.id]}, selected: @user.vip_level_id), {:include_blank => '选择会员级别'}, {:class => "form-control" }%>
+        </div>
+      </div>
+      <div class="form-group field">
+        <%= f.label :pay_password, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-4" >
+           <%= f.password_field :pay_password, :placeholder=>"该用户使用该密码进行余额支付", class: "form-control"%>(密码长度必须大于等于4位)
+        </div>
+      </div>
+    <%else%>
+    <div class="form-group field">
+      <%= f.label :vip_no, :class=>"col-xs-3 control-label" %>
+      <label><%= f.object.is_vip? ? f.object.vip_no : "未授予VIP号码" %></label>
+    </div>
+    <%end%>
+    <div class="form-group field">
+      <%= f.label :wallet, :class=>"col-xs-3 control-label" %>
+      <div class="col-xs-4">
+        <label><%= @current_shop.current_currency_symbol%> <%= f.object.wallet %></label>
+      </div>
+    </div>
+  <%elsif (not @current_user.nil?) and @current_user.vip_no.present?  %>
+	  <div class="form-group field">
+	    <%= f.label :vip_no, :class=>"col-xs-3 control-label" %>
+	    <div class="col-xs-4">
+	    	<label><%= f.object.vip_no %></label>
+	    </div>
+	  </div>
+  <% end %>
+  <% if @current_shop.use_credits %>
+    <div class="form-group field">
+      <%= f.label :credits, :class=>"col-xs-3 control-label" %>
+      <div class="col-xs-4">
+      	<label><%= f.object.credits %></label>
+      </div>
+    </div>
+  <%end%>
+  <div class="form-group field">
+    <%= f.label :email_address, :class=>"col-xs-3 control-label" %>
+    <div class="col-xs-4">
+    	<%= f.email_field :email_address, :class=>"form-control", :placeholder=>"name@domain.com" %>
+    </div>
+  </div>
+
+  <div class="form-group field">
+    <%= f.label :default_address, :class=>"col-xs-3 control-label" %>
+    <div class="col-xs-4">
+    	<%= f.text_field :default_address, :class=>"form-control", :placeholder=>"" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <% if current_account && (@current_account.is_boss? or @current_account.is_admin?) %>
+        <%= f.submit '更新用户信息', class:"btn btn-primary"%>
+      <%else%>
+          <%= f.submit '更新用户信息', class:"btn btn-primary btn-lg btn-block"%>
+      <% end %>
+    </div>
+  </div>

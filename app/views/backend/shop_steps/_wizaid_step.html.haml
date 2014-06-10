@@ -1,0 +1,9 @@
+- unless params[:edit]
+  #fuelux-wizard.row-fluid{"data-target" => "#step-container"}
+    %ul.wizard-steps
+      -i = 1
+      - {shop_info: "基本信息", sms_message: "短信设置", credit: "积分设置", wallet: "余额设置", promotion: "推广设置"}.each do |target, title|
+        %li{data: {target: "#step#{i}"}, class: (@executed_steps.include?(target.to_sym) ? "active" : "")}
+          %span.step= i
+          %span.title= title
+          -i+=1

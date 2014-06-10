@@ -1,0 +1,24 @@
+= form_for [:backend, @current_shop, @vip_level] do |f|
+  - if @vip_level.errors.any?
+    #error_explanation
+      %h2= "#{@vip_level.errors.count}个错误导致无法成功保存:"
+      %ul
+        - @vip_level.errors.full_messages.each do |msg|
+          %li= msg
+  %ul
+    %li 系统通过折扣的比例来判断会员级别的高低，高级会员获得高级别会员折扣
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :discount
+    = f.text_field :discount
+    会员折扣为0-1.0之间，例如：8折就写成0.8
+  .field
+    = f.label :auto_upgrade
+    = f.check_box :auto_upgrade
+  .field
+    = f.label :min_total_amount
+    = f.text_field :min_total_amount
+  .actions
+    = f.submit '保存', :class=>"btn btn-primary"

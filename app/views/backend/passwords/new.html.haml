@@ -1,0 +1,18 @@
+.container{style: "background:rgba(255, 255, 255, 0.3) none repeat scroll 0 0 !important;width:800px;margin:0 auto;border-radius:5px;padding:0;"}
+  .panel.panel-default{style: "margin:10px;"}
+    .panel-body{style: "padding:90px 0 50px 10px;"}
+      .panel-heading
+        %h1 忘记密码
+      = render "layouts/login_errors"
+      = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post, :class=>"form-horizontal" }) do |f|
+        .col-md-8
+          = devise_error_messages!
+          .form-group
+            = f.label :email, :class=>"col-md-3 control-label"
+            .col-md-9
+              = f.email_field :email, :autofocus => true, :class=>"form-control"
+            .col-md-3
+          %center.form-group{style: "margin-top:20px;"}
+            = f.submit "找回密码", class: "btn btn-large btn-primary"
+            = link_to "注册", backend_sign_up_path,:class=>"btn btn-default"
+            = link_to "登录", backend_login_path ,class: "btn btn-large btn-default"

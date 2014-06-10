@@ -1,0 +1,21 @@
+
+%div.pull-right
+  = will_paginate @users, renderer: BootstrapPagination::Rails, bootstrap: 3
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= User.human_attribute_name('id')
+      %th= User.human_attribute_name('name')
+      %th= User.human_attribute_name('phone')
+      %th= t 'operation btn'
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.id
+        %td
+          = user.name||user.fake_user_name
+          - if user.is_blocked
+            %span.label.label-default 已列入黑名单
+        %td= user.phone
+        %td= link_to '批准通过', approve_vip_user_backend_shop_user_path(@current_shop, user),:class=>"btn  btn-default"

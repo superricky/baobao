@@ -1,0 +1,61 @@
+#navbar.navbar.navbar-default
+  :javascript
+    try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+  #navbar-container.navbar-container
+    .navbar-header.pull-left
+      %a.navbar-brand{:href => "#"}
+        %small
+          %i.icon-leaf
+          %strong= find_or_set_title
+          %small 最专业的在线点单系统
+      / /.brand
+    / /.navbar-header
+    .navbar-header.pull-right{:role => "navigation"}
+      %ul.nav.ace-nav
+        %li.purple
+          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            %i.icon-comments-alt
+            %span.menu-text 需求讨论区
+            %i.icon-caret-down
+          %ul.pull-right.dropdown-menu.dropdown-yellow.dropdown-caret.dropdown-close
+            %li
+              %a{:href=>"#{backend_post_threads_path}"} 需求讨论区
+            %li
+              %a{:href=>"#{backend_post_thread_labels_path}"} 讨论标签
+        -if @current_shop
+          %li.purple
+            %a{"data-toggle" => "dropdown", :href => "javascript.void(0)"}
+              = @current_shop.version_name
+              \[
+              = @current_shop.workflow_state_name
+              \]
+
+        %li.green
+          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            %i.icon-envelope.icon-animated-vertical
+            %span.badge.badge-success 0
+          %ul.pull-right.dropdown-navbar.dropdown-menu.dropdown-caret.dropdown-close
+            %li.dropdown-header
+              %i.icon-envelope-alt
+              您暂时没有新的消息
+
+        %li.light-blue
+          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            %img.nav-user-photo{:alt => "Jason's Photo", :src => "/assets/avatars/user.jpg"}/
+            %span.user-info
+              %small 欢迎您，亲爱的
+              = @current_account.name rescue nil
+            %i.icon-caret-down
+          %ul.user-menu.pull-right.dropdown-menu.dropdown-yellow.dropdown-caret.dropdown-close
+            %li
+              %a{:href => "#{show_my_account_backend_accounts_path}"}
+                %i.icon-user
+                个人设置
+            %li.divider
+            %li
+              %a{:href => "#{backend_signout_path}", :data=>{:method => "delete"}}
+                %i.icon-off
+                退出
+      / /.ace-nav
+    / /.navbar-header
+  / /.container

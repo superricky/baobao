@@ -1,0 +1,99 @@
+- unless flash[:error].nil?
+  .alert.alert-danger
+    %strong 操作失败：
+    = flash[:error]
+- unless notice.nil?
+  #notice.alert.alert-success= notice
+.pull-left.col-md-6.col-lg-6.title= t('Listing accounts')
+- if (@current_account.is_admin? and not @current_shop.nil?) or
+- (@current_account.is_boss?)
+  .pull-right
+    .btn-group
+      %button.btn.btn-primary.dropdown-toggle{"data-toggle" => "dropdown",style:"margin-right: 30px;"}
+        配置账户
+        %i.icon-angle-down.icon-on-right
+      %ul.dropdown-menu
+        %li
+          = link_to t('New account'), "#{get_accounts_path}/new"
+        - if @current_branch
+          %li
+            = link_to "分配账户", "javascript:void(0)", data: {toggle: "modal", target: "#assign_account"}
+%table.table.table-striped
+  %thead
+    %tr
+      %th.col-sm-4= Account.human_attribute_name('login_id')
+      %th.col-sm-2= Account.human_attribute_name('name')
+      %th.col-sm-4
+        联系方式
+      %th.col-sm-2{:style => "width:250px;"}= t('operation btn')
+  %tbody
+    - @accounts.each do |account|
+      %tr
+        %td
+          - if account.is_admin?
+            %span.label.label-danger 系统管理员
+          - else
+            %span.label.label-primary
+              所属商户:#{account.shop.name}
+          = account.login_id
+        %td= account.name
+        %td
+          %strong
+            = Account.human_attribute_name('email')
+            \:
+          = account.email
+          %br/
+          %strong
+            = Account.human_attribute_name('phone')
+            \:
+          = account.phone
+          %br/
+          %strong
+            = Account.human_attribute_name('account_type')
+            \:
+          = t(account.roles.first.name) rescue nil
+        %td
+          .btn-group
+            %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+              操作
+              %span.caret
+            %ul.dropdown-menu{:role => "menu"}
+              %li= link_to t('Show'), get_account_path(account)
+              %li= link_to t('Edit'), get_edit_account_path(account)
+              %li= link_to t('Reset Password'), get_reset_password_account_path(account)
+              - if account.is_worker?
+                %li
+                  = link_to "查看管理商户", account_branch_backend_shop_account_path(@current_shop, account), remote: true
+              - if current_account.is_admin? or current_account.is_boss?
+                - if @current_branch
+                  %li= link_to "移除", remove_account_backend_shop_branch_path(@current_shop, @current_branch, account_id: account.id), method: :delete, data: { confirm: '确定要移除吗？' }
+                - if @current_account != account
+                  %li= link_to t('Destroy'), get_account_path(account), method: :delete, data: { confirm: '确定要删除吗？' }
+.pull-right
+  = will_paginate @accounts , renderer: BootstrapPagination::Rails, bootstrap: 3
+-if @current_branch.present?
+  #assign_account.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "AssignAccountLabel", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4#AssignAccountLabel.modal-title 分配账户
+        .modal-body
+          = form_tag assign_account_backend_shop_branch_path(@current_shop, @current_branch) do
+            .form-group
+              = select_tag :account_ids, options_from_collection_for_select(@current_shop.accounts.worker_accounts - @accounts, :id, :name), class: "selectpicker show-tick form-control", multiple: true, data: {"live-search" => "true"}
+              = submit_tag "添加商户",  class:"btn btn-primary"
+#account_branch.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "AccountBranchLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4#AccountBranchLabel.modal-title 商户列表
+      .modal-body
+:javascript
+  $(window).on('load', function () {
+      $('.selectpicker').selectpicker({
+        'selectedText': 'cat',
+        'noneSelectedText': "没有选择任何账户"
+      });
+    });

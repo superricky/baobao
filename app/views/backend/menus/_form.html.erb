@@ -1,0 +1,79 @@
+<%= form_for([:backend, @current_shop, @system_config ,@menu], html: {class: "form-horizontal", role: "form"}) do |f| %>
+  <% if @menu.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <h2><%= @menu.errors.count %>个错误导致无法正确保存:</h2>
+
+      <ul>
+      <% @menu.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if f.object.parent_menu_id.present? %>
+    <div class="form-group field">
+      <%= f.label :parent_menu, Menu.human_attribute_name('parent_menu'), class: "col-sm-2 control-label" %>
+      <div class="col-sm-4">
+        <%= f.hidden_field :parent_menu_id %>
+        <%= f.select :parent_menu_id, @parent_menus_array, {:include_blank => '无父菜单'}, class: "form-control col-sm-4",  disabled: true,selected: @menu.parent_menu_id %>
+        </div>
+      </div>
+
+  <% end %>
+
+  <div class="form-group field">
+    <%= f.label :name, Menu.human_attribute_name('name'), class: "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+      <%= f.text_field :name, class: "form-control col-sm-4" %>
+      </div>
+  </div>
+  <div class="form-group field">
+    <%= f.label :event_type, Menu.human_attribute_name('event_type'), class: "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+    <%= f.select :event_type, Menu::EVENTTYPES.map{|type| [t("menu.event_type.#{type}"), type]}, class: "form-control col-sm-4" %>
+    </div>
+  </div>
+  <div class="form-group field">
+    <%= f.label :material, class: "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+    <%= f.select :material_id, grouped_options_for_select(Menu.data_for_select(@current_shop, @system_config), selected: (@menu.material ? @menu.material.id : "#{Event::KEY_PREFIX}#{@menu.keyword}")), {:include_blank => '请选择事件'}, class: "form-control col-sm-4" %>
+    </div>
+  </div>
+  <div class="form-group field">
+    <%= f.label :url, Menu.human_attribute_name('url'), class: "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+    <%= f.text_field :url , class: "form-control col-sm-4"%>
+    </div>
+  </div>
+  <div class="form-group field">
+    <%= f.label :menu_type, Menu.human_attribute_name('menu_type'), class: "col-sm-2 control-label" %>
+    <div class="col-sm-4">
+    <%= f.select :menu_type, Menu::MENUTYPES , class: "form-control col-sm-4"%>
+    </div>
+  </div>
+  <div class="actions col-sm-offset-2">
+    <%= f.submit class: "btn btn-default "%>
+  </div>
+<% end %>
+
+  <script>
+	function hideInput(){
+	  	$('#menu_url').closest('.field').hide();
+	  	$('#menu_event_id').closest('.field').hide();
+	}
+
+	function changeEvent(eventType){
+		hideInput();
+		if(eventType === 'click'){
+			$('#menu_event_id').closest('.field').show();
+		}else if(eventType === 'view'){
+			$('#menu_url').closest('.field').show();
+		}
+	}
+
+    $('#menu_event_type').change(function(e) {
+     	changeEvent(e.target.value);
+    });
+
+    changeEvent($('#menu_event_type').val());
+  </script>

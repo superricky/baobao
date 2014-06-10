@@ -1,0 +1,198 @@
+- if @current_account.is_admin? or @current_account.is_boss?
+  - if @current_shop.max_branches_count > 1
+    %li{:class=>("active" if ( ['base_branches'].include? controller_name and action_name == "index"))}
+      %a{:href=>"#{ backend_shop_base_branches_path(@current_shop)}"}
+        %i.icon-leaf
+        %span.menu-text 独立商户和连锁商户列表
+    %li{:class=>("active" if ( ['brand_chains'].include? controller_name))}
+      %a.dropdown-toggle{:href => "#"}
+        %i.icon-magnet
+        %span.menu-text 品牌连锁
+        %b.arrow.icon-angle-down
+      %ul.submenu
+        - @current_shop.brand_chains.each do |brand_chain|
+          %li{:class=>("active" if (controller_name == 'brand_chains' and action_name == "show" and params[:id] == brand_chain.id.to_s))}
+            %a{:href=>"#{backend_shop_brand_chain_path(@current_shop, brand_chain)}"}
+              %i.icon-leaf
+              %span.menu-text= brand_chain.name
+  %li{:class=>("active" if @current_branch.nil? and ["branches"].include? controller_name)}
+    %a.dropdown-toggle{:href => "#"}
+      %i.icon-sitemap
+      %span.menu-text 独立商户列表
+      %b.arrow.icon-angle-down
+    %ul.submenu
+      - @current_shop.base_branches.root_base_branches.each do |base_branch|
+        %li
+          %a{:href=>"#{ base_branch.is_branch? ? backend_shop_branch_path(@current_shop, base_branch) : '#'}", :class=>("dropdown-toggle" unless base_branch.is_branch? )}
+            %i.icon-leaf
+            %span.menu-text= base_branch.name
+            - if base_branch.is_brand_chain?
+              %b.arrow.icon-angle-down
+          - if base_branch.is_brand_chain?
+            %ul.submenu
+              - if base_branch.branches.size > 0
+                - base_branch.branches.each do |branch|
+                  %li
+                    %a{:href=>"#{ branch.is_branch? ? backend_shop_branch_path(@current_shop, branch) : backend_shop_brand_chain_path(@current_shop, branch)}"}
+                      %i.icon-leaf
+                      = branch.name
+              - else
+                %li
+                  %a{:href=>"#"} <空>
+- if @current_branch.present?
+  %li{:class=>("active" if ( ['branches', 'accounts', 'custom_ui_settings', 'sms_msgs','printers', 'product_units', 'printers', 'form_elements', 'branch_steps'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#"}
+      %i.icon-wrench
+      %span.menu-text 商户基本设置
+      %b.arrow.icon-angle-down
+    %ul.submenu
+      %li{:class=>("open" if controller_name == 'branches' && action_name == "show")}
+        %a.dropdown-toggle{:href=>"#"}
+          %i.icon-info-sign
+          %span.menu-text 商户信息
+          %b.arrow.icon-angle-down
+        %ul.submenu
+          %li
+            %a{href: "#{backend_shop_branch_path(@current_shop, @current_branch) + '#/branch_info'}"}
+              %i.icon-leaf
+              %span.menu-text 基本信息
+          %li
+            %a{href: "#{backend_shop_branch_path(@current_shop, @current_branch) + '#/detail_info'}"}
+              %i.icon-leaf
+              %span.menu-text 详细信息
+          %li
+            %a{href: "#{backend_shop_branch_path(@current_shop, @current_branch) + '#/awards'}"}
+              %i.icon-leaf
+              %span.menu-text 公司荣誉
+          %li
+            %a{href: "#{backend_shop_branch_path(@current_shop, @current_branch) + '#/delivery_setting'}"}
+              %i.icon-leaf
+              %span.menu-text 外卖设置
+          %li
+            %a{href: "#{backend_shop_branch_path(@current_shop, @current_branch) + '#/order_setting'}"}
+              %i.icon-leaf
+              %span.menu-text 接单设置
+          %li
+            %a{href: "#{backend_shop_branch_path(@current_shop, @current_branch) + '#/scrachpad_setting'}"}
+              %i.icon-leaf
+              %span.menu-text 刮刮奖设置
+      - if @current_account.is_admin? or @current_account.is_boss?
+        %li{:class=>("active" if controller_name == 'accounts')}
+          %a{:href=>"#{backend_shop_branch_accounts_path(@current_shop.slug, @current_branch)}"}
+            %i.icon-leaf
+            %span.menu-text 账户管理
+      %li{:class=>("active" if controller_name == 'custom_ui_settings')}
+        %a{:href=>"#{backend_shop_branch_custom_ui_setting_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 自定义界面管理
+      %li{:class=>("active" if controller_name == 'form_elements')}
+        %a{:href=>"#{backend_shop_branch_form_elements_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 自定义下单信息管理
+      %li{:class=>("active" if controller_name == 'product_units')}
+        %a{:href=>"#{backend_shop_branch_product_units_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 商户计量单位
+      %li{:class=>("active" if controller_name == 'printers')}
+        %a{:href=>"#{backend_shop_branch_printers_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 打印机管理
+      %li{:class=>("active" if controller_name == 'sms_msgs')}
+        %a{:href=>"#{backend_shop_branch_sms_msgs_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 商户短信
+
+  %li{:class=>("active" if ( ['orders', 'trades'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#"}
+      %i.icon-file-text
+      %span.menu-text 订单中心
+      %b.arrow.icon-angle-down
+    %ul.submenu
+      %li{:class=>("active" if controller_name == 'orders')}
+        %a{:href=>"#{backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::WAIT_CONFIRMED)}"}
+          %i.icon-leaf
+          %span.menu-text 订单处理
+      %li{:class=>("active" if controller_name == 'trades')}
+        %a{:href=>"#{backend_shop_branch_trades_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 订单支付流水
+  %li{:class=>("active" if ( ['products', 'categories', 'tags'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#"}
+      %i.icon-lemon
+      %span.menu-text 产品设置
+      %b.arrow.icon-angle-down
+    %ul.submenu
+      %li{:class=>("active" if controller_name == 'products')}
+        %a{:href=>"#{backend_shop_branch_products_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 产品管理
+      %li{:class=>("active" if controller_name == 'categories')}
+        %a{:href=>"#{backend_shop_branch_categories_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 产品分类
+      %li{:class=>("active" if controller_name == 'tags')}
+        %a{:href=>"#{backend_shop_branch_tags_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 标签
+  %li{:class=>("active" if ( ['users', 'credits_logs', 'carts'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#"}
+      %i.icon-user
+      %span.menu-text 客户中心
+      %b.arrow.icon-angle-down
+    %ul.submenu
+      %li{:class=>("active" if controller_name == 'users')}
+        %a.dropdown-toggle{:href=>"#"}
+          %i.icon-info-sign
+          %span.menu-text 我的客户
+          %b.arrow.icon-angle-down
+        %ul.submenu
+          %li{:class=>("active" if (controller_name == 'users' and action_name != 'appling_vip' and params[:type] == "User"))}
+            %a{:href => "#{backend_shop_branch_users_path(@current_shop.slug, @current_branch ,type: "User")}"}
+              %i.icon-leaf
+              %span.menu-text 微信用户
+          %li{:class=>("active" if (controller_name == 'users' and action_name != 'appling_vip' and params[:type] == "PhoneUser"))}
+            %a{:href => "#{backend_shop_branch_users_path(@current_shop.slug, @current_branch , type: "PhoneUser")}"}
+              %i.icon-leaf
+              %span.menu-text 电话用户
+          %li{:class=>("active" if (controller_name == 'users' and action_name != 'appling_vip' and params[:type] == "Member"))}
+            %a{:href => "#{backend_shop_branch_users_path(@current_shop.slug, @current_branch , type: "Member")}"}
+              %i.icon-leaf
+              %span.menu-text pc端用户
+      %li{:class=>("active" if controller_name == 'credits_logs')}
+        %a{:href=>"#{backend_shop_branch_credits_logs_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 积分消费记录
+      %li{:class=>("active" if controller_name == 'carts')}
+        %a{:href=>"#{backend_shop_branch_carts_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaft
+          %span.menu-text 客户购物车
+  %li{:class=>("active" if ( ['promotions', 'scrachpads', 'sliders', 'product_sliders'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#"}
+      %i.icon-gift
+      %span.menu-text 活动与营销
+      %b.arrow.icon-angle-down
+    %ul.submenu
+      %li{:class=>("active" if controller_name == 'promotions')}
+        %a{:href=>"#{index_special_off_backend_shop_branch_promotions_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 促销活动
+      %li{:class=>("active" if controller_name == 'scrachpads')}
+        %a{:href=>"#{branch_index_backend_shop_branch_scrachpads_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 刮刮卡中奖结果
+      %li{:class=>("active" if controller_name == 'product_sliders')}
+        %a{:href=>"#{backend_shop_branch_product_sliders_path(@current_shop.slug, @current_branch)}"}
+          %i.icon-leaf
+          %span.menu-text 产品幻灯片
+      %li{:class=>("active" if controller_name == 'branches')}
+        %a{:href=>"#{backend_shop_branch_path(@current_shop.slug, @current_branch)}#/scrachpad_setting"}
+          %i.icon-leaf
+          %span.menu-text 刮刮奖
+  %li{:class=>("active" if ( ['statistics'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#{backend_shop_branch_statistics_month_path(@current_shop.slug, @current_branch)}"}
+      %i.icon-bar-chart
+      %span.menu-text 商户报表
+%li{class: "#{"active" if controller_name == 'phone_orders'}"}
+  %a{href: "#{@current_branch.present? ? category_list_backend_shop_phone_order_path(@current_shop, @current_branch) : branch_list_backend_shop_phone_orders_path(@current_shop)}"}
+    %i.icon-phone
+    %span.menu-text 电话下单

@@ -1,0 +1,30 @@
+<h1>文章推广记录列表</h1>
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>推广文章</th>
+      <th>推荐次数</th>
+      <th>浏览次数</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @current_shop.is_multipe_base_version? %>
+      <th colspan=4><%= @current_shop.version_name %>不支持推广相关功能</th>
+    <% else %>
+      <% @articles.each do |article| %>
+        <tr>
+          <th><%= link_to article.title, backend_shop_material_article_path(@current_shop, article.owner, article), id: "show_article", remote: true %></th>
+          <td>
+            <%= article.article_sharer_count %>
+          </td>
+          <td><%= article.article_browser_count %></td>
+          <td><%= link_to "查看推广详情", article_promotion_backend_shop_promotion_logs_path(@current_shop, article_id: article.id), class: "btn btn-primary" %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

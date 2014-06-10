@@ -1,0 +1,6 @@
+.thumbnail
+  %a.add_product{href: 'javascript:void(0)', data: {id: product.id, name:product.name, price:product.price, productunit: product.product_unit}}
+    .text-center.phone_order_btn
+      %h5= product.name
+      %br
+      %span= "#{@current_shop.current_currency_symbol}#{product.price}"

@@ -1,0 +1,12 @@
+<%= search_form_for @q, url: search_backend_shop_messages_path(@current_shop.slug), class: "navbar-form", method: :post do |f|%>
+  <div class="form-group">
+    <%= f.text_field :message_thread_user_name_cont, class: "form-control", placeholder: User.human_attribute_name("name") %>
+  </div>
+  <div class="form-group">
+    <%= f.select :time_gteq, options_for_select([["最近一天", "day"], [ "最近一周", "week"], ["最近一月", "month"], ["最近一年", "year"]], selected: (params[:q][:time_gteq] rescue nil)), {prompt: "选择时间段" }, {class: "form-control"} %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit "搜索", class: "btn btn-default" %>
+  </div>
+<% end %>

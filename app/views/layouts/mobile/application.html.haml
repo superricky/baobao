@@ -1,0 +1,34 @@
+!!!
+%html
+  %head
+    -title = yield :title
+    -title ||= find_shop_or_branch_or_product_title
+    %title= title
+    %meta{name: "viewport", content: "width=device-width,initial-scale=1.0,user-scalable=no"}
+    %meta{name: "format-detection", content: "telephone=no"}
+    %meta{name: "format-detection", content: "address=no"}
+    = stylesheet_link_tag  "mobile/application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+  %body
+    %header= render "header" rescue nil
+    %section.body= yield
+    - if content_for :footer
+      = yield :footer
+    %footer= render "/mobile_footer"
+    = javascript_include_tag "mobile/application"
+    = render "js" rescue nil
+:javascript
+    $(document).ready(function(){
+        number_of_product_in_cart_monitor();
+    });
+
+    function number_of_product_in_cart_monitor(){
+        var a=$(".number_of_product_in_cart").html();
+        if(typeof(a)!="undefined"){
+            if(parseInt(a,10)==0 || isNaN(parseInt(a, 10))){
+                $(".number_of_product_in_cart").hide();
+            }else{
+                $(".number_of_product_in_cart").show();
+            };
+        };
+    };

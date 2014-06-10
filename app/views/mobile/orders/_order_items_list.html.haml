@@ -1,0 +1,18 @@
+%ul
+  -@cart.line_items.each_with_index do |line_item, index|
+    -if line_item.product
+      -product = line_item.product
+      %li
+        = image_tag product.image.thumb.url
+        .content
+          %h1= product.name
+          %strong
+            = number_to_currency(line_item.product.price(@current_user), :unit=>currency_symbol)
+            \/件 x #{line_item.quantity}
+    - if delivery_charge_quantity(params[:order_type]) > 0 && params[:order_type] == "delivery"
+      %li
+        %strong
+          外送费(订单金额低于#{number_to_currency(@current_branch.min_order_charge, :unit=>currency_symbol)}收取)
+        %br/
+        = number_to_currency((@current_branch.delivery_zones.find(params[:delivery_zone_id]) rescue @current_branch.delivery_zones.first).charge, :unit=>currency_symbol)
+        \/件 x #{delivery_charge_quantity(params[:order_type])}

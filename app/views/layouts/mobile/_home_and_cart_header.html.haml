@@ -1,0 +1,22 @@
+-content_for :title do
+  -if controller.controller_name == "products"
+    -case controller.action_name
+    -when "show"
+      商品详情
+  -if controller.controller_name == "promotions"
+    促销活动
+  -if controller.controller_name == "carts"
+    我的购物车x
+  -if controller.controller_name == "users"
+    个人中心
+  -if controller.controller_name == "orders"
+    -case controller.action_name
+    -when "new"
+      填写订单信息
+.product
+  - if @current_cart
+    %a.right.icon-cart.icon-with-out-border.icon-4{href: mobile_shop_branch_my_cart_path(@current_shop.slug, @current_branch)}
+    %span.number_of_product_in_cart
+      = get_line_items_count(@current_cart)
+  = link_to "", mobile_shop_branch_account_path(@current_shop.slug, @current_branch), class: "right icon-man icon-with-out-border icon-4"
+  = link_to "", list_mobile_shop_branch_products_path(@current_shop, @current_branch), class: "left icon-home icon-with-out-border icon-4"

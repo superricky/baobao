@@ -1,0 +1,20 @@
+%h1 代理区域
+
+%table.table.table-striped.table-bordered
+  %tr
+    %th= AgentZone.human_attribute_name(:name)
+    %th= AgentZone.human_attribute_name(:agents_count)
+    %th
+
+  - @agent_zones.each do |agent_zone|
+    %tr
+      %td= agent_zone.name
+      %td= agent_zone.agents_count
+      %td
+        = link_to t('Show'), [:backend, agent_zone], :class=>"btn btn-default"
+        = link_to t('Edit'), edit_backend_agent_zone_path(agent_zone), :class=>"btn btn-default"
+        = link_to t('Destroy'), [:backend, agent_zone], :method => :delete, :data => { :confirm => 'Are you sure?' }, :class=>"btn btn-danger"
+
+%br
+
+= link_to '新添区域', new_backend_agent_zone_path, :class=>"btn btn-default"

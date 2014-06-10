@@ -1,0 +1,19 @@
+- unless notice.nil?
+  #notice.alert.alert-success
+    = notice
+#shop_infomation
+  %ul.nav.nav-tabs.nav-justified
+    -i = 0
+    -{基本信息: "shop_info", 短信信息: "sms_message", 积分信息: "credit", 余额信息: "wallet", 网页下单: "pc_order"}.each do |title, target|
+      %li{class: "#{i==0 ? "active" : ""}"}= link_to title, "##{target}", {data: {toggle: "tab"}}
+      -i += 1
+  .tab-content.no-border
+    -i = 0
+    -{shop_info: "basic_information", sms_message: "sms_message", credit: "credit", wallet: "wallet", promotion: "promotion", currency: "currency", pc_order: "pc_order"}.each do |title, target|
+      .tab-pane{id: title, class: "#{i == 0 ? "in active" : ""}"}
+        -if title.to_s == "pc_order" && !@shop.is_multipe_base_version?
+          = render target
+        -else
+          = render target
+          %center= render "backend/shops/edit_link", {step: title.to_sym}
+      - i += 1

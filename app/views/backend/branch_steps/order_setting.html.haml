@@ -1,0 +1,90 @@
+= render layout: 'branch_form' do |f|
+  .panel.panel-default
+    .panel-heading
+      接单设置
+    .panel-body
+      .field.form-group
+        = f.label :notify_new_order, class: "col-sm-3 control-label"
+        .col-sm-4
+          - if @current_shop.get_mail_setting.enable_mail
+            = f.check_box :notify_new_order
+            %span.lbl
+          - else
+            帐号没有开通邮件接单功能。
+            - if current_account.is_boss?
+              = link_to "点击设置", edit_backend_shop_mail_settings_path(@current_shop), class: "btn btn-xs", target: "_blank"
+      .field.form-group
+        = f.label :use_sms, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :use_sms
+          %span.lbl
+          (启用后每条短息将产生短信费用)
+      .field.form-group
+        = f.label :sms_to, class: "col-sm-3 control-label required"
+        .col-sm-4
+          = f.text_field :sms_to, :placeholder=>"1380000000", class: "form-control col-sm-4 required"
+      .field.form-group
+        = f.label :allow_remind_order_msg, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :allow_remind_order_msg
+          %span.lbl
+      #supported_send_sms_order_types.field.form-group
+        = f.label :supported_send_sms_order_types, class: "col-sm-3 control-label required"
+        .col-sm-5
+          .row
+            - Order::get_order_types(@custom_ui_setting).each do |order_type|
+              .col-sm-4
+                = f.check_box :supported_send_sms_order_types, {:checked=> f.object.split_supported_send_sms_order_types.index(order_type[1]).present?, :multiple => true}, order_type[1], nil
+                %span.lbl
+                = order_type[0]
+      .field.form-group
+        = f.label :use_sms_validation, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :use_sms_validation
+          %span.lbl
+      .field.form-group
+        = f.label :max_sms_count, class: "col-sm-3 control-label"
+        条
+        .col-sm-4
+          - if @current_account.is_admin? or @current_account.is_boss?
+            = f.number_field :max_sms_count, class: "form-control col-sm-4"
+          - else
+            = f.object.max_sms_count
+      .field.form-group
+        = f.label :sms_msgs_count, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.object.sms_msgs_count
+          条
+      - if @branch.printers.count == 0
+        .field.form-group.text-primary
+          .col-sm-6.col-md-offset-1
+            系统还提供用无线打印机接受订单，如果您已了解如何配置打印#{link_to "点击配置", new_backend_shop_branch_printer_path(@current_shop, @branch), target: "_blank", class: "btn btn-sm btn-primary"}
+    .field.form-group
+      = f.label :terms, class: "col-sm-3 control-label"
+      .col-sm-4
+        = f.text_area :terms, rows:5, cols:40, placeholder: "留空代表用户提交表单时无需确认任何信息"
+  .panel.panel-footer
+    %center
+      - if params[:edit]
+        = link_to_back
+        = f.submit :class=>"btn btn-primary"
+      - else
+        = link_to '上一步', previous_wizard_path, :class=>"btn btn-default"
+        = f.submit "下一步" ,:class=>"btn btn-primary"
+        = link_to '跳过这一步', next_wizard_path, :class=>"btn btn-primary"
+:javascript
+  function change_use_sms_accept_order(){
+    if($('#branch_use_sms').is(':checked')){
+      $('#branch_sms_to').closest('.field').show();
+      $('#supported_send_sms_order_types').closest('.field').show();
+    }else{
+      $('#branch_sms_to').closest('.field').hide();
+      $('#supported_send_sms_order_types').closest('.field').hide();
+    }
+  }
+  $(function(){
+    change_use_sms_accept_order();
+    $('#branch_use_sms').on("click", function(e){
+      change_use_sms_accept_order();
+    });
+  });

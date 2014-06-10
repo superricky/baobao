@@ -1,0 +1,22 @@
+.row
+  .col-sm-5
+    %table.table.table-striped
+      %tr
+        %th.right
+          = @shop.domain.present? && @shop.validated_domain ? "（验证通过）" : ""
+          = Shop.human_attribute_name("pc_order")
+        %td.left
+          - if @shop.is_multipe_base_version?
+            对不起，网页下单功能仅对独立商户版和多店旗舰版用户开放。
+          - elsif @shop.domain.present?
+            = @shop.domain
+          - else
+            = "#{@shop.slug}.#{request.host}"
+      - if @shop.domain.present? && !@shop.validated_domain && !@shop.is_multipe_base_version?
+        %tr
+          %th.right
+            您的CNAME域名为:#{@shop.random_domain}
+            %br/
+            请将此域名指向#{request.host}完成验证
+          %td.left{:title => @shop.domain}
+            = link_to "点击验证", validation_domain_backend_shop_path(@current_shop), class: "validated_domain_btn" if @shop.domain.present? && !@shop.validated_domain

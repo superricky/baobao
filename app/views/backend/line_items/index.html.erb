@@ -1,0 +1,25 @@
+<h1>购物车产品列表</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>产品名称</th>
+      <th>购买数量</th>
+      <th>最后更新时间</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody id="line_items_body">
+    <% @line_items.each do |line_item| %>
+      <tr data-line-item-id="<%= line_item.id%>">
+        <td><%= line_item.product.name%></td>
+        <td><%= line_item.quantity%></td>
+        <td><%= line_item.updated_at %></td>
+        <td><%= link_to t('Destroy'), backend_shop_branch_cart_line_item_path(@current_shop.slug, @current_branch, @cart, line_item), method: :delete, :remote => true,data: { confirm: '确定要删除吗？' }, :class =>'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('Back'), backend_shop_branch_carts_path(@current_shop.slug, @current_branch), :class=>"btn btn-default" %>
+

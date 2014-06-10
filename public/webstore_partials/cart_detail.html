@@ -1,0 +1,31 @@
+<div ng-controller="cartDetailController">
+  <div ng-include="'webstore_partials/branch_header.html'"></div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">我的购物车</h2>
+    </div>
+    <div class="panel-body">
+      <ul class="list-group">
+        <li ng-repeat="product in products_in_cart" class="list-group-item">
+          <a class="col-xs-12 col-sm-9 name" ng-href="#/branches/{{branch.id}}/products/{{product.id}}">{{product.name}}</a>
+          <div class="cart_dynamic_btn">
+            <button class='minus' ng-click="minus_from_cart(product)">-</button>
+            <span class='number'>{{count_of_product(product)}}</span>
+            <button class='plus' ng-click="add_to_cart(product)">+</button>
+            <span class='price'>{{(product.price*count_of_product(product))|currency:current_shop.current_currency_symbol}}</span>
+            <a class='remove glyphicon glyphicon-remove' ng-click="remove_from_cart(product)"></a>
+          </div>
+        </li>
+      </ul>
+      <button class="btn btn-default" ng-click="clear_cart()">清空购物车</button>
+      <div class="pull-right total_price" ng-if="notice == null">{{total|currency:"￥"}}</div>
+      <div class="pull-right" ng-if="notice != null" style="color:red;">{{notice}}</div>
+    </div>
+    <div class="panel-footer">
+      <center>
+        <a href="javascript:history.back();" class="btn btn-default">返回</a>
+        <a ng-href="{{next_url()}}" class="btn btn-warning">去结算</a>
+      </center>
+    </div>
+  </div>
+</div>

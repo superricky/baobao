@@ -1,0 +1,120 @@
+%table#products_table.table.table-striped
+  %thead
+    %tr
+      %th= check_box_tag "products", "", false,:onchange => "select_all_product(this)"
+      %th= Product.human_attribute_name('name')
+      %th= Product.human_attribute_name('pic')
+      %th= Product.human_attribute_name('price')
+      %th= Product.human_attribute_name('stock')
+      %th.col-md-4= t('operation btn')
+  %tbody
+    - @products.each_with_index do |product, index|
+      = render partial: "backend/products/table_record", locals: {product:product, index:index}
+- if @current_account.is_admin? or @current_account.is_boss?
+  #copy_products_dialog.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4.modal-title 拷贝产品
+        = form_tag copy_to_branch_backend_shop_branch_products_path(@current_shop.slug, @current_branch) do
+          .modal-body
+            - if @current_shop.all_branches.size > 1
+              #hidden-products-div{:style => "display:none;"}
+              .row-fluid 请选择要拷贝的目标商户
+              .container.row-fluid{:style => "width:500px"}
+                - @current_shop.all_branches.each do |branch|
+                  - if branch != @current_branch
+                    %label
+                      = check_box_tag "product[branches][]", branch.id, false, :id=>"branch_id_#{branch.id}"
+                      \&nbsp;#{branch.name}
+                    %br/
+            - else
+              .alert.alert-danger 您当前只有一个商户，请创建其他商户后再执行此拷贝操作
+          .modal-footer
+            %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"} 关闭
+            %button.btn.btn-primary{:type => "submit"} 开始拷贝
+:javascript
+  function select_all_product(value){
+    if($(value).is(":checked")){
+      $.each($("input[type=checkbox][name='product[id][]']"), function(index, node){
+        $(node).prop("checked", true);
+      });
+    }else{
+      $.each($("input[type=checkbox][name='product[id][]']"), function(index, node){
+        $(node).prop("checked", false);
+      });
+    }
+    return false;
+  }
+  
+  function click_copy_product_btn(){
+    var selected_products = $("input[type=checkbox][name='product[id][]']:checked");
+    if ( selected_products.length > 0){
+    	$('#hidden-products-div').html('');
+    	$.each(selected_products, function(index, value){
+    		$('#hidden-products-div').append("<input type='hidden' name='product[product_ids][]' value="+value.value+">");
+    	});
+  	$('#copy_products_dialog').modal('toggle');
+    }else{
+      alert('请先选择要复制的产品');
+    }
+    return false;
+  }
+  
+  function remove_selected_product(){
+    var selected_products = $("input[type=checkbox][name='product[id][]']:checked");
+    if ( selected_products.length > 0){
+      var form = document.getElementById("batch_remove_form");
+      $.each(selected_products, function(index, value){
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "product[product_ids][]");
+        hiddenField.setAttribute("value", value.value);
+        form.appendChild(hiddenField);
+      });
+      document.body.appendChild(form);
+      form.submit();
+    }else{
+      alert('请先选择要删除的产品');
+      return false;
+    }
+  }
+  
+  function batch_added_product(){
+    var selected_products = $("input[type=checkbox][name='product[id][]']:checked");
+    if ( selected_products.length > 0){
+      var form = document.getElementById("batch_added_form");
+      $.each(selected_products, function(index, value){
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "product[product_ids][]");
+        hiddenField.setAttribute("value", value.value);
+        form.appendChild(hiddenField);
+      });
+      document.body.appendChild(form);
+      form.submit();
+    }else{
+      alert('请先选择要删除的产品');
+      return false;
+    }
+  }
+  
+  function batch_shelve_product(){
+    var selected_products = $("input[type=checkbox][name='product[id][]']:checked");
+    if ( selected_products.length > 0){
+      var form = document.getElementById("batch_shelve_form");
+      $.each(selected_products, function(index, value){
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "product[product_ids][]");
+        hiddenField.setAttribute("value", value.value);
+        form.appendChild(hiddenField);
+      });
+      document.body.appendChild(form);
+      form.submit();
+    }else{
+      alert('请先选择要删除的产品');
+      return false;
+    }
+  }

@@ -1,0 +1,8 @@
+.row
+  .col-sm-5
+    %table.table.table-striped
+      %tr
+        %th.right= Shop.human_attribute_name("least_promotion_number")
+        %td.left
+          = @shop.least_promotion_number || 0
+          次

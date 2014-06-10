@@ -1,0 +1,52 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= User.human_attribute_name('id') %></th>
+      <th><%= User.human_attribute_name('name')%></th>
+      <th><%= User.human_attribute_name('phone') %></th>
+      <th><%= User.human_attribute_name('is_vip') %></th>
+      <th><%= t 'operation btn'%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.id %></td>
+        <td><%= user.name||user.fake_user_name %>
+          <% if user.is_blocked %>
+            <span class="label label-default">已列入黑名单</span>
+          <%end%></td>
+        <td><%= user.phone %></td>
+        <td><%= user.is_vip? ? user.vip_no : "非VIP会员"%></td>
+        <td>
+          <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          操作 <span class="caret"></span>
+        </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><%= link_to t('Show'), get_user_path(user) %></li>
+              <li><%= link_to t('Edit'), get_edit_user_path(user)%></li>
+              <% if (@current_account.is_admin? or @current_account.is_boss?) and user.is_vip? %>
+                <li><%= link_to "充值", vip_edit_backend_shop_user_path(@current_shop.slug, user)%></li>
+              <% end %>
+              <% if @current_account.is_admin? %>
+                <li><%= link_to t('Destroy'), get_user_path(user), method: :delete, data: { confirm: '您确定要删除该用户以及对应的聊天记录吗?' }%></li>
+              <%end %>
+            </ul>
+          </div>
+
+          <% if @current_branch.present? and @current_shop.use_credits%>
+            <%= link_to "积分兑换", new_backend_shop_branch_credits_log_path(@current_shop.slug, @current_branch, :user_id => user.id) , :class => 'btn btn-primary'%>
+          <% end %>
+          <%if @current_account.is_admin? or @current_account.is_boss? %>
+            <%= link_to user.is_blocked ? "解除黑名单": "加入黑名单", get_block_user_path(user), method: :put, data: { confirm: "您确定要将该用户#{user.is_blocked ? "解除黑名单": "加入黑名单"}吗?" } , :class => "btn #{user.is_blocked ? 'btn-success': 'btn-danger' }"%>
+          <%end%>
+          </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="pull-right">
+  <%= will_paginate @users, params: { type: @users.first.class.name }, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>

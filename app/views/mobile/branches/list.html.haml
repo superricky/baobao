@@ -1,0 +1,36 @@
+-content_for :title do
+  #{@current_shop.name}商城
+%ul#branch_slides.rslides{style: "margin:0;"}
+  -@slides.each do |slide|
+    %li
+      %a{href: list_mobile_shop_branch_products_path(@current_shop.slug, slide.branch)}= image_tag slide.img.medium.url, alt: ""
+      %strong= slide.desc
+%header
+  .menu-bar{style: "margin:0;padding:2px;background:#d4d4d4;"}
+    = link_to "查看地区", "javascript:void(0);", class: "right icon-region", id: "partition_by_region", style: "line-height:3em;font-size:12pt;text-align:center;width:50%;background:#fff;"
+    = link_to "查看分类", "javascript:void(0);", class: "left icon-menus", id: "partition_by_kind", style: "line-height:3em;font-size:12pt;text-align:center;width:49.5%;background:#fff;"
+    %ul.menu-panel.menu-branch-types.hide
+      %i.left_i
+      %li{style: "border:1px solid #969696;"}= link_to "所有分类", [list_mobile_shop_branches_path(@current_shop), "branch_type=0"].join("&")
+      - mobile_branch_types.each_with_index do |branch_type, i|
+        -if branch_type.branches.length > 0
+          %li{style: "border:1px solid #969696;"}= link_to truncate(branch_type.name, length: 6), [list_mobile_shop_branches_path(@current_shop), "branch_type=#{branch_type.id}"].join("&")
+    %ul.menu-panel.menu-zones.hide
+      %i.right_i
+      %li{style: "border:1px solid #969696"}= link_to "全部地区", [list_mobile_shop_branches_path(@current_shop), "zone=0"].join("&")
+      - monile_zones.each do |zone|
+        -if zone.branches.length > 0
+          %li{style: "border:1px solid #969696"}= link_to zone.name, [list_mobile_shop_branches_path(@current_shop), "zone=#{zone.id}"].join("&")
+%nav.branch-logos
+  %ul
+    -@branches.each do |branch|
+      %li.col-3
+        %a{href: list_mobile_shop_branch_products_path(@current_shop.slug, branch)}
+          .branch-logo.circle{style: "background-image:url(#{branch.image.thumb.url});"}
+          %strong= branch.name
+:javascript
+  document.ready = function(){
+    $("#branch_slides").responsiveSlides({
+      speed: 800
+    });
+  };

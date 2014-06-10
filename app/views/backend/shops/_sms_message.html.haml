@@ -1,0 +1,31 @@
+.row
+  .col-sm-5
+    %table.table.table-striped
+      %tr
+        %th.right= Shop.human_attribute_name("use_sms")
+        %td.left= @shop.use_sms ? "已启用": "未启用"
+      %tr
+        %th.right= Shop.human_attribute_name("use_sms_validation")
+        %td.left= @shop.use_sms_validation ? "已启用":"未启用"
+      %tr
+        - if @shop.use_sms_validation
+          %th.right
+            = Shop.human_attribute_name("max_validation_code_times_in_day")
+          %td.left
+            = @shop.max_validation_code_times_in_day
+            条
+      %tr
+        %th.right 已购买
+        %td.left
+          = @shop.max_sms_count
+          条
+      %tr
+        %th.right 已使用
+        %td.left
+          = @shop.sms_msgs_count
+          条
+      %tr
+        %th.right 剩余
+        %td.left
+          = @shop.max_sms_count - @shop.sms_msgs_count
+          条可用

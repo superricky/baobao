@@ -1,0 +1,48 @@
+<div class="modal fade" id="product-detail-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <img alt="产品实例图" name="image"/>
+        <hr/>
+        <div style="position:float;vertical-align:top;">
+          <div style="color:#333;font-weight:bold;font-size:1.8em;">
+            <span name="name"></span>
+          </div>
+          <div id="original-price-div">
+            <span class="label"><%=Product.human_attribute_name('original_price') %>：</span>¥
+            <span name="original_price" class="original-price field"></span>/
+            <span name="product_unit"></span>
+          </div>
+          <div>
+            <span class="label"><%=Product.human_attribute_name('price') %>：</span>¥
+            <span name="price"></span>/
+            <span name="product_unit"></span>
+          </div>
+          <% if @current_shop.use_credits %>
+            <div>
+              <span class="label"><%=Product.human_attribute_name('credits_for_each_product') %>：</span>
+              <span name="credits_for_each_product" class="field"></span>
+            </div>
+          <%end%>
+          <div>
+            <span class="label"><%=Product.human_attribute_name('stock') %>：</span>
+            <span name="stock" class="field"></span>
+          </div>
+        </div>
+        <hr/>
+        <div>
+          <span class="label"><%=Product.human_attribute_name('description') %>：</span>
+          <p name="description"></p>
+        </div>
+        <div class="alert alert-info" style="margin-top:5px;">图片仅供参考，以实物为准</div>
+      </div>
+      <div class="modal-footer">
+        <center>
+          <button type="button" class="btn btn-danger btn-lg btn-block" data-dismiss="modal">关闭</button>
+       </center>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>

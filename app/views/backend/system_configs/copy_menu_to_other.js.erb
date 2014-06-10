@@ -1,0 +1,9 @@
+<% if @errors.present? and @errors.any? %>
+  $('#copy-to-system-config-error').html('<%= "#{@errors.join('<br/>')}" %>');
+  $('#copy-to-system-config-success').hide();
+  $('#copy-to-system-config-error').show();
+<% else %>
+  $('#copy-to-system-config-success').text('恭喜您，您已经成功将当前公众账号的菜单复制到其他公众账号。请注意：复制到其他公众账号并不代表其他公众账号菜单已经同步至微信服务器，如需让您复制的菜单在微信用户端生效，您还需要选择相应的公众账号进行同步操作。');
+  $('#copy-to-system-config-success').show();
+  $('#copy-to-system-config-error').hide();
+<% end %>

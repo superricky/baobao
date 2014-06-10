@@ -1,0 +1,7 @@
+%h1 修改服务区域
+
+= render 'form'
+
+= link_to t('Show'), backend_shop_zone_path(@current_shop.slug, @zone), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_zones_path(@current_shop.slug), :class=>"btn btn-default"

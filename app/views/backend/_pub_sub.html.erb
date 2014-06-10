@@ -1,0 +1,56 @@
+<% if (not @current_account.nil?) and (@current_account.is_boss? or @current_account.is_worker?) %>
+  <%= subscribe_to "/messages/accounts/#{@current_account.id}"%>
+  <div id="messages" class="alert alert-success" style="display:none;width:980px;margin:auto;">
+     <button type="button" class="close" aria-hidden="true">&times;</button>
+     <div>
+      <strong id="message_title"></strong><span id="message_content"></span>
+      详情请点击<a href="#" id="message_link" class="label label-success">这里</a>
+     </div>
+  </div>
+
+  <script>
+  $(document).ready(function(){
+    var oldTitle = document.title;
+    var interval = null;
+    var isOldTitle = true;
+    var newTitle = null;
+    var link = null;
+    $('#messages').on('click', function(){
+      $('#messages').fadeOut();
+    });
+    function notifyNewMsg(data, channel) {
+        $('#messages').fadeIn();
+        newTitle = data.msg.title;
+        content = data.msg.content;
+        link = data.msg.link;
+        $('#message_title').text(newTitle);
+        $('#message_content').text(content);
+        $('#message_link').attr('href', link);
+        interval = setInterval(changeTitle, 700);
+        soundPlay();
+      }
+
+    function changeTitle() {
+        document.title = isOldTitle ? oldTitle : newTitle;
+        isOldTitle = !isOldTitle;
+    }
+
+    var soundEmbed = null;
+    //======================================================================
+    function soundPlay() {
+      var which_mp3 = "<%= audio_url "new_message.mp3" %>"
+      var which_ogg = "<%= audio_url "new_message.ogg" %>"
+        document.getElementById("sound").innerHTML='<audio controls autoplay="autoplay"><source src="'
+          + which_ogg
+          + '" type="audio/ogg" /><source src="'
+          + which_mp3
+          + '" type="audio/mpeg" /></audio>';
+      }
+
+    $(window).focus(function () {
+        clearInterval(interval);
+        document.title = oldTitle;
+    });
+  });
+  </script>
+<% end %>

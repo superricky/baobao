@@ -1,0 +1,28 @@
+!!!
+%html{:"ng-app"=>"webstore"}
+  %head
+    %meta{charset: "utf-8"}
+    %meta{name: "keywords", content: ""}
+    %meta{name: "description", content: ""}
+    %meta{name: "author", content: ""}
+    %meta{name: "shop_id", content: "#{@current_shop.id}"}
+    %meta{name: "shop_slug", content: "#{@current_shop.slug}"}
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    %meta{http: {equiv: "X-UA-Compatible"}, content: "IE=EmulateIE9"}
+    = csrf_meta_tags
+    = stylesheet_link_tag "webstore/application", media: "all", data: {turbolinks: {track: true}}
+    /[if IE]
+      = javascript_include_tag "compatibility_alert"
+    /[if lt IE 9]
+      = javascript_include_tag "html5shiv"
+      = javascript_include_tag "respond.min"
+      = javascript_include_tag "json3.min"
+    %title= @current_shop.name
+  %body
+    %header
+      = render "layouts/webstore/header"
+    .container
+      .row= yield
+    %footer= render "layouts/webstore/footer"
+    %section.bg
+    = javascript_include_tag "webstore/webstore"

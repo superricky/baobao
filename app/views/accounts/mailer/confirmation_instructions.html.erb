@@ -1,0 +1,20 @@
+<p>
+<%= SiteConfig.where(key:SiteConfig::SITECONFIG_SUPPORT_COMPANY).first.value %>
+欢迎您的申请使用!</p>
+<p>
+  <b><%= Account.human_attribute_name(:name) %>:</b>
+  <%= @resource.name%>
+</p>
+<p>
+  <b><%= Account.human_attribute_name(:login_id) %>:</b>
+  <%= @resource.login_id%>
+</p>
+<p>
+  <b><%= Account.human_attribute_name(:email) %>:</b>
+  <%= @resource.email%>
+</p>
+<p>
+请确认以上信息是您在<%= SiteConfig.where(key:SiteConfig::SITECONFIG_SUPPORT_COMPANY).first.value %>提交的注册信息，如果您没有提交过注册信息，请直接忽略本邮件. 如果您确认提交过以上注册信息，请点击以下邮件进行开通确认帐号
+</p>
+
+<p><%= link_to '点击激活您的帐号', confirmation_url(@resource, :confirmation_token => @token) %></p>

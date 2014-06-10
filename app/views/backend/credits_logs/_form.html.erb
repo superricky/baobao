@@ -1,0 +1,57 @@
+<%= form_for(@credits_log, url: @credits_log.new_record? ? get_credits_logs_path : get_credits_log_path(@credits_log) ) do |f| %>
+  <% if @credits_log.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= @credits_log.errors.count %>个错误导致无法正确保存:</h2>
+
+      <ul>
+      <% @credits_log.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  	<div class="field">
+  		<strong><%= CreditsLog.human_attribute_name("credit_log_type")%>:</strong>
+	  <%= @credits_log.credit_log_type_name %>
+	  
+	</div>
+	
+	<div class="field">
+	  <strong><%= CreditsLog.human_attribute_name("shop")%>:</strong>
+	  <%= @credits_log.shop.name %>
+	</div>
+	
+	<div class="field">
+	  <strong><%= CreditsLog.human_attribute_name("branch")%>:</strong>
+	  <%= @credits_log.branch.name %>
+	</div>
+	
+	<div class="field">
+	  <strong><%= CreditsLog.human_attribute_name("user")%>:</strong>
+	  <%= @credits_log.user.name %>
+	  <input type="hidden" name="credits_log[user_id]" value=<%= "#{@credits_log.user_id}" %>>
+	</div>
+	<% if params[:action] == 'new' or params[:action] == 'create'%>
+	<div class="field">
+	  <strong>用户当前剩余积分:</strong>
+	  	<%= @credits_log.user.credits %>
+	</div>
+	<%end%>
+	<div class="field">
+	  <strong><%= CreditsLog.human_attribute_name("credits")%>:</strong>
+	  <% if params[:action] == 'new' or params[:action] == 'create'%>
+	  	<%= f.number_field :credits, :min=>0, :placeholder=>"消费积分的数量"%>
+	  <%else%>
+	  	<%= @credits_log.credits %>
+	  <%end%>
+	</div>
+  	
+  	<div class="field">
+      <%= f.label :note %><br>
+      <%= f.text_area :note, :cols=> 40, :rows=>8, :placeholder=>"积分消费备注，便于将来查询。比如积分兑换的物品"%>
+  	</div>
+  <div class="actions">
+    <%= f.submit :class=>"btn btn-primary"%>
+  </div>
+<% end %>

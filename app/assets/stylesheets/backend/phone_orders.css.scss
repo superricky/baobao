@@ -1,0 +1,40 @@
+#category_tabbable{
+  .product_show{
+    min-width: 125px;
+    max-width: 125px;
+    padding: 0px 5px;
+    .add_product{
+      color: #000000;
+      display: inline-block;
+      text-decoration: none;
+      &:hover{
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+      }
+      &:active{
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2) inset;
+      }
+      .phone_order_btn {
+        height: 100px;
+        padding: 10px;
+        width: 100px;
+        margin: auto;
+        background-color: #3276b1;
+        color: #FFF;
+        font-size: 14px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.phone_order_product_list{
+  #cart{
+    width: 300px;
+    position: fixed;
+    top: 100px;
+    .panel-body{
+      max-height: 400px;
+      overflow: auto;
+    }
+  }
+}

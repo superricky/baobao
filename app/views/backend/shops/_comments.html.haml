@@ -1,0 +1,28 @@
+.col-sm-6
+  .widget-box
+    .widget-header
+      %h4.lighter.smaller
+        %i.icon-comment.blue
+        用户评论
+    .widget-body
+      .widget-main.no-padding
+        .dialogs{:style=>"height:200px;overflow-y:scroll;"}
+          - @current_shop.branch_comments.limit(10).each do |comment|
+            .itemdiv.dialogdiv
+              .user
+                %img{:src=>"/assets/avatars/avatar2.png", :alt=>"avatar"}
+              .body
+                .time
+                  %i.icon-time
+                  %span.green= comment.created_at.strftime("%Y-%m-%d %H:%M:%S")
+                .name
+                  %a{:href=>"#"}= comment.name
+                  %span.label.label-info.arrowed.arrowed-in-right= "未审核" if not comment.can_pub?
+                .text= comment.content
+        %form
+          .form-actions
+            .input-group
+              %span.input-group-btn
+                %a.btn.btn-sm.btn-info.no-radius.pull-right{:href=>"#{backend_shop_branch_comments_path(@current_shop)}"}
+                  %i.icon-archive
+                  察看和审批所有评论

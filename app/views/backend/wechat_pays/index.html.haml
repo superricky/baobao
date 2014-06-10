@@ -1,0 +1,59 @@
+.alert.alert-info
+  选择支持微信支付功能的
+  %strong 认证服务号
+  进行设置，如果您没有认证的服务号请进入
+  = link_to '微信公众账号', backend_shop_system_configs_path(@current_shop)
+  进行设置
+  %br
+  申请微信支付所需参数详情，请点击
+  = link_to '申请微信支付参数', "javascript:void(0)", data: {toggle: "modal", target: "#weixin_pay_args_modal"}
+  进行参考
+%table.table.table-striped
+  %thead
+    %tr
+      %th= SystemConfig.human_attribute_name("public_account_name")
+      %th= SystemConfig.human_attribute_name("gonghao_type")
+      %th= SystemConfig.human_attribute_name('support_weixin_pay')
+
+      %th 操作
+  %tbody
+    - @system_configs.each do |system_config|
+      %tr
+        %td= system_config.public_account_name||system_config.my_fake_id
+        %td 认证的服务号
+        %td
+          - if system_config.support_weixin_pay?
+            %span.label.label-success 支持
+          - else
+            %span.label.label-warning 不支持
+        %td
+          = link_to t("Show"), backend_shop_wechat_pay_path(@current_shop.slug, system_config), class: "btn btn-default"
+          = link_to t("Edit"), edit_backend_shop_wechat_pay_path(@current_shop.slug, system_config), class: "btn btn-default"
+.modal.fade#weixin_pay_args_modal{:role=>"dialog", :"aria-hidden"=>"true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{:type=>"button",:"data-dismiss"=>"modal", :"aria-hidden"=>"true"} &times;
+        %h4.modal-title 微信支付申请所需相关参数
+
+      .modal-body
+        %table.table.table-striped
+          %thead
+            %tr
+              %th 参数名
+              %th 参数值
+          %tbody
+            %tr
+              %td 支付授权目录
+              %td= "#{shop_root_url(@current_shop)}/"
+            %tr
+              %td 支付请求实例
+              %td= client_new_client_root_url(@current_shop)
+            %tr
+              %td 维权通知url
+              %td= priority_notify_weixinpay_url(@current_shop)
+            %tr
+              %td 告警通知url
+              %td= warning_weixinpay_url(@current_shop)
+      .modal-footer
+        %button.btn.btn-default{:"data-dismiss"=>'modal'} 关闭

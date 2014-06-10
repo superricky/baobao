@@ -1,0 +1,58 @@
+= render :partial=>'order_navs'
+.well.col-md-12.col-lg-12
+  %form.form-inline{:role => "form"}
+    .form-group
+      %label.sr-only{:for => "search_key"} 订单关键词
+      %input#search_key.form-control{:name => "number", :placeholder => "输入关键词", :type => "text"}/
+    .form-group
+      %select.form-control{:onchange => "change_search_key(this)"}
+        %option{:value => "number"} 按订单编号
+        %option{:value => "name"} 按客户姓名
+        %option{:value => "phone"} 按客户手机
+    %button.btn.btn-primary{:type => "submit"} 查找
+.pull-right
+  = will_paginate @posts, renderer: BootstrapPagination::Rails, bootstrap: 3
+%table.table.table-striped
+  %thead
+    %tr
+      %th 订单编号
+      %th 姓名
+      %th 订单状态
+      %th 下单时间
+      %th 操作
+  %tbody
+    - if @orders.empty?
+      %tr
+        %td{:colspan => "5", :style => "text-align:center;"}
+          %strong 没有符合您要求的订单
+    - else
+      - @orders.each do |order|
+        <tr
+        - if order.state == Order::WAIT_CONFIRMED
+          style="font-weight:bold;font-size:14px;"
+        >
+        %td= order.id
+        %td= order.name
+        %td
+          - if order.state == Order::WAIT_CONFIRMED
+            %span.label.label-danger 新订单
+          = order.state_name
+        %td= order.created_at.strftime('%Y-%m-%d %H:%M')
+        %td
+          = link_to t('Show'), backend_shop_branch_order_path(@current_shop.slug, @current_branch, order), class: "btn btn-default"
+          - unless order.allow_change_state_for_admin?.empty?
+            .btn-group
+              %button.btn.btn-default.dropdown-toggle{"data-toggle" => "dropdown", :type => "button"}
+                改变订单状态 为
+                %span.caret
+              %ul.dropdown-menu{:role => "menu"}
+                - Order::get_state_items_by_states(order.allow_change_state_for_admin?()).each do|state_item|
+                  %li= link_to state_item[0], change_state_backend_shop_branch_order_path(@current_shop.slug, @current_branch, order.id, state:state_item[1]), method: :post
+%div{:style => "min-height:60px;"}
+  .pull-right
+    = will_paginate @posts, renderer: BootstrapPagination::Rails, bootstrap: 3
+:javascript
+  function change_search_key(value){
+  	var key = $(value).val();
+  	$('#search_key').attr('name', key);
+  }

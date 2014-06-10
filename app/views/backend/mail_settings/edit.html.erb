@@ -1,0 +1,10 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		邮件通知设置
+	</div>
+	<div class="panel-body">
+		<%= render 'form' %>
+	</div>
+</div>
+
+<%= link_to t('Show'), backend_shop_mail_settings_path(@current_shop.slug), :class=>"btn btn-default" %>

@@ -1,0 +1,6 @@
+%h1= t('Editing shop')
+= form_for [:backend, @shop], html: {class: "form-horizontal", role: "form", id: "branch_form"} do |f|
+  = render 'form', {f:f}
+= link_to t('Show'), [:backend, @shop]
+|
+\#{link_to t('Back'), backend_shops_path}

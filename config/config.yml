@@ -1,0 +1,8 @@
+development:
+  domain_level: 1
+
+test:
+  domain_level: 1
+
+production:
+  domain_level: 1

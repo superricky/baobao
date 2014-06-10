@@ -1,0 +1,2 @@
+module MailSettingsHelper
+end

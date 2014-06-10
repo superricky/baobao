@@ -1,0 +1,14 @@
+!!!
+%html
+  %head
+    %title= find_shop_or_branch_title
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    = stylesheet_link_tag  "mobile", "data-turbolinks-track" => true
+    = javascript_include_tag "mobile"
+    = csrf_meta_tags
+  %body
+    %div{:style => "min-height:500px;"}
+      = yield
+    = render "/mobile_footer"
+    - if content_for :footer
+      = yield :footer

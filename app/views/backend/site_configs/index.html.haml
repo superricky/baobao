@@ -1,0 +1,17 @@
+%h1{:style=>"text-align:center;"}= t('Listing site_configs')
+
+%div.row
+  %div.col-xs-12
+    %div.table-responsive
+      %table.table.table-striped.table-bordered.table-hover
+        %tbody
+          - @site_configs.each do |site_config|
+            %tr
+              %td.col-xs-3
+                %strong= site_config.display_name
+              %td.col-xs-6= site_config.value
+              %td.col-xs-3
+                %a{:href=> "#{edit_backend_site_config_path(site_config)}"}
+                  %button.btn.btn-xs.btn-info
+                    %i.icon-edit
+

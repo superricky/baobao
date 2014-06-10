@@ -1,0 +1,167 @@
+$color_shadow: rgba(0,0,0,0.4);
+$color_border: #bebebe;
+$color_bar: #fefefe;
+$color_list_hover:#f1fafc;
+$color_actions_hover_border:#febf40;
+$color_actions_hover:#fdffb8;
+$color_red:#cc0000;
+
+.left{float:left !important;}
+.right{float:right !important;}
+.center{text-align:center !important;}
+.dev{border:1px solid blue;overflow:hidden;display:block;}
+h1 *{font-size:15pt !important;}
+h2 *{font-size:12pt !important;}
+h3 *{font-size:10pt !important;}
+h1{font-size:15pt !important;}
+h2{font-size:12pt !important;}
+h3{font-size:10pt !important;}
+h1, h2, h3{margin:0;padding:0 !important;}
+
+section{overflow:hidden;}
+
+ul{
+  margin:0;
+  padding:0;
+  li{
+    list-style:none !important;
+    margin:0;
+    padding:0;
+  }
+}
+
+header{
+  nav{
+    border-radius:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-shadow:0 1px 1px 1px $color_shadow;
+    z-index:9999;
+  }
+  .status_bar{
+    height:111px;
+    box-shadow:0 1px 1px 1px $color_shadow;
+    background:$color_bar;
+  }
+  aside{
+    &.summary{
+      height:111px;
+      background:#fff;
+      position:absolute;
+      overflow:hidden;
+      z-index:999;
+      &:hover{
+        height:auto;
+        box-shadow:0 1px 1px 1px $color_shadow;
+        border-radius: 0 0 5px 5px;
+        border-color: $color_shadow;
+        border:1px solid $color_border;
+      }
+      .branch_logo{width:80px;height:80px;margin:20px 10px;}
+      strong{letter-spacing:0em;line-height:2em;}
+      hr{margin:5px;}
+    }
+    &.notice{
+      width:360px;
+      height:111px;
+    }
+  }
+  margin-bottom:10px;
+}
+
+footer{
+  margin-top:10px;
+  ul{
+    margin:0;padding:0;
+    li{
+      margin:0;padding:0;display:inline-block;list-style:none;
+      a{color:#2b2b2b;}
+    }
+  }
+}
+
+body{
+  *{letter-spacing:0.1em;font-size:10pt;}
+  section{
+    &.bg{
+      position:fixed;
+      width:100%;
+      height:100%;
+      top:0;
+      left:0;
+      background-color:#99ccff;
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:100%;
+      z-index:-1;
+    }
+  }
+
+  aside{
+    .panel{
+      margin-left:1px;
+      margin-bottom:10px;
+      background:#fff;
+      &.side_map{
+        img{margin:10px 0;}
+      }
+      .list-group-item{
+        overflow:hidden;
+        line-height:3em;
+        &:hover{
+          background:$color_list_hover;
+          .favorite_link{background:$color_actions_hover;}
+          span .btn{
+            border:1px solid $color_actions_hover_border;
+            background:$color_actions_hover;
+          }
+        }
+      }
+    }
+    .side_notice{
+      border-top:4px solid $color_red;
+      h2{text-align:center;margin:10px;padding:0;}
+      p{text-indent:2em;line-height:2em;margin:0 10px;}
+      .btn{width:100%;line-height:2.5em;letter-spacing:0.5em;}
+    }
+  }
+}
+
+.h1{height:300px;background:blue;margin-bottom:10px;}
+
+.right{
+  .dropdown-menu{
+    right:0 !important;
+    left:auto !important;
+  }
+}
+
+.modal{
+  h2{font-weight:bolder;}
+  form{
+    fieldset{
+      legend{font-size:12pt;line-height:13pt;padding:5px 0;text-indent:1em;}
+    }
+  }
+}
+
+.navbar-brand{
+  img{width:72px;height:40px;}
+}
+
+.menus, .view_area{min-height:500px;}
+#error_explanation{
+  h2{display:none;}
+  ul{
+    li{
+      font-weight:bolder;
+      color:$color_red;
+    }
+  }
+}
+
+@media(max-width:992px){
+  aside{padding-left:0 !important;}
+  .notice{display:none !important;}
+  .currency{display:none !important;}
+}

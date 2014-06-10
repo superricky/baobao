@@ -1,0 +1,17 @@
+.panel.panel-default
+  .panel-heading
+    账户信息
+  .panel.panel-body
+    = render 'account_info'
+= link_to t('Edit'), get_edit_account_path(@account), :class=>"btn btn-primary"
+- if current_account?(@account)
+  = link_to t('Edit Password'), get_edit_password_account_path(@account), :class=>"btn btn-primary"
+= link_to "查看管理商户", account_branch_backend_shop_account_path(@current_shop, @account), remote: true, class: "btn btn-primary"
+= link_to t('Back'), get_accounts_path , :class=>"btn btn-primary"
+#account_branch.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "AccountBranchLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+        %h4#AccountBranchLabel.modal-title 商户列表
+      .modal-body

@@ -1,0 +1,35 @@
+%p#notice= notice
+%div.panel.panel-default
+  %div.panel-heading 商户分类详情
+  %div.panel-body
+    %p
+      %b
+        = BranchType.human_attribute_name(:name)
+        \:
+      = @branch_type.name
+    %p
+      %b
+        = BranchType.human_attribute_name(:branches_count)
+        \:
+      = "#{@branch_type.branches_count}家"
+%div.panel.panel-default
+  %div.panel-heading 属于该分类的商户
+  %div.panel-body
+    %table.table.table-striped
+      %thead
+        %tr
+          %th= Branch.human_attribute_name("name")
+          %th= Branch.human_attribute_name("is_open")
+          %th 剩余配额
+          %th= Branch.human_attribute_name("telephone")
+          %th= t("operation btn")
+      %tbody
+        - if @branches.empty?
+          %tr
+            %th{:colspan=>5} 该分类暂无商户
+        - @branches.each_with_index do |branch, index|
+          = render 'backend/branches/table_record', {branch: branch, index:index, branches: @branches}
+
+= link_to t('Edit'), edit_backend_shop_branch_type_path(@current_shop.slug, @branch_type)
+\|
+= link_to t('Back'), backend_shop_branch_types_path(@current_shop.slug)

@@ -1,0 +1,30 @@
+// Place all the styles related to the MessageThreads controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.message-thread {
+    
+}
+
+.message-thread-user {
+  padding:10px;
+  color: #4d5d2c;
+  text-decoration:none;
+}
+
+#message-threads-table tbody td span{
+  line-height:55px;
+  height:55px;
+  padding:5px;
+}
+
+.message-thread-user a,
+.message-thread-user a:link,
+.message-thread-user a:visited,
+.message-thread-user a:hover,
+.message-thread-user a:active {
+  background-color: transparent;
+  text-decoration:none;
+  color: #4d5d2c;
+  font-weight: bold;
+  font-size:15px;
+}

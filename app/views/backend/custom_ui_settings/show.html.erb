@@ -1,0 +1,31 @@
+<% unless notice.nil? %>
+	<p class="alert alert-success" id="notice"><%= notice %></p>
+<%end%>
+
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		自定义界面设置
+	</div>
+	<div class="panel panel-body">
+	<div class="alert alert-info">
+由于不同行业对下单过程中的术语不尽相同，本功能允许用户个性化下单称谓。但请使用相近词语作为替代，例如：对外送而言，餐饮行业可以叫“外卖”，生活服务业可以使用“上门服务代替”，其他商品可以使用“货到付款”代替
+</div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>原关键词</th><th>自定义关键词</th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @custom_ui_setting.attributes.delete_if{|key, value| [:created_at, :updated_at, :id, :branch_id].include? key.to_sym }.each do |key, value| %>
+					<tr>
+						<td><strong><%= CustomUiSetting.human_attribute_name(key.to_sym) %></strong></td>
+						<td><%= value||"未定义" %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+</div>
+</div>
+<%= link_to t('Edit'), edit_backend_shop_branch_custom_ui_setting_path(@current_shop.slug, @current_branch), :class=>"btn btn-default" %>
+

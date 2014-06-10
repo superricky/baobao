@@ -1,0 +1,10 @@
+$("tr[data-order-id=<%=@order.id%>]").replaceWith($("<%= j(render partial: 'mobile/orders/mobile_order', locals: { order: @order}) %>"));
+$('#order-error ul').html('');
+<% if  @order.errors.any? %>
+	<% @order.errors.full_messages.each do|msg| %>
+		$('#order-error ul').append("<li><%= msg %></li>");
+	<%end%>
+	$('#order-error').show();
+<%else%>
+  $('#order-error').hide();
+<%end%>

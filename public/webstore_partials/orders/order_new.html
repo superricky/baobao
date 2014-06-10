@@ -1,0 +1,90 @@
+<div ng-controller="orderController">
+  <div ng-include="'webstore_partials/branch_header.html'"></div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">确认提交信息</h2>
+    </div>
+    <div class="panel-body">
+      <h2>订单内容确认</h2>
+      <hr/>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-xs-6">菜单名</th>
+            <th class="col-xs-2">单价</th>
+            <th class="col-xs-2">数量</th>
+            <th class="col-xs-2">小计</th>
+          </tr>
+        </thead>
+        <tbody id="cart_details">
+          <tr ng-repeat="product in products_in_cart">
+            <td>{{product.name}}</td>
+            <td>{{product.price|currency:current_shop.current_currency_symbol}}</td>
+            <td>{{count_of_product(product)}}</td>
+            <td><strong>{{(product.price*count_of_product(product))|currency:'￥'}}</strong></td>
+          </tr>
+          <tr class="bottom">
+            <td colspan="4" style="vertical-align:bottom;text-align:right">
+              <strong ng-if="charge()">配送区域：{{zone.zone_name}}&nbsp;&nbsp;配送费用：{{zone.charge|currency:current_shop.current_currency_symbol}}{{branch.min_order_charge > 0 ? '(满'+(branch.min_order_charge|currency:current_shop.current_currency_symbol)+"免外送费！)" : ''}}</strong>
+              <strong>共{{count}}份美食，应付金额：<span style="color:red;font-size:16pt;">{{total+other_total|currency:current_shop.current_currency_symbol}}</span></strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>配送信息请确认</h2>
+      <hr/>
+      <table class="confirmation_order_info">
+        <tr>
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-cutlery">用餐方式</label></td>
+          <td class="col-xs-8 col-md-9">{{order_types_view(order.order_type)}}</td>
+        </tr>
+        <tr>
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-user">姓名</label></td>
+          <td class="col-xs-8 col-md-9">{{order.name}}</td>
+        </tr>
+        <tr>
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-phone">手机</label></td>
+          <td class="col-xs-8 col-md-9">{{order.phone}}</td>
+        </tr>
+        <tr>
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-phone">配送区域</label></td>
+          <td class="col-xs-8 col-md-9">{{get_delievery_zone_name()}}</td>
+        </tr>
+        <tr class="delivery">
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-home">配送时间段</label></td>
+          <td class="col-xs-8 col-md-9">{{order.address}}</td>
+        </tr>
+        <tr class="delivery" ng-show="order.delivery_period">
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-home">配送地址</label></td>
+          <td class="col-xs-8 col-md-9">{{order.delivery_period}}</td>
+        </tr>
+        <tr class="not_delivery" ng-show="order.order_type != 'delivery'">
+          <td class="col-xs-4 col-md-3 title"><label class="control-label">桌号</label></td>
+          <td class="col-xs-8 col-md-9">{{order.desk_no}}</td>
+        </tr>
+        <tr class="not_delivery" ng-show="order.order_type != 'delivery'">
+          <td class="col-xs-4 col-md-3 title"><label class="control-label">就餐人数</label></td>
+          <td class="col-xs-8 col-md-9">{{order.guest_num}}</td>
+        </tr>
+        <tr ng-repeat="element in branch.form_elements">
+          <td class="col-xs-4 col-md-3 title"><label class="control-label">{{element.label}}</label></td>
+          <td class="col-xs-8 col-md-9">{{order.form_contents_attributes[$index].content}}</td>
+        </tr>
+        <tr>
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-edit">备注</label></td>
+          <td class="col-xs-8 col-md-9">{{order.note}}</td>
+        </tr>
+        <tr>
+          <td class="col-xs-4 col-md-3 title"><label class="control-label glyphicon glyphicon-card">支付方式</label></td>
+          <td class="col-xs-8 col-md-9">货到付款。微信商铺支持更多支付方式哟！</td>
+        </tr>
+      </table>
+    </div>
+    <div class="panel-footer">
+      <center>
+        <a href="javascript:history.back();" class="btn btn-warning">返回</a>
+        <input class="btn btn-primary" name="commit" type="button" value="确认并提交订单" ng-click="order_commit()">
+      </center>
+    </div>
+  </div>
+</div>

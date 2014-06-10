@@ -1,0 +1,17 @@
+<% url = @current_branch.nil? ? search_backend_shop_credits_logs_path(@current_shop.slug) : search_backend_shop_branch_credits_logs_path(@current_shop.slug, @current_branch) %>
+<%= search_form_for @q, url: url, class: "navbar-form", method: :post do |f|%>
+  <div class="form-group">
+    <%= f.select :credit_log_type_eq, options_for_select(get_credits_log_type_array, selected: (params[:q][:credit_log_type_eq] rescue nil )), {prompt: "选择类型" }, {class: "form-control"} %>
+  </div>
+  <% if @current_branch.nil? %>
+    <div class="form-group">
+      <%= f.select :branch_name_eq, options_for_select(get_branch_name_array, selected: (params[:q][:branch_name_eq] rescue nil )), {prompt: "选择商户" }, {class: "form-control"} %>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= f.text_field :user_name_cont, class: "form-control", placeholder: User.human_attribute_name("name") %>
+  </div>
+  <div class="form-group">
+    <%= f.submit "搜索", class: "btn btn-default" %>
+  </div>
+<% end %>

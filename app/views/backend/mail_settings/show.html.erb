@@ -1,0 +1,81 @@
+<% unless notice.nil? %>
+<p id="notice" class="alert alert-success">
+	<%= notice %>
+</p>
+<%end%>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		邮件通知设置
+	</div>
+	<div class="panel-body">
+		<% if @mail_setting.new_record? or not @mail_setting.enable_mail %>
+		<p class="alert alert-danger">当前未启用邮件通知</p>
+		<%else%>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("enable_mail")%>:</strong>
+			<%= @mail_setting.enable_mail ? "已启用":"未启用" %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("notify_shop_manager")%>:</strong>
+			<%= @mail_setting.notify_shop_manager ? "新订单到来时既通知商户经营者也通知您":"仅通知商户经营者" %>
+		</p>
+
+		<% if @mail_setting.use_system_setting %>
+			<p>使用系统默认邮箱进行发送</p>
+
+		<%else%>
+			<p><strong>系统将使用自定义邮箱设置</strong></p>
+		<p>
+			<strong><%= MailSetting.human_attribute_name("delivery_method")%>:</strong>
+			<%= @mail_setting.delivery_method %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("address")%>:</strong>
+			<%= @mail_setting.address %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("port")%>:</strong>
+			<%= @mail_setting.port %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("domain")%>:</strong>
+			<%= @mail_setting.domain %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("user_name")%>:</strong>
+			<%= @mail_setting.user_name %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("password")%>:</strong>
+			******
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("authentication")%>:</strong>
+			<%= @mail_setting.authentication %>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("enable_starttls_auto")%>:</strong>
+			<%= @mail_setting.enable_starttls_auto ? "启用":"不启用"%>
+		</p>
+
+		<p>
+			<strong><%= MailSetting.human_attribute_name("reply_to")%>:</strong>
+			<%= @mail_setting.reply_to %>
+		</p>
+		<%= link_to "测试邮箱是否设置成功",test_config_email_backend_shop_mail_settings_path(@current_shop.slug), :class=>"btn btn-success" %>
+		如果测试失败，请检查您的邮箱是否启用了SMTP发信功能
+		<%end%>
+		<%end%>
+	</div>
+</div>
+
+<%= link_to t('Edit'), edit_backend_shop_mail_settings_path(@current_shop.slug), :class=>"btn btn-default" %>

@@ -1,0 +1,77 @@
+.material_form
+  = form_for([:backend, @current_shop ,@material], :html => {class: "form-horizontal", role: "form"}, remote: true) do |f|
+    - if @material.errors.any?
+      #error_explanation.alert.alert-danger
+        %h2
+          = @material.errors.count
+          个错误导致无法正确保存：
+        %ul
+          - @material.errors.full_messages.each do |msg|
+            %li= msg
+      fdsafdsafdsa
+    .field.form-group
+      = f.label :material_name , class: "col-sm-3 control-label"
+      .col-sm-4
+        = f.text_field :material_name, class: "form-control"
+    .field.form-group
+      = f.label :msg_type, class: "col-sm-3 control-label"
+      .col-sm-4
+        = f.select :msg_type, Message::MSGTYPES
+    .field.form-group
+      = f.label :content , class: "col-sm-3 control-label"
+      .col-sm-8
+        = f.text_area :content, class: "form-control", cols: "40", rows: "5"
+    .field.form-group
+      = f.label :title , class: "col-sm-3 control-label"
+      .col-sm-4
+        = f.text_field :title, class: "form-control"
+    .field.form-group
+      = f.label :music_url , class: "col-sm-3 control-label"
+      .col-sm-4
+        = f.text_field :music_url, class: "form-control"
+    .field.form-group
+      = f.label :hq_music_url , class: "col-sm-3 control-label"
+      .col-sm-4
+        = f.text_field :hq_music_url, class: "form-control"
+    .field.form-group
+      = f.label :description , class: "col-sm-3 control-label"
+      .col-sm-8
+        = f.text_area :description , class: "form-control", cols: "40", rows: "5"
+    .field.form-group
+      .row.col-md-offset-3
+        .col-md-3
+          = f.submit :class => 'btn btn-primary', id: ( "submit_news_material" if @material.new_record?)
+:javascript
+  function hideInput(){
+      $('#material_content').closest('.field').hide();
+      $('#material_title').closest('.field').hide();
+      $('#material_description').closest('.field').hide();
+      $('#material_music_url').closest('.field').hide();
+      $('#material_hq_music_url').closest('.field').hide();
+      $('#material_articles').closest('.field').hide();
+      $('#preview_material_articles_btn').hide();
+      $('#generalize_introduce').hide();
+      $('#submit_news_material').attr("value", "提交")
+  }
+
+  function changeEvent(eventType){
+    hideInput();
+    if(eventType === 'text'){
+      $('#material_content').closest('.field').show();
+    }else if(eventType === 'music'){
+        $('#material_title').closest('.field').show();
+        $('#material_description').closest('.field').show();
+        $('#material_music_url').closest('.field').show();
+        $('#material_hq_music_url').closest('.field').show();
+    }else if(eventType === 'news'){
+      $('#material_articles').closest('.field').show();
+      $('#preview_material_articles_btn').show();
+      $('#submit_news_material').attr("value", "下一步")
+    }
+  }
+
+    $('#material_msg_type').change(function(e) {
+      changeEvent(e.target.value);
+    });
+
+    changeEvent($('#material_msg_type').val());

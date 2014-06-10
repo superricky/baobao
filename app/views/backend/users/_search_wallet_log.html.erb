@@ -1,0 +1,9 @@
+<%= search_form_for @q, url: search_log_backend_shop_user_path(@current_shop.slug, @user, log_type: "wallet_logs"), class: "navbar-form", method: :post do |f|%>
+  <div class="form-group">
+    <%= f.select :wallet_log_type_eq, options_for_select(get_wallet_logs_type_array, selected: (params[:q][:wallet_log_type_eq] rescue nil)), {prompt: "选择流水类型" }, {class: "form-control"} %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit "搜索", class: "btn btn-default" %>
+  </div>
+<% end %>

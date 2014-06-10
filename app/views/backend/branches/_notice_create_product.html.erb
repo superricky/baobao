@@ -1,0 +1,26 @@
+<% if @current_branch.products.count == 0 %>
+  <div class="modal fade" id="notice_create_product" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">提示</h4>
+        </div>
+        <div class="modal-body">
+          <div class="well">
+            <h4 class="green smaller lighter">
+              <%= link_to "创建商品", new_backend_shop_branch_product_path(@current_shop.slug, @current_branch), class: "btn btn-info"%></h4>
+              您的帐号下面的商户"<%= @current_branch.name%>" ，尚未创建商品，请点击创建
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function(){
+      $('#notice_create_product').modal({
+        keyboard: false
+      })
+    });
+  </script>
+<% end %>

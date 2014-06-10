@@ -1,0 +1,97 @@
+<div class="col-md-6 col-md-offset-3 col-xs-12">
+  <div class="page-content">
+    <div class="page-header">
+      <h1>注册帐号</h1>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-12">
+        <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name),
+          html: {class: "form-horizontal", role: "form"}) do |f| %>
+
+        <div class="form-group">
+          <%= f.label :login_id , class: "col-md-3 control-label"%>
+          <div class="col-md-8">
+            <%= f.text_field :login_id, class: "form-control col-sm-4" %>
+          (须英文字母开头,且仅包含英文字母和数字)
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :name , class: "col-md-3 control-label"%>
+          <div class="col-md-8">
+            <%= f.text_field :name, class: "form-control col-sm-4" %>
+          </div>
+        </div>
+
+        <% resource.build_shop if resource.shop.nil?%>
+        <%= f.fields_for :shop do |shop_form| %>
+          <div class="form-group">
+            <%= shop_form.label "name" , class: "col-md-3 control-label"%>
+            <div class="col-md-8">
+              <%= shop_form.text_field :name, class: "form-control col-sm-4" %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= shop_form.label :aid , class: "col-md-3 control-label"%>
+            <div class="col-md-8">
+              <%= shop_form.text_field :aid, class: "form-control col-sm-4", :placeholder=>"若没有邀请码请留空" %>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.label :email , class: "col-md-3 control-label"%>
+          <div class="col-md-6">
+            <%= f.email_field :email, class: "form-control col-sm-4" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :phone , class: "col-md-3 control-label"%>
+          <div class="col-md-8">
+            <%= f.text_field :phone, class: "form-control col-sm-4" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :password , class: "col-md-3 control-label"%>
+          <div class="col-md-8">
+            <%= f.password_field :password, class: "form-control col-sm-4" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :password_confirmation , class: "col-md-3 control-label"%>
+          <div class="col-md-8">
+            <%= f.password_field :password_confirmation, class: "form-control col-sm-4" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-md-3">
+            <%= captcha_tag %>
+            <% if request.post? %>
+              验证码<%= valid_captcha?(params[:captcha]) ? '正确' : '不正确' %>
+            <% end %>
+          </div>
+        </div>
+        <div class="form-group">
+          <%= f.label :captcha, class: "col-md-3 control-label"%>
+          <div class="col-sm-8">
+            <%= f.text_field :captcha %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-3 col-xs-4 col-md-offset-3">
+            <%= f.submit "注册帐号", :class=>"btn btn-primary" %>
+          </div>
+          <div class="col-md-3 col-xs-4">
+            <%= link_to "登录帐号", backend_login_path,:class=>"btn btn-primary" %>
+          </div>
+        </div>
+      <% end %>
+      </div>
+    </div>
+  </div>
+
+</div>

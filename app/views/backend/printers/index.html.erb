@@ -1,0 +1,55 @@
+<% if (not flash[:error].nil?) and (not flash[:error].empty?) %>
+	<div class="alert alert-danger">
+		<%= flash[:error] %>
+	</div>
+<% end %>
+
+<% unless notice.nil? %>
+<div class="alert alert-success">
+	<%= notice %>
+</div>
+<%end %>
+<div class="btn-group pull-right" style="margin:10px;">
+	<%= link_to t('New printer'), new_backend_shop_branch_printer_path, :class=>"btn btn-primary" %>
+	</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>打印机名称</th>
+      <th><%= Printer.human_attribute_name('print_on_order') %></th>
+      <th><%= Printer.human_attribute_name('phone')%></th>
+      <th>打印数量</th>
+      <th>打印机类型</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @printers.each do |printer| %>
+      <tr>
+        <td>
+        	<%= printer.name%>
+        </td>
+        <td>
+        	<% if printer.print_on_order %><span class="label label-success">已启用</span><%else%><span class="label label-default">已停用</span><%end%>
+        </td>
+        <td>
+        	<%= printer.phone%>
+        </td>
+        <td>
+        	<%= printer.copy_count%>
+        </td>
+        <td>
+        	<% if printer.use_feiyin_printer? %>
+        		飞印打印机
+        	<%end%>
+        </td>
+        <td>
+        	<%= link_to t('Show'), backend_shop_branch_printer_path(@current_shop.slug, @current_branch, printer), class: "btn btn-default" %>
+        	<%= link_to t("Edit"), edit_backend_shop_branch_printer_path(@current_shop.slug, @current_branch, printer), class: "btn btn-default" %>
+        	<%= link_to t('Destroy'), backend_shop_branch_printer_path(@current_shop.slug, @current_branch, printer), method: :delete, data: { confirm: '确定要删除吗？' }, :class =>'btn btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

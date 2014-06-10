@@ -1,0 +1,48 @@
+%h1 商户列表
+
+%table.table.table-striped
+  %tr
+    %th= BaseBranch.human_attribute_name(:name)
+    %th= BaseBranch.human_attribute_name(:type)
+    %th.col-xs-4= BaseBranch.human_attribute_name(:introduction)
+    %th 操作
+
+  - @base_branches.each_with_index do |base_branch, index|
+    %tr
+      %td= link_to base_branch.name, "#{base_branch.is_branch? ? backend_shop_branch_path(@current_shop, base_branch) : backend_shop_brand_chain_path(@current_shop, base_branch)}"
+      %td= base_branch.is_branch? ? "单店铺商户" : "品牌连锁"
+      %td= base_branch.introduction
+      %td
+        - if @base_branches.size > 1
+          .btn-group
+            %button.btn.btn-default.dropdown-toggle{:type=>"button", :"data-toggle"=>"dropdown"}
+              排序
+              %span.caret
+            %ul.dropdown-menu{:role=>"menu"}
+              - unless index == 0
+                %li
+                  %a{:href=>"#{change_position_backend_shop_base_branches_path(@current_shop.slug, base_branch_ids:[@base_branches[index-1].id, base_branch.id])}", :data=>{:method=>"put"}}
+                    %i.glyphicon.glyphicon-arrow-up
+                    向上移一位
+              - unless index == @base_branches.size-1
+                %li
+                  %a{:href=>"#{change_position_backend_shop_base_branches_path(@current_shop.slug, base_branch_ids:[base_branch.id, @base_branches[index+1].id])}", :data=>{:method=>"put"}}
+                    %i.glyphicon.glyphicon-arrow-down
+                    向下移一位
+        .btn-group
+          %button.btn.btn-default.dropdown-toggle{:type=>"button", :"data-toggle"=>"dropdown"}
+            操作
+            %span.caret
+          %ul.dropdown-menu{:role=>"menu"}
+            %li
+              %a{:href=>"#{base_branch.is_branch? ? backend_shop_branch_path(@current_shop, base_branch) : backend_shop_brand_chain_path(@current_shop, base_branch)}"}
+                = t('Show')
+              %a{:href=>"#{base_branch.is_branch? ? edit_backend_shop_branch_path(@current_shop, base_branch) : edit_backend_shop_brand_chain_path(@current_shop, base_branch)}"}
+                = t('Edit')
+              %a{:href=>"#{base_branch.is_branch? ? backend_shop_branch_path(@current_shop, base_branch) : backend_shop_brand_chain_path(@current_shop, base_branch)}", :data => {:confirm => t('Are you sure?'), :method => :delete}}
+                = t('Destroy')
+
+%br
+
+= link_to '新建连锁品牌', new_backend_shop_brand_chain_path, :class=>"btn btn-primary"
+= link_to '新建商户', new_backend_shop_branch_path, :class=>"btn btn-primary"

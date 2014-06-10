@@ -1,0 +1,5 @@
+<% if @post_thread.errors.size > 0 %>
+  alert("<%= @post_thread.errors.full_messages.join(',')%>");
+<% else %>
+  alert("催促成功，管理员会尽快回复您的请求");
+<% end %>

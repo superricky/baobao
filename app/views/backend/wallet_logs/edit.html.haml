@@ -1,0 +1,7 @@
+%h1 编辑备注
+
+= render 'form'
+
+= link_to t('Show'), get_wallet_log_path(@wallet_log), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_wallet_logs_path, :class=>"btn btn-default"

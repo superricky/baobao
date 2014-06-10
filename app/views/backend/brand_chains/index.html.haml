@@ -1,0 +1,24 @@
+%h1 连锁品牌列表
+
+%table.table.table-striped
+  %tr
+    %th= BrandChain.human_attribute_name(:name)
+    %th= BrandChain.human_attribute_name(:image)
+    %th.col-xs-4= BrandChain.human_attribute_name(:introduction)
+    %th= BrandChain.human_attribute_name(:branches_count)
+    %th
+
+  - @brand_chains.each_with_index do |brand_chain, index|
+    %tr
+      %td= link_to brand_chain.name, "#{brand_chain.is_branch? ? backend_shop_branch_path(@current_shop, brand_chain) : backend_shop_brand_chain_path(@current_shop, brand_chain)}"
+      %td= image_tag brand_chain.image.medium.url, :class=>"img-rounded", :width=>200
+      %td= brand_chain.introduction
+      %td= brand_chain.branches_count
+      %td
+        = link_to t('Show'), backend_shop_brand_chain_path(@current_shop, brand_chain), :class=>"btn btn-default"
+        = link_to t('Edit'), edit_backend_shop_brand_chain_path(@current_shop, brand_chain), :class=>"btn btn-default"
+        = link_to t('Destroy'), backend_shop_brand_chain_path(@current_shop, brand_chain), :method => :delete, :data => { :confirm => t('Are you sure?') }, :class=>"btn btn-danger"
+
+%br
+
+= link_to '新建连锁品牌', new_backend_shop_brand_chain_path, :class=>"btn btn-primary"

@@ -1,0 +1,79 @@
+<div class="panel panel-default">
+  <div class="panel panel-heading">
+    账户充值
+  </div>
+  <div class="panel panel-body">
+    <%= form_for(@user, url:recharge_backend_shop_user_path(@current_shop.slug, @user), :html => {:class => "form-horizontal", :role=>"form"}) do |f| %>
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <div><%= @user.errors.count %>个错误导致无法充值成功：</div>
+
+          <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group field">
+        <%= f.label :id , :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+          <label><%= f.object.id %></label>
+        </div>
+      </div>
+
+      <div class="form-group field">
+        <%= f.label :name , :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+          <%= f.object.name %>
+        </div>
+      </div>
+
+      <div class="form-group field">
+        <%= f.label :phone, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+          <%= f.object.phone %>
+        </div>
+      </div>
+      <div class="form-group field">
+        <%= f.label :vip_no, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+            <label><%= f.object.is_vip? ? f.object.vip_no : "未授予VIP号码" %></label>
+        </div>
+      </div>
+      <div class="form-group field">
+          <%= f.label :vip_level, :class=>"col-xs-3 control-label" %>
+          <div class="col-xs-9">
+              <label><%= f.object.vip_level.name%></label>
+          </div>
+      </div>
+      <% if @current_shop.use_credits %>
+      <div class="form-group field">
+        <%= f.label :credits, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+          <label><%= f.object.credits %></label>
+        </div>
+      </div>
+      <%end%>
+      <div class="form-group field">
+        <%= f.label :wallet, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+          <label><%= @current_shop.current_currency_symbol%><%= f.object.wallet %></label>
+        </div>
+      </div>
+      <div class="form-group field">
+        <%= f.label :recharge_amount, :class=>"col-xs-3 control-label" %>
+        <div class="col-xs-9">
+          <%= f.text_field :recharge_amount, :class=>"form-control", :placeholder=>"0.00" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+           <%= f.submit '确认充值', class:"btn btn-primary"%>
+        </div>
+      </div>
+    <%end%>
+  </div>
+</div>
+<%= link_to t('Back'), get_users_path , :class=>"btn btn-default"%>

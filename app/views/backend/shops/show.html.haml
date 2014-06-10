@@ -1,0 +1,3 @@
+= render 'show_info'
+- if current_account.is_admin?
+  = link_to t('Back'), backend_shops_path, :class=>"btn btn-primary"

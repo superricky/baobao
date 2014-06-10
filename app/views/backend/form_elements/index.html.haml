@@ -1,0 +1,32 @@
+.col-xs-12
+  %h3.header.smaller.lighter.blue
+  .table-header 自定义表单效果
+  .table-responsive
+    .dataTables_wrapper{role: "grid"}
+      %ol#remote_sortable_list= render "list"
+      %br/
+      .row
+        = form_tag save_sequence_backend_shop_branch_form_elements_path(@current_shop, @current_branch), remote: true do
+          = hidden_field_tag :sequence
+          = submit_tag '应用序列', class: "btn btn-warning", style: "float:right"
+        = link_to '添加文本输入框', new_backend_shop_branch_form_element_path(@current_shop, @current_branch), class: "btn btn-primary", remote: true
+        = link_to '添加多选框', new_select_backend_shop_branch_form_elements_path(@current_shop, @current_branch), class: "btn btn-primary", remote: true
+      %hr/
+      %p.row
+        %strong 温馨提示！
+        %br/
+        %strong 1.添加文本输入框后，访客下单时会要求其输入文本形式的下单信息。
+        %br/
+        %strong 2.多选框添加后，访客下单时会要求其输入文本形式选择指定的选项信息。
+        %br/
+        %strong 3.上下拖拽调整顺序后可点击“应用序列”保存顺序。
+      %br/
+      #the_modal.modal.fade
+        .modal-dialog
+          .modal-content
+            .modal-header
+              %button.close{data: {dismiss: "modal"}, aria: {hidden: true}}
+                &times;
+              %h4.modal-title 新建表单元素
+            #remote_form_box.row.modal-body
+

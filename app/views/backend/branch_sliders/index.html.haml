@@ -1,0 +1,26 @@
+%h1
+  商户推荐幻灯片列表
+  %small 最多展示#{@current_shop.max_branch_sliders}张幻灯片
+
+%table.table.table-striped
+  %tr
+    %th.col-md-4= BranchSlider.human_attribute_name(:img)
+    %th.col-md-3= BranchSlider.human_attribute_name(:desc)
+    %th.col-md-2= BranchSlider.human_attribute_name(:position)
+    %th.col-md-3
+
+  - @branch_sliders.each_with_index do |branch_slider, index|
+    %tr
+      %td= image_tag branch_slider.img.medium.url, :class=>"img-rounded", :width=>200
+      %td= branch_slider.desc
+      %td
+        = form_tag change_position_backend_shop_branch_slider_path(@current_shop, branch_slider) do
+          = select_tag :position, options_for_select(get_branch_slider_position_select_option, selected: (index + 1)), class: "form-control", onchange: "this.form.submit();"
+      %td
+        = link_to t('Show'), backend_shop_branch_slider_path(@current_shop.slug, branch_slider), :class=>"btn btn-default"
+        = link_to t('Edit'), edit_backend_shop_branch_slider_path(@current_shop.slug, branch_slider), :class=>"btn btn-default"
+        = link_to t('Destroy'), backend_shop_branch_slider_path(@current_shop.slug, branch_slider), :method => :delete, :data => { :confirm => t('Are you sure?') }, :class=>"btn btn-danger"
+
+%br
+
+= link_to '新建商户推荐幻灯片', new_backend_shop_branch_slider_path(@current_shop.slug)

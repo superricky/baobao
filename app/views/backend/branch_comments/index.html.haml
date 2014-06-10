@@ -1,0 +1,24 @@
+%h1 客户评论列表
+
+%table.table.table-striped
+  %tr
+    %th= BranchComment.human_attribute_name(:user)
+    %th.col-md-4= BranchComment.human_attribute_name(:content)
+    %th= BranchComment.human_attribute_name(:level)
+    %th= BranchComment.human_attribute_name(:branch)
+    %th= BranchComment.human_attribute_name(:can_pub)
+
+  - @branch_comments.each do |branch_comment|
+    %tr
+      %td= link_to branch_comment.user.name, backend_shop_user_path(@current_shop.slug, branch_comment.user)
+      %td
+        = "昵称: #{branch_comment.name}"
+        %br
+        = "评论: #{branch_comment.content}"
+      %td= "#{branch_comment.level}分"
+      %td= "#{branch_comment.branch.name}(#{branch_comment.branch.average_level}分)"
+      %td
+        = form_tag toggle_pub_backend_shop_branch_comment_path(@current_shop.slug, branch_comment) do
+          %button{onclick: "this.form.submit();", :class=>"btn #{branch_comment.can_pub? ? 'btn-default' : 'btn-primary'}"}
+            = branch_comment.can_pub?  ? '隐藏' : '发布'
+

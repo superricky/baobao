@@ -1,0 +1,62 @@
+= form_for([:backend, @current_shop, @current_branch ,@product],                                            |
+  :html => { :multipart => true, "data-ajax" => false, :class => "form-horizontal", :role=>"form" }) do |f| |
+  - if @product.errors.any?
+    #error_explanation.alert.alert-danger
+      %div
+        = @product.errors.count
+        个错误导致无法正确保存产品:
+      %ul
+        - @product.errors.full_messages.each do |msg|
+          %li= msg
+  %div
+  .panel.panel-default
+    .panel.panel-heading
+      产品信息
+    .panel.panel-body
+      .form-group.field
+        = f.label :name , :class=>"col-xs-3 control-label required"
+        .col-xs-9
+          = f.text_field :name, :class=>"form-control"
+      .form-group.field
+        = f.label :image , :class=>"col-xs-3 control-label"
+        .col-xs-4
+          = f.file_field :image, :class=>"form-control"
+          *图片大小不得超过0.5MB
+          \#{f.hidden_field :image_cache}
+          \#{image_tag(f.object.image.medium.url, :class=>"img-rounded", :width=>300) if f.object.image.present?}
+      .form-group.field
+        = f.label :price , :class=>"col-xs-3 control-label"
+        .col-xs-4
+          = f.text_field :price, :class=>"form-control", :rows=>8, :cols=>40
+      .form-group.field
+        = f.label :product_unit , :class=>"col-xs-3 control-label"
+        .col-xs-4
+          = f.select :product_unit, options_for_select(get_product_units_list.map{|product_unit|[product_unit.name, product_unit.name]}, @product.product_unit)
+      .form-group.field
+        = f.label :stock , :class=>"col-xs-3 control-label"
+        .col-xs-4
+          = f.number_field :stock, :class=>"form-control"
+      .form-group.field
+        = f.label :category , :class=>"col-xs-3 control-label"
+        .col-xs-4
+          = f.select :category_ids, categories_options(@current_shop, @current_branch, @product),{} ,{class: "selectpicker show-tick form-control", multiple: true, data: {"live-search" => "true"}}
+          = link_to t('New category'), new_backend_shop_branch_category_path, target: "_blank"
+      .form-group.field
+        = f.label :tag , :class=>"col-xs-3 control-label"
+        .col-xs-4
+          = f.select :tag_id, options_for_select(@current_branch.tags.map{|tag| [tag.name, tag.id]}, @product.tag_id ), :include_blank => t('no tag')
+          = link_to t('New tag'), new_backend_shop_branch_tag_path, target: "_blank"
+      .form-group.field
+        = f.label :description , :class=>"col-xs-3 control-label"
+        .col-xs-9
+          = f.cktext_area :description, :ckeditor => {:language => "zh-cn",:toolbar => 'mini'}
+    .panel.panel-footer
+      .actions
+        = f.submit class:"btn btn-primary"
+:javascript
+  $(document).ready(function () {
+    $('.selectpicker').selectpicker({
+      'selectedText': 'cat',
+      'noneSelectedText': "没有选择任何分类"
+    });
+  });

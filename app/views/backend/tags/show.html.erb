@@ -1,0 +1,11 @@
+<% unless notice.nil? %>
+<div class="alert alert-success" id="notice"><%= notice %></div>
+<% end %>
+
+<p>
+  <strong><%= Tag.human_attribute_name("name")%>:</strong>
+  <%= @tag.name %>
+</p>
+
+<%= link_to t('Edit'), edit_backend_shop_branch_tag_path(@current_shop.slug, @current_branch, @tag) %> |
+<%= link_to t('Back'), backend_shop_branch_tags_path %>

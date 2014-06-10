@@ -1,0 +1,37 @@
+.col-md-12.col-lg-12
+  %ul.nav.nav-tabs
+    <li
+    - if params[:state].to_i == Order::WAIT_CONFIRMED
+      class="active"
+    >
+    \#{link_to "新订单", backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::WAIT_CONFIRMED)}
+    <li
+    - if params[:state].to_i == Order::CONFIRMED
+      class="active"
+    >
+    \#{link_to "处理中订单", backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::CONFIRMED)}
+    <li
+    - if params[:state].to_i == Order::DELIVERING
+      class="active"
+    >
+    \#{link_to "发货中订单", backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::DELIVERING)}
+    <li
+    - if params[:state].to_i == Order::DELIVERED
+      class="active"
+    >
+    \#{link_to "已处理订单", backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::DELIVERED)}
+    <li
+    - if params[:state].to_i == Order::COMPLETED
+      class="active"
+    >
+    \#{link_to "已完成订单", backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::COMPLETED)}
+    <li
+    - if params[:state].present? and params[:state].to_i == Order::CANCELED
+      class="active"
+    >
+    \#{link_to "已取消订单", backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::CANCELED)}
+    <li
+    - if params[:state].nil?
+      class="active"
+    >
+    \#{link_to "查找订单", search_backend_shop_branch_orders_path(@current_shop.slug, @current_branch)}

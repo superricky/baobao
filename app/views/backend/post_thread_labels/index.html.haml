@@ -1,0 +1,20 @@
+%h1 讨论标签列表
+
+%table.table.table-striped
+  %tr
+    %th= PostThreadLabel.human_attribute_name(:name)
+    %th
+
+  - @post_thread_labels.each do |post_thread_label|
+    %tr
+      %td= post_thread_label.name
+      %td
+        = link_to '查看讨论帖集合', backend_post_thread_label_path(post_thread_label),:class=>"btn btn-default"
+        - if current_account.is_admin?
+          = link_to t('Edit'), edit_backend_post_thread_label_path(post_thread_label),:class=>"btn btn-default"
+          = link_to t('Destroy'), [:backend, post_thread_label], :method => :delete, :data => { :confirm => 'Are you sure?' },:class=>"btn btn-danger"
+
+%br
+
+- if current_account.is_admin?
+  = link_to '新建讨论标签', new_backend_post_thread_label_path, :class=>"btn btn-default"

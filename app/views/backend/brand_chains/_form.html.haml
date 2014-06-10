@@ -1,0 +1,49 @@
+= form_for [:backend, @current_shop, @brand_chain], :html=>{:role=>"form", :class=>"form-horizontal", remote: remote} do |f|
+  - if @brand_chain.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@brand_chain.errors.count, "error")} prohibited this brand_chain from being saved:"
+      %ul
+        - @brand_chain.errors.full_messages.each do |msg|
+          %li= msg
+
+
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :name
+    .col-sm-9
+      = f.text_field :name, :class=>"col-xs-10 col-sm-5"
+  .space-4
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+    .col-sm-9
+      .checkbox
+        = f.check_box :is_open
+        %span.lbl= f.label :is_open
+  .space-4
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :image
+    .col-sm-9
+      = f.file_field :image, :class=>"col-xs-10 col-sm-5"
+  .space-4
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :introduction
+    .col-sm-9
+      = f.text_area :introduction, :class=>"col-xs-10 col-sm-5"
+  .space-4
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :branch_ids
+    .col-sm-9
+      - @current_shop.branches.each do |branch|
+        .checkbox
+          %label
+            = check_box_tag "brand_chain[branch_ids][]" ,branch.id, @brand_chain == branch.brand_chain ,{:class=>"ace"}
+            %span.lbl
+              = branch.name
+              = "(当前所属连锁：#{branch.brand_chain.name})" if branch.brand_chain.present?
+
+  .space-4
+  .actions
+    = f.submit '保存', :class=>"btn btn-primary"

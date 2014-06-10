@@ -1,0 +1,19 @@
+-content_for :title do
+  搜索商品
+.m-1
+  = form_tag search_mobile_shop_branch_products_path(@current_shop, @current_branch), class: "search" do
+    = submit_tag "", class: "right"
+    = text_field_tag :keyword, nil, placeholder: "搜索关键词"
+    %hr/
+  -if @products.present?
+    %nav.products-nav
+      %ul
+        -@products.each_with_index do |product, i|
+          %li.col-2
+            %a{href: mobile_shop_branch_product_path(@current_shop, @current_branch, product), class: i==0 ? "vertial-2" : "lateral"}
+              %h1= product.name
+              %strong= number_to_currency(product.price(@current_user), :unit=>currency_symbol)
+              %center= image_tag product.image.thumb.url
+  -else
+    %center{style: "min-height:300px;padding-top:150px;"}
+      %h1 没有搜索到您想要的商品

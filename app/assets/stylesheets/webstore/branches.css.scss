@@ -1,0 +1,347 @@
+// Place all the styles related to the webstore/branches controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$color_shadow: rgba(0,0,0,0.4);
+$color_border: #bebebe;
+$color_bar: #fefefe;
+$color_list_hover:#f1fafc;
+$color_actions_hover_border:#febf40;
+$color_actions_hover:#fdffb8;
+$color_red:#cc0000;
+
+.shop{
+  background:#fff;
+  margin-bottom:10px;
+  img{margin:10px;}
+}
+
+.branches{
+  background:#fff;
+  ul{
+    li{
+      display:block !important;
+      border:1px solid #d4d4d4;
+      padding:10px !important ;
+      height:110px;
+      h2{margin:0;}
+      img{
+        margin-right:10px;
+        width:90px;
+        height:90px;
+        border:1px solid #d4d4d4;
+      }
+      &:hover{
+        background:#efefef;
+      }
+    }
+  }
+}
+
+.product_list{
+  .list-group-item{
+    img{
+      width:90px;
+      height:90px;
+    }
+    .title_and_description{
+      line-height:22px;
+      cursor:pointer;
+    }
+    h2{
+      margin:0;padding:0;
+      font-weight:bolder;
+    }
+    .price{
+      color:red;
+      width:100px;
+      display:inline-block;
+      float:left;
+      margin-top:30px;
+    }
+  }
+}
+
+.product_price_field{
+  margin-top:26px;
+}
+
+.product_picture{
+  width: 100%;
+}
+
+.product_partition_fixed{
+  position:fixed;
+  top:0;
+  z-index:9999;
+  i.glyphicon-collapse-down{
+    position:absolute;
+    font-size:15pt;
+    margin:19px 15px 0 0;
+    right:0;
+    cursor:pointer;
+    color:#06f;
+  }
+}
+
+#new_order{
+  .table{
+    tr{
+      td{line-height:3em;}
+    }
+    thead{
+      border:1px solid $color_border;
+      background:#d4d4d4;
+    }
+    tbody{
+      tr{border:1px solid $color_border;}
+      .bottom{
+        border:1px solid $color_border;
+        background:#d4d4d4;
+      }
+    }
+  }
+}
+
+#cart_bar{
+  border-radius:5px 5px 0 0;
+  position:fixed;
+  right:5px;
+  bottom:0;
+  .row{
+    border-radius:5px 5px 0 0;
+    margin:0;
+    background:#696969;
+    color:#fff;
+    line-height:30pt;
+    div{display:inline-block;}
+    .cart_icon{
+      background:#06f;
+      text-align:center;
+      border-radius:5px 0 0 0;
+      padding:0 15px;
+    }
+    a{
+      padding:0 14px;background:#fc3;
+      color:#2b2b2b;
+      line-height:2em;
+    }
+    .cart_btn{
+      margin-right:10px;
+    }
+    .total{font-weight:bolder;display:inline-block;}
+  }
+}
+
+.right_bar{
+  display:block;
+  position:fixed;
+  right:10px;
+  z-index:999;
+  top:300px;
+  .glyphicon{
+    color:#fff;
+    background:rgba(0,0,0,0.5);
+    display:block !important;
+    width:60px !important;
+    height:60px !important;
+    padding:5px 0 0 6px;
+    font-size:2em;
+    line-height:2em;
+    text-align:center !important;
+    text-decoration:none;
+    border:0px solid rgba(0,0,0,0.5);
+    border-radius:5px;
+    .qrcode{position:absolute;right:0;margin-top:-60px;display:none;}
+    &:hover{
+      .qrcode{display:block;}
+    }
+  }
+}
+
+.hot_products{
+  .minus, .plus, .number{
+    border:1px solid $color_border;
+    display:inline-block;
+    float:left;
+    margin-top:10px;
+    width:30px;
+    text-align:center;
+    letter-spacing:0;
+    text-decoration:none;
+  }
+  .number{
+    line-height:30px;
+  }
+  .minus, .plus{
+    font-weight:bolder;
+    background:#d4d4d4;
+    line-height:25px;
+  }
+  .price{
+    display:inline-block;
+    color:$color_red;
+    text-align:right;
+  }
+}
+
+#cart_modal{
+  padding-top:50px;
+  ul.list{
+    margin:0;
+    padding:0;
+    background:#fff;
+    border-top:5px solid #06f;
+    li{
+      display:block;
+      border-bottom:1px dashed $color_border;
+      line-height:50px;
+      *{font-size:13pt;}
+      .clean{margin-left:10px;}
+      .minus, .plus, .number{
+        border:1px solid $color_border;
+        display:inline-block;
+        float:left;
+        margin-top:10px;
+        width:30px;
+        text-align:center;
+        letter-spacing:0;
+        text-decoration:none;
+      }
+      .number{
+        line-height:30px;
+      }
+      .minus, .plus{
+        font-weight:bolder;
+        background:#d4d4d4;
+        line-height:25px;
+      }
+      .price{
+        display:inline-block;
+        color:$color_red;
+        text-align:right;
+      }
+      .remove{
+        display:inline-block;
+      }
+      .name{overflow:hidden;height:52px;}
+      a{
+        display:inline-block;
+        line-height:30px;
+        text-align:center;
+        letter-spacing:0;
+        text-decoration:none;
+        cursor:pointer;
+      }
+    }
+  }
+}
+
+.dynamic_btn{
+  display:inline-block;
+  .minus, .plus, .number{
+    float:left;
+    margin-top:26px;
+    border:1px solid $color_border;
+    display:inline-block;
+    width:30px;
+    text-align:center;
+    letter-spacing:0;
+    text-decoration:none;
+  }
+  .number{
+    line-height:30px;
+  }
+  .minus, .plus{
+    font-weight:bolder;
+    background:#d4d4d4;
+    line-height:25px;
+  }
+  .price{
+    display:inline-block;
+    margin-left:10px;
+    color:$color_red;
+    width:60px;
+    text-align:right;
+  }
+}
+
+.notice{
+  ul{
+    margin:15px 0;
+    padding:0;
+    li{
+      margin:0;
+      padding:0;
+      text-align:center;
+      display:inline-block;
+      font-size:3em;
+      font-weight:bolder;
+      width:110px;
+      overflow:hidden;
+      &:hover{
+        background:$color_list_hover;
+      }
+      &.center-li{
+        border:1px solid $color_border;
+        border-bottom:0;
+        border-top:0;
+      }
+    }
+  }
+}
+
+.container{
+  .panel{
+    box-shadow:0 1px 3px $color_shadow;
+    .panel-heading{font-size:1.2em;font-weight:bolder;line-height:1.8em;border-bottom:1px solid #969696;}
+  }
+  .partitions{
+    ul{
+      margin:0;
+      padding:0;
+      font-size:12pt;
+      line-height:2em;
+    }
+  }
+  .products{
+    margin-bottom:0;
+    border-radius:0;
+    &.first{border-radius:5px 5px 0 0;}
+    &.last{border-radius:0 0 5px 5px;}
+    .list-group-item{
+      overflow:hidden;
+      font-size:1.2em;
+      .favorite_link{display:inline-block;float:left;width:33px;height:4em;}
+      &:hover{
+        background:$color_list_hover;
+        .favorite_link{background:$color_actions_hover;}
+        .btn{
+          border:1px solid $color_actions_hover_border;
+          background:$color_actions_hover;
+        }
+      }
+    }
+  }
+}
+
+.product_list{
+  margin-bottom:10px;
+}
+
+.required_input{
+  border:1px solid red;
+}
+
+.more_kind{display:none;}
+
+.confirmation_order_info{
+  tr{
+    .title{text-align:right;}
+    td{line-height:20px;}
+  }
+  margin-bottom:20px;
+}
+
+.modal{
+  padding-top:80px;
+}

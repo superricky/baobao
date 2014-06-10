@@ -1,0 +1,51 @@
+.alert.alert-warning
+  请注意：由于微信支付仅限于开通了商户功能的认证服务号，所以请确保您的支付相关参数属于该认证服务号，否则有可能导致用户无法访问您的微信公众账号
+.panel.panel-default
+  .panel-heading 微信支付设置
+  .panel-body
+    = form_for(@wechat_pay, url: backend_shop_wechat_pay_path(@current_shop, @wechat_pay), html: {class: "form-horizontal", role: "form"}) do |f|
+      #error_explanation
+        %h2= "#{@wechat_pay.errors.count}个错误导致无法正确保存微信支付信息:"
+        %ul.alert.alert-danger
+          - @wechat_pay.errors.full_messages.each do |msg|
+            %li= msg
+
+      .form-group
+        = f.label :public_account_name, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = link_to f.object.public_account_name, backend_shop_system_config_path(@current_shop, f.object), :class=>"control-group"
+      .form-group
+        = f.label :my_fake_id, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = link_to f.object.my_fake_id, backend_shop_system_config_path(@current_shop, f.object), :class=>"control-group"
+      .form-group
+        = f.label :support_weixin_pay, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = f.check_box :support_weixin_pay, class: "ace ace-switch ace-switch-2"
+          %span.lbl
+      .form-group
+        = f.label :appId, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = f.object.appId
+          %a{:href=>edit_backend_shop_system_config_path(@current_shop, f.object)}
+            %span.label.label-info 修改
+      .form-group
+        = f.label :appSecret, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = f.object.appSecret
+          %a{:href=>edit_backend_shop_system_config_path(@current_shop, f.object)}
+            %span.label.label-info 修改
+      .form-group
+        = f.label :paySignKey, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = f.text_field :paySignKey, :class=>"control-group"
+      .form-group
+        = f.label :partnerId, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = f.text_field :partnerId, :class=>"control-group"
+      .form-group
+        = f.label :partnerKey, :class=>"col-xs-4 control-label"
+        .col-xs-8
+          = f.text_field :partnerKey, :class=>"control-group"
+      .actions.col-xs-offset-4
+        = f.submit '保存', :class=>"btn btn-default"

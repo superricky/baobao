@@ -1,0 +1,18 @@
+.widget-box.material{id: "material_#{material.id}"}
+  .widget-header
+    %h5.smaller
+      = material.material_name
+    .widget-toolbar
+      %span.label.label-success
+        = t("material.#{material.msg_type}")
+  .widget-body
+    .widget-main.padding-10
+      = render "backend/articles/list", {material: material}
+    .widget-toolbox.padding-8
+      .row
+        .col-sm-12
+          = link_to t("Edit"), edit_backend_shop_material_path(@current_shop, material), class: "btn btn-sm btn-primary", data: {remote: true}
+          = link_to t("Destroy"), backend_shop_material_path(@current_shop, material), method: :delete, class: "btn btn-sm btn-danger", data: {remote: true, confirm: "确定要删除素材吗？"}
+          = link_to "设置自动回复", new_backend_shop_event_path(@current_shop, material_id: material.id),class: "btn btn-sm btn-primary", data: {remote: true}
+      .event_list
+        = render "event_list", {material: material}

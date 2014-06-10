@@ -1,0 +1,2 @@
+module WeixinPayHelper
+end

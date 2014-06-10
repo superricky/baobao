@@ -1,0 +1,20 @@
+-content_for :title do
+  我的购物车
+.my-cart
+  .m-1
+    -if @cart.line_items.empty?
+      %h1 购物车为空，请返回选择您要购买的商品
+    -else
+      %table.carts
+        %tbody#product-list
+          - @cart.line_items.each do |line_item|
+            = render partial: "mobile/products/product", locals:{product: line_item.product, quantity:line_item.quantity}
+      = render 'quantity'
+      = link_to "清空购物车", mobile_shop_branch_clear_my_cart_path(@current_shop.slug, @current_branch), class: "btn btn-default"
+-if !@cart.line_items.empty?
+  .bottom-panel
+    = link_to "立即购买", new_mobile_shop_branch_order_path(@current_shop.slug, @current_branch, :order_type=>Order::ORDERTYPE_DELIVERY), class: "btn btn-commit right"
+    %strong
+      金额合计
+      %span= currency_symbol
+      %span#amount= "#{get_amount(@current_cart)}"

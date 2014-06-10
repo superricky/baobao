@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+<div class="panel panel-default">
+  <div class="panel-heading">计量单位详情</div>
+  
+  <div class="panel-body">
+<p>
+  <strong><%= ProductUnit.human_attribute_name("name")%>:</strong>
+  <%= @product_unit.name %>
+</p>
+
+<p>
+  <strong>计量单位类型:</strong>
+  <%= @product_unit.type_name %>
+</p>
+</div>
+</div>
+<%= link_to t('Edit'), get_edit_product_unit_path(@product_unit), :class=>"btn btn-default" %> |
+<%= link_to t('Back'), get_product_units_path, :class=>"btn btn-default" %>

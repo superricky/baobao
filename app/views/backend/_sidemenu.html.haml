@@ -1,0 +1,75 @@
+-if !@current_account.is_admin?
+  #sidebar.sidebar
+    .menu_header
+      %a{href:"http://www.raycomsoft.com/tuodanbao.htm"}
+        %img.avator{src: "/assets/backend/logo.png",style:"width: 150px;margin-left: 60px;"}
+    %hr/
+    -shop_menus.each do |main, table|
+      -i = 0
+      %ul.menu_btns{id: "menu_bar_#{main}"}
+        -table[:menus].each do |title, menus|
+          -url = menus[:url]
+          -icon = menus[:icon]
+          %li{class: "#{i%2 == 0 ? "" : "odd"} bg-#{i%8} icon-white-#{icon} icon-btn"}
+            = link_to title, url
+          -i+=1
+    %ul.menu_bar
+      -shop_menus.each do |main, table|
+        -title = table[:title]
+        -icon = table[:icon]
+        %li{id: main}= link_to title, "javascript:void(0);", data: {icon: icon}, class: "menu_bar_link"
+    :javascript
+      document.ready = function(){
+        $(".menu_btns").hide();
+        $("#menu_bar_#{current_menu}").show();
+        $("##{current_menu}").addClass("current");
+        $(".menu_bar_link").each(function(){
+          var icon = $(this).attr("data-icon");
+          var current_icon = "icon-"+icon;
+          var normal_icon = "icon-white-"+icon;
+          if($(this).parent("li").hasClass("current")){
+            $(this).addClass(current_icon);
+            $(this).removeClass(normal_icon);
+          }else if(!$(this).hasClass(normal_icon)){
+            $(this).addClass(normal_icon);
+            $(this).removeClass(current_icon);
+          }
+        $(".menu_bar").height($(".container").height()-180);
+        });
+        $(".menu_bar li").click(function(){
+          $(".menu_btns").hide();
+          var id = $(this).attr("id");
+          $("#menu_bar_"+id).show();
+        });
+      }
+    %hr
+- if @current_account.is_admin?
+  #sidebar.sidebar
+    .menu_header
+    #sidebar-shortcuts.sidebar-shortcuts
+      #sidebar-shortcuts-large.sidebar-shortcuts-large
+        - if @current_account.is_admin?
+          %a.btn.btn-success{:title=>"网站设置", :href=>"#{backend_site_configs_path}"} 网站设置
+        - if @current_account.is_admin? or @current_account.is_boss?
+          %a.btn.btn-danger{:title=>"点号配置", :href=>"#{@current_shop.present? ? dashboard_backend_shop_path(@current_shop) : backend_shops_path}"} 系统中心
+        - if @current_shop.present?
+          %a.btn.btn-info{:title=>"商户管理", :href=>"#{backend_shop_branches_path(@current_shop)}"} 商户中心
+      #sidebar-shortcuts-mini.sidebar-shortcuts-mini
+        %span.btn.btn-success
+        %span.btn.btn-danger
+        %span.btn.btn-warning
+        %span.btn.btn-info
+    %ul.nav.nav-list
+      - if ["post_threads", "posts", "post_thread_labels"].include? controller_name
+        - if current_account.is_admin?
+          = render "backend/system_menu"
+        - elsif current_account.is_boss?
+          = render 'backend/shop_config_nav'
+        - else
+          = render "backend/branch_nav"
+      - elsif @current_shop.nil? and controller_name != "shops"
+        = render "backend/system_menu"
+      - elsif @current_branch.present? or ["base_branches", "branches", "brand_chains", "phone_orders"].include? controller_name
+        = render "backend/branch_nav"
+      - else
+        = render 'backend/shop_config_nav'

@@ -1,0 +1,21 @@
+- content_for :header do
+  订单列表
+- if (not flash[:error].nil?) and (not flash[:error].empty?)
+  .alert.alert-danger
+    = flash[:error]
+#order-error.alert.alert-danger{:style => "display:none;"}
+  %ul.list-unstyled
+- unless notice.nil?
+  .alert.alert-success
+    = notice
+%table.table.table-striped
+  %thead
+    %tr
+      %th 订单编号
+      %th 商户
+      %th 下单时间
+      %th 订单状态
+      %th 操作
+  %tbody
+    - @orders.each do |order|
+      = render :partial => "mobile_order", locals:{order:order}

@@ -1,0 +1,25 @@
+%p#notice= notice
+- if @current_shop.is_multipe_base_version?
+  .alert.alert-danger 对不起，财付通功能仅对独立商户版和多店旗舰版用户开放。
+- else
+  .panel.panel-default
+    .panel-heading 财付通收款账户设置
+    .panel-body
+      %p
+        %b
+          = Tenpay.human_attribute_name(:use_tenpay)
+          \:
+        = @tenpay.use_tenpay? ? "启用" : "未启用"
+      - if @tenpay.use_tenpay?
+        %p
+          %b
+            = Tenpay.human_attribute_name(:pid)
+            \:
+          = @tenpay.pid
+        %p
+          %b
+            = Tenpay.human_attribute_name(:pkey)
+            \:
+          = @tenpay.pkey
+
+      = link_to t('Edit'), edit_backend_shop_tenpay_path(@current_shop), :class=>"btn btn-default"

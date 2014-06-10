@@ -1,0 +1,43 @@
+.panel.panel-default
+  .panel-body
+    = form_for([:backend, @current_shop, @event], :html => {class: "form-horizontal", role: "form", data: {remote: true}}) do |f|
+      - if @event.errors.any?
+        .alert.alert-danger
+          %div
+            = @event.errors.count
+            个错误导致此次编辑无法成功保存:
+          %ul
+            - @event.errors.full_messages.each do |msg|
+              %li= msg
+      .field.form-group
+        = f.label :event , class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.select :event, Event::EVENTTYPES[2..3], class: "form-control"
+      .field.form-group
+        = f.label :event_key , class: "col-sm-3 control-label"
+        .col-sm-6
+          = f.text_field :event_key, class: "form-control"
+      = f.hidden_field :material_id
+      .field.form-group
+        .col-sm-offset-3.col-md-5
+          = f.submit :class => 'btn btn-primary'
+
+:javascript
+
+  function hideInput(){
+    $('#event_event_key').closest('.field').hide();
+  }
+
+  function changeEvent(eventType){
+    hideInput();
+    if(eventType === 'KEYWORD_AUTOREPLY'){
+      $('#event_event_key').closest('.field').show();
+    }
+  }
+  $(function(){
+    $('#event_event').change(function(e) {
+      changeEvent(e.target.value);
+    });
+
+    changeEvent($('#event_event').val());
+  });

@@ -1,0 +1,6 @@
+$("#article_modal .modal-body").html("<%= escape_javascript(render partial: 'backend/articles/form', locals:{article: @article, form_url: backend_shop_material_articles_path(@current_shop.slug, @material)}) %>")
+$('#article_modal').modal({
+  keyboard: false
+});
+
+$('#article_modal .modal-dialog').width("800px")

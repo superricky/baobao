@@ -1,0 +1,9 @@
+%h1= t('Editing account')
+.panel.panel-default
+  .panel-heading
+    账户设置
+  .panel-body
+    = render 'form'
+= link_to t('Show'), get_account_path(@account), :class=>"btn btn-default"
+|
+\#{link_to t('Back'), get_accounts_path, :class=>"btn btn-default"}

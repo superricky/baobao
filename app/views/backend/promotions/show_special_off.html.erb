@@ -1,0 +1,53 @@
+<p id="notice"><%= notice %></p>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		促销活动详情
+	</div>
+	<div class="panel-body">
+<p>
+	<strong><%= Promotion.human_attribute_name("branch") %>:</strong>
+	<%= @promotion.branch.name %>
+</p>
+
+<p>
+	<strong><%= Promotion.human_attribute_name("name") %>:</strong>
+	<%= @promotion.name %>
+</p>
+
+<p>
+	<strong><%= Promotion.human_attribute_name("description") %>:</strong>
+	<%= @promotion.description %>
+</p>
+
+<p>
+	<strong><%= Promotion.human_attribute_name("image") %>:</strong>
+	<%= image_tag @promotion.image.medium.url %>
+</p>
+
+<p>
+	<strong><%= Promotion.human_attribute_name("start_time_and_end_time") %>:</strong>
+	<%= @promotion.start_time.strftime('%Y-%m-%d %H:%M:%S') %>——<%= @promotion.end_time.strftime('%Y-%m-%d %H:%M:%S') %>
+</p>
+ <table class="table table-striped">
+<thead><tr><th>产品</th><th>原价</th><th>促销价格</th></tr></thead>
+<tbody id="promotion_details_body">
+	<% @promotion.promotion_details.each do |promotion_detail|%>
+	<% if promotion_detail.product.nil? %>
+	<tr><td rowspan="3">该特价产品已经下架删除</td></tr>
+	<%else%>
+	<tr>
+		<td><%= promotion_detail.product.name%></td>
+		<td><span class="original-price"><%= number_to_currency(promotion_detail.product.original_price, :unit=>'¥')%></span></td>
+		<td><%= number_to_currency(promotion_detail.price, :unit=>'¥')%></td>
+	</tr>
+	<%end%>
+	<%end%>
+
+</tbody>
+</table>
+</div>
+</div>
+
+<%= link_to t('Edit'), edit_special_off_backend_shop_branch_promotion_path(@current_shop, @current_branch, @promotion), :class=>"btn btn-primary" %>
+<%= link_to t('Back'), index_special_off_backend_shop_branch_promotions_path(@current_shop, @current_branch), :class=>"btn btn-default" %>

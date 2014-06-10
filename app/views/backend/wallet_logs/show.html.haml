@@ -1,0 +1,22 @@
+%p#notice= notice
+
+%p
+  %b= WalletLog.human_attribute_name("user")
+  \:
+  = @wallet_log.user.name
+%p
+  %b= WalletLog.human_attribute_name("wallet_log_type")
+  \:
+  = get_wallet_logs_type_name(@wallet_log.wallet_log_type)
+%p
+  %b= WalletLog.human_attribute_name("money")
+  \:
+  = @wallet_log.money
+%p
+  %b= WalletLog.human_attribute_name("note")
+  \:
+  = @wallet_log.note
+
+= link_to t('Edit'), edit_backend_shop_wallet_log_path(@current_shop.slug, @wallet_log), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_wallet_logs_path, :class=>"btn btn-default"

@@ -1,0 +1,17 @@
+%h1 服务套餐购买日志
+
+%table.table.table-striped
+  %tr
+    %th.col-sm-2= TransactionLog.human_attribute_name(:shop)
+    %th.col-sm-2= TransactionLog.human_attribute_name(:buyer_email)
+    %th.col-sm-2= TransactionLog.human_attribute_name(:created_at)
+    %th.col-sm-2= ServiceSaleOrder.human_attribute_name(:out_trade_no)
+    %th.col-sm-6= TransactionLog.human_attribute_name(:description)
+
+  - @transaction_logs.each do |transaction_log|
+    %tr
+      %td= link_to transaction_log.shop.name, [:backend, transaction_log.shop]
+      %td= transaction_log.buyer_email
+      %td= transaction_log.created_at.strftime("%Y-%m-%d %H:%M:%S")
+      %td= link_to transaction_log.service_sale_order.out_trade_no, [:backend, transaction_log.service_sale_order]
+      %td= transaction_log.description

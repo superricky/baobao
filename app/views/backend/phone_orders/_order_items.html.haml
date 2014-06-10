@@ -1,0 +1,17 @@
+%table.table.table-striped{id: "cart"}
+  %tr
+    %th 产品名称
+    %th 产品单价
+    %th 产品数量
+    %th 产品总价
+  - @order.order_items.each do |order_item|
+    %tr{id: order_item.id}
+      %td= order_item.name
+      %td= "#{number_to_currency(order_item.price, :unit=>'¥')}/#{order_item.product_unit}"
+      %td= order_item.quantity
+      %td= "#{number_to_currency(order_item.quantity * order_item.price, :unit=>'¥')}"
+  %tr
+    %th &nbsp;
+    %th &nbsp;
+    %th &nbsp;
+    %th= "订单总金额：#{number_to_currency(@order.cash_amount, :unit=>'¥')}"

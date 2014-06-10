@@ -1,0 +1,111 @@
+%h1= t('Editing account')
+= simple_form_for(@account, url: get_update_my_account_path, html: {class: "form-horizontal", role: "form", id: "branch_form"}) do |f|
+  - if f.object.errors.any?
+    #error_explanation.alert.alert-danger
+      %div
+        = f.object.errors.count
+        个错误导致账户无法被保存:
+      %ul
+        - f.object.errors.full_messages.each do |msg|
+          %li= msg
+  - if current_account.is_admin? and @current_shop.nil?
+    .form-group
+      = f.label :account_type , class: "col-md-3 control-label required"
+      .col-md-9
+        = f.select :account_role, Account::ADMINTYPES, {}, {class: "form-control", :onchange=>"change_options(this)"}
+    .form-group
+      = f.label :shop_id, class: "col-md-3 control-label"
+      .col-md-9
+        = f.select :shop_id, options_for_select(Shop.all.map{|shop|[shop.name, shop.id]}), {}, {class: "form-control", :onchange=>"change_options(this)"}
+  - elsif (current_account.is_admin? and @current_shop.present?)
+    .form-group
+      = f.label :account_type, class: "col-md-3 control-label"
+      .col-md-9
+        - if @current_branch.present?
+          = Account::ADMINTYPES[-1][0]
+        - else
+          = f.select :account_role, Account::ADMINTYPES[-2..-1], {}, {class: "form-control"}
+  - elsif current_account.is_boss?
+    .form-group
+      = f.label :account_type, class: "col-md-3 control-label"
+      .col-md-9
+        = f.hidden_field :account_role
+        = t(f.object.roles.first.name) rescue nil
+  .form-group
+    = f.label :login_id, class: "col-md-3 control-label"
+    .col-md-9
+      - if params[:action] == 'new' or params[:action] == 'create'
+        = f.text_field :login_id, class: "form-control"
+        (*须以字母开头且只能包含字母和数字,最少长度为4, 登录的用户名 = 帐号简称：用户名)
+      - else
+        = f.object.login_id
+  .form-group
+    = f.label :name,  class: "col-md-3 control-label"
+    .col-md-9
+      - if @current_account.is_admin? or (@current_account.is_boss? and @account.is_worker?) or @account.new_record?
+        = f.text_field :name, class: "form-control"
+      - else
+        = f.object.name
+  .form-group
+    = f.label :email, class: "col-md-3 control-label"
+    .col-md-9
+      - if @current_account.is_admin? or (@current_account.is_boss? and @account.is_worker?) or @account.new_record?
+        = f.text_field :email, class: "form-control"
+      - else
+        = f.object.email
+  - if params[:action] == 'new' or params[:action] == 'create'
+    .form-group
+      = f.label :password, class: "col-md-3 control-label"
+      .col-md-9
+        = f.password_field :password, class: "form-control"
+        (*只能包含字母、数字以及'_',最少长度为8）
+    .form-group
+      = f.label :password_confirmation, class: "col-md-3 control-label"
+      .col-md-9
+        = f.password_field :password_confirmation, class: "form-control"
+  .form-group
+    = f.label :phone, class: "col-md-3 control-label"
+    .col-md-4
+      = f.text_field :phone, class: "form-control"
+  .form-group
+    = f.label :user_id, class: "col-md-3 control-label"
+    .col-sm-4
+      - if User.get_binding_users
+        = f.select :user_id, options_for_select(User.get_binding_users.map{|user| [user.user_mark, user.id]}, selected: @account.user_id), {include_blank: true}, {class: "selectpicker_user form-control show-tick" ,data: {"live-search" => "true"}}
+        %br/
+        使用微信接单前，请先关注服务号()，并且保证每隔48小时与服务号互动一次（若超过48小时不与互动，微信将禁止服务号给您发送新的订单信息），以上ID是该账户持有人在服务号()里面的用户ID。
+        - unless @current_shop.hide_support_company
+          您也可以通过扫描如下二维码关注服务号：
+          %br/
+          = image_tag "http://www.tuodanbao.com/uploads/ckeditor/pictures/71/content_qrcode_for_gh_764a5843438b_344.jpg"
+  - unless @current_branch.present?
+    .form-group
+      = f.label :branch_ids, class: "col-md-3 control-label"
+      .col-sm-4
+        = f.select :branch_ids, options_from_collection_for_select(@current_shop.branches, :id, :name, @account.branches.collect{|b| b.id}),{}, {class: "selectpicker show-tick form-control", multiple: true, data: {"live-search" => "true"}}
+  %center= f.submit class:"btn btn-default"
+:javascript
+  document.ready = function(){
+    $('.selectpicker').selectpicker({
+      'selectedText': 'cat',
+      'noneSelectedText': "没有选择任何商"
+    });
+
+    $('.selectpicker_user').selectpicker({
+      'selectedText': 'cat',
+      'noneSelectedText': "请选择绑定用户"
+    });
+
+    change_account_type_to_worker($('#account_account_role').val())
+    $('#account_account_role').change(function(e) {
+      change_account_type_to_worker(e.target.value.toString());
+    });
+  }
+
+  function change_account_type_to_worker(e){
+    if(e == "worker"){
+      $('#account_branch_ids').closest('.form-group').show();
+    }else{
+      $('#account_branch_ids').closest('.field').hide();
+    }
+  }

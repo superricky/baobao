@@ -1,0 +1,5 @@
+<p>欢迎注册 <%= @email %>!</p>
+
+<p>请通过以下链接访问您的帐号：</p>
+
+<p><%= link_to '验证帐号', webstore_member_confirmation_path(@current_shop, confirmation_token: @token) %></p>

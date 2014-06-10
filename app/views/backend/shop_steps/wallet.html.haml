@@ -1,0 +1,19 @@
+= render layout: 'shop_form' do |f|
+  .panel.panel-default
+    .panel-heading
+      余额设置
+    .panel-body
+      .field.form-group
+        = f.label :support_wallet_pay, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :support_wallet_pay, class: "ace ace-switch ace-switch-4"
+          %span.lbl
+    .panel.panel-footer
+      %center
+        - if params[:edit]
+          = link_to_back
+          = f.submit :class=>"btn btn-primary"
+        - else
+          = link_to '上一步', previous_wizard_path, :class=>"btn btn-primary"
+          = f.submit "下一步" ,:class=>"btn btn-primary"
+          = link_to '跳过这一步', next_wizard_path, :class=>"btn btn-primary"

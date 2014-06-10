@@ -1,0 +1,22 @@
+<tr data-article-id=<%= article.id%>>
+  <td><%= article.title %></td>
+  <% if index == 0 %>
+  <td><%= image_tag article.image.medium.url, :width => 180, :height =>100 %></td>
+  <% else %>
+  <td><%= image_tag article.image.thumb.url, :width=> 100, :height =>100 %></td>
+  <%end%>
+  <td>
+    <p>
+      <%= article.description%>
+    </p>
+    <p>
+      <%= article.url %>
+    </p>
+  </td>
+  <% if is_edit? or is_create? or is_update? %>
+  <td>
+    <%= link_to t('Edit'), edit_backend_shop_material_article_path(@current_shop.slug, @material, article), remote: true, :class => 'btn btn-default' %><br/>
+  	<%= link_to t('Destroy'), backend_shop_material_article_path(@current_shop.slug, @material, article), method: :delete, data: { confirm: "确定要删除章节#{article.title}吗？" }, remote: true, :class => 'btn btn-danger' %>
+  </td>
+  <% end %>
+</tr>

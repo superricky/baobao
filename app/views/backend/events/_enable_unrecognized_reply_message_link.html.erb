@@ -1,0 +1,5 @@
+<small class="green">
+  <b><%= @current_shop.enable_unrecognized_reply_message ? "已" : "未" %>启用未识别消息自动回复</b>
+</small>
+<label><%= link_to "#{@current_shop.enable_unrecognized_reply_message ? '不启用' : '启用'}",unmatch_message_backend_shop_events_path(@current_shop, enable_unrecognized_reply_message: (!@current_shop.enable_unrecognized_reply_message)), class: "btn btn-minier btn-primary", remote: "true"%>
+</label>

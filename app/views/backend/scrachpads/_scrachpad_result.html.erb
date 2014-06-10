@@ -1,0 +1,31 @@
+<tr data-scratchpad-id=<%= scrachpad.id %>>
+	<td>
+		<%= link_to "#{scrachpad.user.present? && scrachpad.user.name.present? ? scrachpad.user.name : '未知'}", [:backend, @current_shop, @current_branch, scrachpad.user], :target=>"_blank" %>(用户ID:<%= scrachpad.user_id rescue "无"%>, 用户会员编号: <%= scrachpad.user.vip_no rescue "非会员"||"非会员" %>)
+	</td>
+	<td>
+		<%=  scrachpad.card_result %>
+	</td>
+	<td><%= scrachpad.valid_before.strftime("%Y-%m-%d") %></td>
+	<td><% if scrachpad.order.present? %>
+			<%= link_to scrachpad.order_id ,backend_shop_branch_order_path(@current_shop.slug, @current_branch, scrachpad.order), :target=>"_blank" %>
+		<%else%>
+			<%= scrachpad.order_id %>
+		<%end %>
+	</td>
+	<td>
+		<% if scrachpad.deleted_at.present? %>
+			<span class="label label-danger">刮卡已被扔</span>
+		<%end%>
+		<% if scrachpad.is_opened %>
+			<% if (not scrachpad.is_used) && scrachpad.deleted_at.nil? %>
+				<%= link_to "改变状态为已使用",  deactivate_backend_shop_branch_scrachpad_path(@current_shop.slug, @current_branch, scrachpad),
+					:remote=>true, :method=>"post", data: { confirm: "确定要改变彩票#{scrachpad.card_result}为已使用吗？注意：该操作不可恢复" },
+					:class=>"btn btn-danger" %>
+			<%elsif scrachpad.deleted_at.nil? %>
+				<span class="label label-info">已使用</span>(使用时间:<%= scrachpad.used_time.strftime("%Y-%m-%d %H:%M:%S")-%>)
+			<%end%>
+		<%else%>
+			<label class="label label-success">客户尚未刮奖</label>
+		<%end%>
+	</td>
+</tr>

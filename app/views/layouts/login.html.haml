@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %meta{:content => "IE=EmulateIE9", "http-equiv" => "X-UA-Compatible"}
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no", :name => "viewport"}
+    /[if IE]
+      = javascript_include_tag "compatibility_alert"
+    %title= find_or_set_title
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+  %body{style: "background:url(/assets/backend/banner.jpg);background-repeat:no-repeat;background-position:50% 50%;"}
+    #banner{:style => "min-height:60px;"}
+    .container
+      = yield

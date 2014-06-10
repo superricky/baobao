@@ -1,0 +1,21 @@
+-content_for :title do
+  个人中心
+.user-account
+  .m-2
+    %nav.combo
+      %ul
+        %li
+          %i.icon-more.icon-2.right
+          = link_to "待完成订单", query_mobile_shop_branch_orders_path(@current_shop.slug, @current_branch, states: [Order::WAIT_CONFIRMED, Order::CONFIRMED, Order::DELIVERING]), class: "icon-order"
+        %li
+          %i.icon-more.icon-2.right
+          = link_to "已完成订单", query_mobile_shop_branch_orders_path(@current_shop.slug, @current_branch,states: [Order::COMPLETED]), class: "icon-order"
+        %li
+          %i.icon-more.icon-2.right
+          = link_to "已取消订单", query_mobile_shop_branch_orders_path(@current_shop.slug, @current_branch,states: [Order::CANCELED]), class: "icon-order"
+        %li
+          %i.icon-more.icon-2.right
+          = link_to "收货信息", mobile_shop_branch_myprofile_path(@current_shop, @current_branch), class: "icon-myprofile"
+        %li
+          %i.icon-more.icon-2.right
+          = link_to "我的刮刮卡", mobile_shop_branch_scrachpads_path(@current_shop.slug, @current_branch), class: "icon-guaguacard"

@@ -1,0 +1,125 @@
+<% user_some_field = []%>
+<%
+	if @user.is_vip?
+		user_some_field << [User.human_attribute_name(:wallet), number_to_currency(@user.wallet , :unit=>@current_shop.current_currency_symbol)]
+	end
+
+	if @current_shop.use_credits
+		user_some_field << [User.human_attribute_name(:credits), @user.credits]
+	end
+ %>
+
+<% unless notice.nil? %>
+<div class="alert alert-success" id="notice"><%= notice %></div>
+<% end %>
+
+<% unless @user.errors.empty? %>
+	<div class="alert alert-danger"><%= @user.errors.full_messages %></div>
+<%end%>
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		<ul class="nav nav-pills nav-justified">
+			<li class="<%= 'active' if  params[:log_type].nil? %>">
+		  	<% if @current_branch.present? %>
+		  		<%= link_to "用户基本信息", backend_shop_branch_user_path(@current_shop.slug, @current_branch ,@user)%>
+		  	<% else %>
+		  		<%= link_to "用户基本信息", backend_shop_user_path(@current_shop.slug ,@user)%>
+		  	<% end %>
+		  </li>
+		  <% if @current_branch.present? %>
+			  <li class="<%= 'active' if params[:log_type] == 'credits_logs'%>">
+			  	<% if @current_branch.present? %>
+			  		<%= link_to "用户积分记录", backend_shop_branch_user_path(@current_shop.slug, @current_branch ,@user, log_type: "credits_logs")%>
+			  	<% else %>
+			  		<%= link_to "用户积分记录", backend_shop_user_path(@current_shop.slug ,@user, log_type: "credits_logs")%>
+			  	<% end %>
+			  </li>
+		  <% end %>
+		  <% if (@current_account.is_admin? or @current_account.is_boss?) && @current_branch.nil?  %>
+			  <li class="<%= 'active' if params[:log_type] == 'wallet_logs'%>">
+			  	<%= link_to "用户余额记录", backend_shop_user_path(@current_shop,@user, log_type: "wallet_logs") %>
+			  </li>
+		  <% end %>
+		</ul>
+	</div>
+	<div class="panel panel-body">
+		<% if params[:log_type].nil? %>
+			<table class="table table-striped table-bordered">
+				<tbody>
+					<tr>
+						<th><%= User.human_attribute_name(:id) %></th>
+						<td><%= @user.id %></td>
+						<th><%= User.human_attribute_name(:phone) %></th>
+						<td><%= @user.phone %></td>
+					</tr>
+					<tr>
+						<th><%= User.human_attribute_name(:name) %></th>
+						<td><%= @user.name %></td>
+						<th><%= User.human_attribute_name(:default_address) %></th>
+						<td><%= @user.default_address %></td>
+					</tr>
+					<tr>
+						<th><%= User.human_attribute_name(:vip_no)%></th>
+						<td>
+							<% if @user.is_vip? %>
+								<%= @user.vip_no %> &nbsp;&nbsp;会员级别: <span class="label label-info"><%= @user.vip_level.name rescue nil%></span>
+							<%else%>
+								非VIP会员
+							<%end%>
+						</td>
+						<th><%= User.human_attribute_name(:email_address) %></th>
+						<td><%= @user.email_address %></td>
+					</tr>
+					<tr>
+						<th><%= User.human_attribute_name(:fake_user_name) %></th>
+						<td><%= @user.fake_user_name %></td>
+						<th><%= User.human_attribute_name(:total_amount) %></th>
+						<td><%= number_to_currency(@user.total_amount, :unit=>@current_shop.current_currency_symbol) %></td>
+					</tr>
+					<tr>
+						<th><%= User.human_attribute_name(:subscribe_time) %></th>
+						<td><%= @user.subscribe_time.strftime("%Y-%m-%d %H:%M:%S") rescue nil %></td>
+						<th>
+							<%= User.human_attribute_name(:sent_validation_code_times_in_today) %>
+						</th>
+						<td>
+							<%= @user.get_sent_validation_code_times_in_today %>次
+						  <% unless @current_branch.present? %>
+						  	<%= link_to "重置已接受验证码次数为0", reset_validation_code_times_backend_shop_user_path(@current_shop.slug, @user), :class=>"btn btn-default" %>
+						  <%end%>
+						</td>
+					</tr>
+					<tr>
+						<% user_some_field.each do |field| %>
+								<th><%= field[0]%></th>
+								<td><%= field[1]%></td>
+						<% end %>
+					</tr>
+					<tr>
+						<th>用户类型</th>
+						<td><%= @user.user_type_name%></td>
+					</tr>
+				</tbody>
+			</table>
+			<% if @user.last_location_time.present? %>
+				<p>
+				  <strong><%= User.human_attribute_name(:last_location) %>:</strong>(最后发送位置时间:<%= @user.last_location_time.strftime("%Y-%m-%d %H:%M:%S") %>)<br />
+				  <img src="<%= location_img({:location_x => @user.last_latitude, :location_y=>@user.last_longitude, :width=>250, :height=>240, :zoom=>13}) %>"/>
+				</p>
+			<%end%>
+		<% elsif params[:log_type] == 'credits_logs' %>
+			<%= render "search_credits_log" %>
+			<%= render "credits_logs" %>
+		<% elsif params[:log_type] == 'wallet_logs' %>
+			<%= render "search_wallet_log" %>
+			<%= render "wallet_log" %>
+		<% end %>
+	</div>
+	<div class="panel panel-footer">
+		<%= link_to t('Edit'), get_edit_user_path(@user), :class=>"btn btn-default" %> |
+		<%= link_to t('Back'), "#{get_users_path}?type=#{@user.class.name}", :class=>"btn btn-default" %>
+		<% if @current_account.is_admin? or @current_account.is_boss? %>
+			<%= link_to '会员充值', vip_edit_backend_shop_user_path(@current_shop.slug, @user), class:"btn btn-default"%>
+		<% end %>
+	</div>
+</div>

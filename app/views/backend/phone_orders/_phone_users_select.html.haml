@@ -1,0 +1,6 @@
+.row
+  .col-xs-6
+    = select_tag "phone_order[user_id]", options_for_select(phone_users.map{|phone_user| [phone_user.name, phone_user.id, {"data-name" => phone_user.name, "data-address" => phone_user.default_address}]}),{:prompt => "请选择", class: "form-control"}
+  .col-xs-3
+    %button.btn.btn-primary.btn-sm{id: "phone_user_name_fill_in"}
+      手动填写

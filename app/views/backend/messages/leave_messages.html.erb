@@ -1,0 +1,25 @@
+<%= render 'backend/message_threads/messages_nav'%>
+<%= render "search" %>
+<h1><%= t("用户留言") %></h1>
+<div class="pull-right">
+	<%= will_paginate @messages , renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+<table class="table table-striped" id="message-threads-table">
+  <thead>
+    <tr>
+      <th><%= MessageThread.human_attribute_name('user') %></th>
+      <th class="col-md-4 col-lg-4"><%= Message.human_attribute_name('content') %></th>
+      <th><%= Message.human_attribute_name('created_at')%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  	<% @messages.each do |message| %>
+  		<tr>
+  			<td><%= link_to message.message_thread.user.name||"<未知>", get_user_path(message.message_thread.user) %></td>
+  			<td><%= message.content%></td>
+  			<td><%= message.created_at.strftime("%Y-%m-%d %H:%M:%S")%></td>
+  		</tr>
+  	<%end%>
+  </tbody>
+</table>

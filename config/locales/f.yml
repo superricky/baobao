@@ -1,0 +1,832 @@
+---
+zh-CN:
+  will_paginate:
+    previous_label: 上一页
+    next_label: 下一页
+    page_gap: ...
+  action:
+    edit: 编辑
+    modify: 修改
+    update: 更新
+    submit: 提交
+  activerecord:
+    errors:
+      models:
+        shop:
+          attributes:
+            image:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+        promotion:
+          attributes:
+            image:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+        branch:
+          attributes:
+            image:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+        article:
+          attributes:
+            image:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+        product_slider:
+          attributes:
+            img:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+        branch_slider:
+          attributes:
+            img:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+        product:
+          attributes:
+            image:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+            pic:
+              size_too_big: 图片大小不得超过指定的大小 %{file_size}
+
+        promotion_detail:
+          attributes:
+            product:
+              uniqueness:
+                format: "'%{value}'已经存在"
+        user:
+          attributes:
+            pay_password_hash:
+              presence:
+                format: "支付密码格式不正确，密码长度必须大于等于4位"
+    models:
+      member: 会员
+      menu: 菜单
+      system_config: 系统设置
+      message: 消息
+      message_thread: 会话
+      user: 微信用户
+      material: 素材
+      article: 章节
+      event: 自动回复
+      product: 产品
+      order: 订单
+      site_config: 配置
+      account: 账户
+      category: 产品分类
+      shop: 帐号
+      shop_step: 帐号设置
+      tag: 标签
+      branch: 商户
+      service_period: 商户服务时间段
+      printer: 无线打印机
+      promotion: 促销活动
+      promotion_detail: 产品列表
+      product_unit: 计量单位
+      mail_setting: 邮件通知
+      sms_msg: 短信
+      credits_log: 积分消费
+      vip_level: 会员级别
+      branch_avard: 企业荣誉
+      wallet_log: 余额充值消费记录
+      report: 企业新闻
+      theme: 定制主题
+      zone: 服务区域
+      branch_type: 商户分类
+      branch_slider: 商户推荐幻灯片
+      product_slider: 产品幻灯片
+      branch_comment: 客户评论
+      brand_chain: 连锁品牌管理
+      base_branch: 商户
+      promotion_log: 推广信息
+      custom_ui_setting: 自定义界面关键词
+      form_element: 自定义表单
+      post_thread: 需求讨论
+      post_thread_label: 讨论标签
+      service_sale_order: 服务订单
+      service_product: 可选服务套餐
+      transaction_log: 服务套餐购买日志
+      branch_step: 管理商户
+      statistic: 系统报表
+      wechat_pay: 微信支付
+      delivery_zone: 配送区域
+      trade: 支付流水
+      weixinpay_warning: 微信支付警告
+      weixinpay_feedback: 微信支付维权通知
+      phone_order: 电话下单
+      tenpay: 财付通
+      mobile_alipay: 支付宝
+      qrcode_generalize: 二维码推广
+      currency_symbol: 货币类型
+      agent_zone: 代理区域
+      agent: 代理商
+      delivery_time: 配送时间
+    attributes:
+      mobile_alipay:
+        use_mobile_alipay: 是否启用支付宝
+        pid: 支付宝商家PID
+        pkey: 支付宝商家KEY
+        email: 支付宝商家账户Email
+      tenpay:
+        use_tenpay: 启用财付通
+        pid: 商户号
+        pkey: 初始密钥
+      weixinpay_warning:
+        system_config: 公众账号
+        description: 摘要
+        alarm_content: 警告内容
+        created_at: 警告发起时间
+      weixinpay_feedback:
+        system_config: 公众账号
+        feedback_id: 维权请求编号
+        trade_id: 交易编号
+        created_at: 请求发起时间
+      agent:
+        aid: 专属邀请码
+        name: 代理商名称
+        phone: 代理商电话
+        balance: 余额
+        agent_zones: 代理区域
+        agent_rels: 代理关系
+        shops: 开发商户
+      agent_zone:
+        name: 区域名称
+        parent_agent_zone_id: 父代理区域
+        sub_agent_zones: 子代理区域
+        agents_count: 代理商数量
+      agent_rel:
+        agent_zone_id: 代理区域
+        agent_from: 代理开始时间
+        agent_to: 代理结束时间
+
+
+      transaction_log:
+        buyer_email: 购买者email
+        shop: 商户
+        description: 日志
+        created_at: 购买时间
+      service_product:
+        product_type: 产品类型
+        available_shop_versions: 可购买商户类型
+        product_type_name:
+          recharge_sms_msg: 短信配额
+          recharge_order: 订单配额
+          recharge_time: 服务续期
+        subject: 产品名称
+        price: 价格
+        quantity: 数量
+        description: 产品描述
+      service_sale_order:
+        price: 价格
+        quantity: 数量
+        discount: 折扣
+        created_at: 创建时间
+        out_trade_no: 订单号
+        subject: 商品名称
+        amount: 交易金额
+        workflow_state: 交易状态
+        shop: 付款商户
+        shop_id: 付款商户
+        workflow_state_name:
+          new: 等待付款
+          finished: 交易成功
+          closed: 交易已关闭
+      custom_ui_setting:
+        order_delivery_btn: 外送
+        order_eat_in_hall_btn: 店内用餐
+        order_order_seat: 用餐预定
+        pay_on_receive: 货到付款
+        pay_by_wallet: 余额抵扣
+        pay_by_credits: 积分抵扣
+        note_place_holder: 订单备注提示
+      post_thread_label:
+        name: 标签名
+      post_thread:
+        post_thread_label_ids: 所属讨论标签
+        post_thread_labels: 所属讨论标签
+        post_count: 回复
+        title: 标题
+        account: 作者
+        content: 描述
+        last_requestd_at: 最后一次催促处理是在
+        requested_times: 催促处理次数
+        workflow_state: 当前状态
+        created_at: 发布时间
+        updated_at: 更新时间
+
+      member:
+        email: 注册邮箱
+        name: 用户名
+        password: 登录密码
+        password_confirmation: 重复密码
+        last_sign_in_ip: 上次登录IP地址
+        last_sign_in_at: 上次登录时间
+        default_address: 默认配送地址
+        phone: 联系电话
+        uid: 用户ID
+        subdomain: 域名
+        current_password: 当前密码
+
+      base_branch:
+        name: 品牌名称
+        introduction: 品牌简介
+        image: 形象图片
+        type: 品牌类型
+        is_open: 是否正常营业
+      brand_chain:
+        name: 连锁品牌名称
+        branches_count: 连锁店数量
+        introduction: 连锁品牌简介
+        image: 连锁品牌形象图片
+        branch_ids: 所辖商户
+      branch_comment:
+        name: 昵称
+        user: 用户
+        branch: 商户
+        content: 评论内容
+        level: 满意度
+        can_pub: 发布/隐藏
+
+      product_slider:
+        product: 链接到产品
+        product_id: 链接到产品
+        img: 图片
+        desc: 描述
+        position: 排序
+      promotion_log:
+        sharer: 分享用户
+        browser: 浏览用户
+      branch_slider:
+        branch: 链接到商户
+        branch_id: 链接到商户
+        img: 图片
+        desc: 描述
+        position: 排序
+      branch_type:
+        name: 商户分类名称
+        branches_count: 商户数量
+      zone:
+        name: 区域名称
+        parent_zone: 上级区域
+        sub_zones: 子区域
+        parent_zone_id: 上级区域
+        branches_count: 商户数量
+      theme:
+        background_color: 主体背景颜色
+        text_color: 主体文本颜色
+        header_bg_color: 头部背景颜色
+        header_text_color: 头部文本颜色
+        navbar_bg_color: 底部背景颜色
+        navbar_text_color: 底部文本颜色
+        menu_bg_color: 左侧菜单背景颜色
+        menu_text_color: 左侧菜单文本颜色
+        theme_type: 主题类型
+      report:
+        title: 标题
+        content: 内容
+        author: 作者
+        created_at: 发表时间
+        updated_at: 更新时间
+      wallet_log:
+        user: 用户
+        shop: 公众账号
+        branch: 商户
+        wallet_log_type: 流水类型
+        wallet_log_types:
+          recharge: 充值
+          recharge_rollback: 充值回退
+          pay: 支付
+          pay_rollback: 支付回退
+          pay_success: 支付成功
+        money: 金额
+        note: 备注
+      vip_level:
+        name: 会员级别名称
+        discount: 会员折扣
+        auto_upgrade: 是否支持会员级别自动升级
+        min_total_amount: 用户累计消费金额首次满多少时自动升级至该级别
+      system_config:
+
+        support_weixin_pay: 是否支持微信支付
+        public_account_name: 公众帐号名
+        my_fake_id: '公众账号原始ID'
+        url: 自有服务器地址
+        appId: appId
+        appSecret: appSecret
+        gonghao_type: 公众账号类型
+        be_verified: 是否通过认证
+      printer:
+        print_on_order: 是否启用无线打印
+        memberCode: 飞印打印机商户编码
+        deviceNo: 飞印打印机飞印终端编号
+        apiKey: 飞印打印机API密钥
+        copy_count: 每个订单打印份数
+        phone: 手机卡号
+        printer_type: 设备类型
+        name: 打印机标识
+      promotion:
+        branch: 所属商户
+        shop: 所属账号
+        name: 活动名称
+        start_time: 活动开始时间
+        end_time: 活动结束时间
+        branch: 承办商户
+        image: 活动图片
+        description: 活动描述
+        start_time_and_end_time: 活动时间
+        promotion_detail:
+          product: 产品
+          promotion: 活动
+      promotion_detail:
+          product: 产品
+          promotion: 活动
+      menu:
+        name: "菜单按钮名称"
+        key: "点击事件Key值"
+        material: "回复内容"
+        url: "页面浏览时间URL地址"
+        parent_menu: "上级菜单按钮"
+        menu_type: "菜单按钮类型"
+        event_type: "事件类型"
+      message_thread:
+        updated_at: 最后更新时间
+        user: 微信用户
+      message:
+        content: 内容
+        created_at: 发送时间
+      user:
+        id: 用户ID
+        phone:  "手机"
+        default_address: "默认地址"
+        name: 姓名
+        pay_password_hash: 支付密码
+        pay_password: 支付密码
+        fake_user_name: 微信ID
+        email_address: 邮箱地址
+        subscribe_time: 第一次关注时间
+        last_login_ip: 最后登陆IP
+        credits: 积分
+        vip_no: 会员卡号
+        vip_level: 会员级别
+        vip_level_id: 会员级别
+        sent_validation_code_times_in_today: 今日累计接受验证码数量
+        last_location: 最后发送位置
+        is_vip: 是否是VIP
+        wallet: 账户余额
+        recharge_amount: 充值金额
+        total_amount: 累计消费金额
+      material:
+        msg_type: 素材类型
+        material_name: 素材名字
+        content: 内容
+        updated_at: 更新时间
+        title: 标题
+        description: 章节描述
+        music_url: 音乐文件地址
+        hq_music_url: 高清音乐文件地址
+        articles: 章节列表
+      article:
+        title: 标题
+        description: 文章描述
+        url: 链接地址
+        image_url: 图片URL地址
+        image: 图片
+        expiration_time: 文章推广截至时间
+        position: 文章位置
+        link_type: 链接类型
+        support_promotion: 是否支持推广
+        link_types:
+          article: 链接到文章
+          shop_or_branch: 链接到商户
+          other_web_link: 外部链接
+        introduction: 简介
+      event:
+        event: 自动回复类型
+        event_key: 关键词
+        material: 素材
+      product:
+        name: 产品名称
+        price: 价格
+        product_unit: 单位
+        promotion: 促销活动
+        pic: 产品图片
+        image: 产品图片
+        stock: 剩余库存
+        credits_for_each_product: 积分
+        description: 产品介绍
+        category: 产品所属分类
+        tag: 产品标签
+        original_price: 原价
+      account:
+        captcha: 验证码
+        login_id: 用户名
+        name: 姓名
+        password: 密码
+        password_confirmation: 确认密码
+        email: 电子邮箱
+        last_login_ip: 最后登录IP
+        updated_at: 最后一次登录时间
+        account_type: 账户类型
+        created_at: 账户创建时间
+        phone: 手机
+        branch_ids: 管理店铺
+        old_password: 旧密码
+        remember_me: 记住登录
+        new_password: 新密码
+        new_password_confirmation: 确认新密码
+        shop_id: 所属商户
+        user_id: 微信接单用户(须为服务号用户)
+      order:
+        id: 订单编号
+        name: 姓名
+        phone: 手机
+        address: 配送地址
+        delivery_time: 配送时间
+        note: 备注
+        amount: 合计金额
+        is_paid: 支付状态
+        state: 订单状态
+        credits: 获得积分
+        desk_no: 桌号
+        guest_num: 就餐人数
+        order_type: 用餐方式
+        branch: 商户
+        arrive_time: 到店时间
+        pay_type: 支付方式
+        delivery_zone: 配送区域
+        consume_wallet: 余额抵扣
+        consume_credit: 积分抵扣
+        cash_amount: 待支付金额
+        delivery_period: 配送时间段
+      trade:
+        trade_id: 交易编号
+        out_trade_no: 订单编号
+        partner: 商户编号
+        total_fee: 交易金额
+        branch: 商户
+        branch_id: 商户
+        trade_type: 支付类型
+        created_at: 通知支付完成时间
+
+
+      category:
+        name: 分类名称
+      shop:
+        aid: 邀请码
+        agent: 代理商
+        pc_order: 网页下单域名
+        support_link: 服务提供商链接
+        support_link_name: 服务提供商名称
+        copy_right_footer: 版权页脚
+        support_auto_buy_service: 是否支持自助服务
+        max_branch_sliders: 商户推荐幻灯片最大数量
+        name: 平台或品牌名称
+        slug: 用户名
+        orders_count: 累计订单数量
+        income: 累计进账收入
+        notice: 公众账号公告
+        is_open: 营运状态
+        expiration_time: 商户到期时间
+        telephone: 电话或手机
+        introduction: 平台介绍
+        max_branches_count: 允许开设最多商户数量
+        image: 账号形象图片
+        use_credits: 是否启用积分
+        money_for_each_credit: 积分获取规则
+        default_reply_content_type: 消息回复类型
+        charge_method: 计费模式
+        left_order_count: 剩余订单数量
+        welcome_msg: 自定义欢迎词或帮助信息
+        use_sms: 订单短信通知
+        use_sms_validation: 启用短信验证用户手机功能
+        max_sms_count: 已购买短信条数
+        sms_msgs_count: 已使用短信条数
+        max_validation_code_times_in_day: 默认每用户每天最多接受验证码短信数量
+        credits_given: 点账号累计发放积分
+        credits_consume: 点账号累计消费积分
+        wallet_given: 点账号累计充值余额
+        wallet_consume: 点账号累计消费充值余额
+        support_wallet_pay: 支持余额支付
+        support_credits_pay: 支持积分支付
+        credit_for_each_money: 积分抵用规则
+        hide_support_company: 隐藏页脚技术支持公司
+        award_credits_at_follow: 首次关注送积分
+        award_credits: 赠送积分数
+        least_promotion_number: 察看排名前最低有效推荐点击次数
+        qrcode: 微信二维码
+        state: 帐号状态
+        enable_foreign_currency: 启用外币
+        foreign_currency_symbol: 外币符号
+        workflow_state:
+          normally: 正常营业
+          trial: 试用
+          shop_expired: 帐号到期
+          order_quantity_use_up: 帐号订单数已使用完
+        version:
+          single_vip_version: 独立商户版
+          multiple_base_version: 多商户基本版
+          multiple_vip_version: 多商户旗舰版
+        product_image_limit: 单个商户上传图片最大数量
+        product_slider_limit: 单个商户产品幻灯片数量
+        domain: 域名
+        reply_num_of_orders: 获取历史订单
+        enable_unrecognized_reply_message: 启用未识别消息自动回复
+      branch:
+        terms: 提交表单时需用户确认的服务条款信息
+        brand_chain: 所属连锁品牌
+        brand_chain_id: 所属连锁品牌
+        average_level: 用户评分
+        zone_ids: 服务区域
+        name: 商户名称
+        shop: 所属点账号
+        orders_count: 累计订单数量
+        income: 累计进账收入
+        notice: 商户公告
+        is_open: 营运状态
+        service_period_start: 营业开始时间
+        service_period_end: 营业结束时间
+        expiration_time: 商户到期时间
+        location: 地理位置
+        address: 地址
+        telephone: 电话或手机
+        zip_code: 邮政编码
+        latitude: 纬度
+        longitude: 经度
+        zones: 服务区域
+        delivery_charge: 外送费
+        use_min_order_charge: 是否启用外送费
+        min_order_charge: 订单满指定金额免外送费
+        delivery_radius_txt: 外送范围
+        non_service_order_charge:  最低起送金额
+        delivery_radius: 半径范围(以公里为单位)
+        introduction: 商户简介
+        image: 商户形象图片(正方形)
+        rect_image: 商户形象图片(长方形)
+        charge_method: 计费模式
+        left_order_count: 剩余订单数量
+        supported_order_types: 下单方式
+        supported_send_sms_order_types: 支持发送订单短信的订单类型
+        notify_new_order: 是否启用邮件通知
+        use_sms: 订单短信通知
+        use_sms_validation: 启用短信验证用户手机功能
+        max_sms_count: 已购买短信条数
+        sms_msgs_count: 已使用短信条数
+        sms_to: 订单短信发送至手机
+        max_validation_code_times_in_day: 每用户每天最多接受验证码短信数量
+        use_scrachpad: 启用刮刮卡活动
+        separate_notice_of_praise_and_new_order: 是否将订单通知和中奖通知分开
+        first_prize_possibility: 一等奖概率
+        first_prize: 一等奖奖品
+        second_prize_possibility: 二等奖概率
+        second_prize: 二等奖奖品
+        third_prize_possibility: 三等奖概率
+        third_prize: 三等奖奖品
+        no_prize: 参与奖奖品
+        valid_before: 活动截止日期
+        min_charge_for_scratch: 可获得刮刮卡的最小消费金额
+        max_scratch_times_in_day: 每人每天最多可在本店获得刮刮卡数量
+        supported_scratchpad_order_types: 支持刮刮卡的下单方式
+        min_order_time_gap: 最短提前预定时间
+        check_stock: 下单时库存操作
+        credits_given: 商户累计发放积分
+        credits_consume: 商户累计消费积分
+        product_list_style: 产品列表显示风格
+        branch_type_id: 所属商户分类
+        delivery_zones:  外送费设置
+        delivery_times: 配送时间
+        allow_remind_order_msg: 启用短信催单功能
+        service_periods: 商户服务时间
+        enabled_verify_service_periods: 只允许在服务时间内下单
+        fixed_delivery_time: 启用固定时间配送
+      branch/delivery_times:
+        time_advance: 最短提前预定时间
+      branch/delivery_zones:
+        zone_name: 区域名
+      tag:
+        name: 标签名称
+      product_unit:
+        name: 计量单位名
+      mail_setting:
+        enable_mail: 启用邮件通知
+        delivery_method: 发信方式
+        address: 服务器地址
+        port: 端口
+        domain: 域名
+        user_name: 用户名
+        password: 密码
+        authentication: 认证方式
+        enable_starttls_auto: 启用STARTTLS
+        reply_to: 客户回信地址
+        use_system_setting: 使用系统默认邮箱设置
+        notify_shop_manager: 新订单到来时是否通知点号管理员
+      sms_msg:
+        to: 接收手机号码
+        body: 短信内容
+      credits_log:
+        id: 流水号
+        credit_log_type: 流水类型
+        credits: 积分
+        shop: 点账号
+        branch: 商户
+        user: 用户
+        note: 备注
+        user_credits_balance_after: 该笔订单后用户剩余积分
+        shop_credits_given_after: 该笔订单后点账号累计发放积分
+        shop_credits_consume_after: 该笔订单后点账号累计兑换积分
+        branch_credits_given_after: 该笔订单后商户累计发放积分
+        branch_credits_consume_after: 该笔订单后商户累计兑换积分
+        account: 经办人
+      currency_symbol:
+        symbol: 货币符号
+        decoration: 货币名称
+      form_element:
+        statement: 项目名称
+        branch_id: 所属店铺
+        shop_id: 所属商户
+        type: 类型
+        regex: 规则
+        sequence: 序列
+        created_at: 创建时间
+        need: 是否必填
+        form_elements: 可选项目
+        placeholder: 输入帮助信息
+        types:
+          FormElementText: 单行文本
+          FormElementSelect: 下单选项
+          FormElementOption: 选项
+        regexs:
+          none: 不用验证数据
+          email: 邮箱验证
+          phone: 电话号码验证
+          number: 只能是数字（2位数以内）
+          text_range: 字数限制（6～70个字）
+  login_id: 用户名
+  password: 密码
+  Listing menus: "菜单列表"
+  Listing message_threads: "会话列表"
+  Listing users: 用户列表
+  Editing user: 修改用户资料
+  Listing materials: 素材列表
+  Listing articles: 章节列表
+  Foreign language link: 外文链接
+  External Linking: 外部链接
+  Write article: 编写文章
+  Listing products: 产品列表
+  Editing material: 编辑素材
+  Listing events: 自动回复
+  Editing event: 编辑自动回复
+  Editing product: 编辑产品
+  Listing site_configs: 网站配置参数
+  Editing site_config: 修改%{name}
+  New Product: 新建产品
+  New currency_symbol: 新建货币类型
+  Listing accounts: 账户列表
+  Editing category: 编辑产品分类
+  New account: 新建账户
+  Editing account: 修改账户信息
+  Edit Password: 修改密码
+  Reset Password: 重置密码
+  New shop: 新建商户
+  Editing shop: 编辑微信公众账号
+  Listing shops: 微信公众账号列表
+  Editing tag: 编辑标签
+  Listing tags: 标签列表
+  New tag: 新建标签
+  Editing article: 编辑内容
+  Listing branches: 商户列表
+  New branch: 新建商户
+  Editing branch: 编辑商户
+  Listing special off: 特价活动列表
+  New special off: 新建特价促销活动
+  Listing product_units: 计量单位列表
+  New product unit: 新建计量单位
+  Editing product unit: 编辑计量单位
+  New printer: 添加打印机
+  Edit printer: 修改打印机
+
+  invalid username or password: 用户名或者密码不正确，请确认后重新输入
+  Account has been created successfully!: 账户创建成功！
+  Profile updated: 个人信息已经成功更新
+  no permision to update other people's password: 无权修改他人的用户名和密码
+  original password not correct !: 旧密码不正确
+  Account destroyed: 账户已删除
+  Please sign in: 请登陆后进行操作
+  no product items in cart: 购物车中没有添加的商品，无法下单
+  password has been updated successfully!: 密码已经成功更新
+  Product was successfully updated: 产品更新成功
+  Product was successfully created: 产品创建成功
+  Category was successfully updated: 产品分类更新成功
+  Category was successfully created: 产品分类创建成功
+  shop you select is exist: 您所浏览的商户不存在
+  no tag: 没有标签
+  no category: 没有分类
+  Menu was unable to synchronized: 无法同步菜单
+  Menu was successfully created: 菜单成功创建
+  Menu was successfully updated: 菜单成功更新
+  System config was successfully created: 微信帐号配置成功
+  Material was successfully created: 素材创建成功
+  Material was successfully updated: 素材更新成功
+  Event was successfully created: 自动回复创建成功
+  Event was successfully updated: 自动回复更新成功
+  Shop was successfully created: 商户创建成功
+  Shop was successfully updated: 商户更新成功
+  No permission to operate other shop: 您无权操作他人商户
+  Tag was successfully updated: 标签分类更新成功
+  please check receive email: 邮箱配置成功,请查看配置邮箱是否收到邮件
+  email configuration is not successful: 邮箱配置失败, 请检查账户用户名、密码是否准确!
+  Tag was successfully created: 标签分类创建成功
+  same product name already exist: 该商户中已经存在同名的产品
+  User was successfully updated: 用户信息更新成功
+  Order was successfully updated: 订单更新
+  Site config was successfully updated: 站点信息更新成功
+  Printer has successfully updated: 打印机信息已经成功更新
+  Branch was successfully created: 商户已经成功创建，您现在可以为该商户设置打印机和产品了
+  Branch was successfully updated: 商户更新成功
+  Branch was successfully setted: 商户设置成功
+  Shop was successfully setted: 帐号设置成功
+  You have no authories to create more branch: 对不起，您无法再创建更多的商户，您需要向运营商申请更多的商户配额
+  special off was successfully updated: 恭喜您，特价活动已经被更新！
+  special off was succesfully created!: 恭喜您，特价活动已经被创建成功！
+  Product unit was successfully created: 计量单位创建成功
+  Product unit was successfully updated: 计量单位更新成功
+  Mail setting was successfully updated: 邮箱系统设置成功！
+  Printer has successfully created: 打印机添加成功
+  Custom ui setting was successfully updated: 自定义界面参数更新成功
+  Scrachpad was successfully updated: 刮刮卡已更新
+  you don not have the right: 您没有访问次页面的权限
+  You have to log in to continue: 您还没有登录,请先登录！
+
+  operation btn: "操作"
+  Show: "详情"
+  Save: 保存
+  Edit: "编辑"
+  Cancel: "取消"
+  Destroy: "删除"
+  Remove: 移除
+  New menu: "新建菜单按钮"
+  async menu with weixin client: "同步微信客户端菜单"
+  preview menu json: "预览菜单json数据"
+  preview article: 预览
+  Create menu: "创建菜单"
+  Back: "返回列表"
+  Editing menu: "更新菜单按钮"
+  New Material: 新建素材
+  New category: 新建分类
+  Are you sure?: 确定进行此删除操作吗？
+  text: 文本
+  music: 音频
+  news: 新闻多媒体
+  CLICK: 点击事件
+  KEYWORD_AUTOREPLY: 关键词自动回复
+  unmatch: 未识别消息自动回复
+  subscribe: 用户关注
+  unsubscribe: 取消用户关注
+  New event: 新建自动回复
+  Sign in: 登录
+  system_admin: 系统管理员
+  boss: 公众账号管理员
+  worker: 分店老板
+  subscribe_account: 订阅号
+  service_account: 服务号
+  delivery_fee: 外送费
+  event:
+    uniq:
+      event_key: "不允许出现重复的自动回复关键词"
+      event: "最多只允许定义一个订阅回复、一个取消订阅回复或一个未识别消息自动回复"
+    exclusion:
+      event_key: "'%{key}'是系统关键词, 不能重复定义"
+  order:
+    state:
+      canceled: 已取消
+      wait_confirmed: 等待处理
+      confirmed: 处理中
+      delivering: 正在发货
+      delivered: 已处理
+      completed: 已完成
+      unknown: 未知状态
+
+  will_paginate:
+    next_label: 后一页
+    previous_label: 前一页
+  printer:
+    feiyin: 飞印打印机
+  material:
+    text: 文本消息
+    news: 图文消息
+    music: 音频消息
+    promotion: 推广消息
+  bb: 黑莓主题
+  ios: ios主题
+  ios7: ios7主题
+  android: 安卓主题
+  win8: win8主题
+  tizen: tizen主题
+  theme_system: 系统推荐主题
+  theme_custom: 自定义主题
+  product_list_style:
+    thumb: 缩略图风格
+    txt: 文本风格
+  menu:
+    event_type:
+      click: 微信回复
+      view: 链接跳转
+  post_thread:
+    workflow_state:
+      new: 新建
+      opened: 管理员已阅读
+      closed: 已结帖
+

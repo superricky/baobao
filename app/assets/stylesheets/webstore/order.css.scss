@@ -1,0 +1,38 @@
+// Place all the styles related to the webstore/order controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$color_shadow: rgba(0,0,0,0.4);
+$color_border: #bebebe;
+$color_bar: #fefefe;
+$color_list_hover:#f1fafc;
+$color_actions_hover_border:#febf40;
+$color_actions_hover:#fdffb8;
+$color_red:#cc0000;
+
+#new_order_webstore{
+  border-radius: 7px;
+  background:#fff;
+  padding:10px;
+  .form-group{
+    overflow:hidden;
+    lint-height:22px;
+  }
+  .total{
+    margin-right:20px;
+    strong{font-size:30px;}
+  }
+}
+
+.my_orders{
+  padding:10px 10px 0 10px;
+  .panel{
+    .panel-heading{
+      strong.total{line-height:22px;}
+      .btn-pay{float:right;line-height:22px;margin-right:10px;display:inline;padding:0;}
+    }
+    .panel-body{
+      img{margin:0 0 5px 0;}
+      .label{width:100%;display:block;margin:0 0 5px 0;}
+    }
+  }
+}

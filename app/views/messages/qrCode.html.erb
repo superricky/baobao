@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="wx_article">
+    <h3 class="title">推广二维码</h3>
+    <div class="wx_article_picture">
+      <%= image_tag "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=#{@user.ticket}", class: "img-rounded", width: "100%"%>
+    </div>
+    <div class="container">
+      <p>用微信“扫一扫”功能即可关注我的公众账号哦。</p>
+      <p>如果是本地的手机图片，请按以下步骤操作:</p>
+      <ol>
+        <li>长按二维码后选择保存到手机</li>
+        <li>返回到微信主界面，并点击“扫一扫”</li>
+        <li>点击右上角按钮，并选择“从相册选择二维码”</li>
+      </ol>
+      <div id="audiences">
+        <h4 class="header smaller lighter">当前有<%= @user.audiences.count %>受众者</h4>
+        <div id="audiences_image"></div>
+      </div>
+      <%= link_to "获得受众者" ,user_get_audiences_info_path(@user.shop, @user, limit: 8), remote: true, id: "get_last_audiences", hidden: "hidden" %>
+    </div>
+  </div>
+</div>
+<% content_for :footer do %>
+  <%= render "/mobile_footer" %>
+<% end %>
+<script type="text/javascript">
+  $(function(){
+    $("#get_last_audiences").trigger("click");
+  });
+</script>

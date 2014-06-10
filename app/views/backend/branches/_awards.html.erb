@@ -1,0 +1,16 @@
+<div class=""></div>
+<div class="col-xs-12 col-sm-7">
+  <% if @branch.awards.present? %>
+    <table class="table table-striped">
+      <% @branch.awards.each do |award| %>
+        <tr>
+          <th class="right"><%= award.name %></th>
+          <td class="left" ><%= award.description %></td>
+        </tr>
+      <% end %>
+    </table>
+  <%else%>
+    暂无企业荣誉
+  <% end %>
+</div>
+<div class=""></div>

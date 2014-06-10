@@ -1,0 +1,21 @@
+%h1 余额充值消费记录
+= render "search"
+%table.table.table-striped
+  %tr
+    %th= WalletLog.human_attribute_name("user")
+    %th= WalletLog.human_attribute_name("wallet_log_type")
+    %th= WalletLog.human_attribute_name("money")
+    %th= WalletLog.human_attribute_name("note")
+    %th
+
+  - @wallet_logs.each do |wallet_log|
+    %tr
+      %td= link_to wallet_log.user.name, backend_shop_user_path(@current_shop.slug, wallet_log.user)
+      %td= get_wallet_logs_type_name wallet_log.wallet_log_type
+      %td= wallet_log.money
+      %td= wallet_log.note
+      %td
+        - if wallet_log.is_recharge_log?
+          = link_to t('Edit'), edit_backend_shop_wallet_log_path(@current_shop.slug, wallet_log), :class=>"btn btn-default"
+
+%br

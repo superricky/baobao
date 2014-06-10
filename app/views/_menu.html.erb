@@ -1,0 +1,9 @@
+<div id="outer-menu" style="width:100%;background-color:#459935;">
+	<div id="inner-menu" style="width:980px;margin:auto;">
+		<ul style="padding-left: 0;list-style-type: none;">
+			<li <% if controller_name == 'branches' %>class="selected"<% end %>><%= link_to "业务管理",
+					backend_shop_branch_orders_path(@current_shop.slug, @current_branch, state: Order::WAIT_CONFIRMED)  %></a></li>
+			<li <% if controller_name == 'accounts' %>class="selected"<% end %>><%= link_to "个人设置", get_show_my_account_path %></li>
+		</ul>
+	</div>
+</div>

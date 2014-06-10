@@ -1,0 +1,29 @@
+%h1 服务区域列表
+
+%table.table.table-striped
+  %tr
+    %th= Zone.human_attribute_name(:name)
+    %th= Zone.human_attribute_name(:sub_zones)
+    %th= Zone.human_attribute_name(:branches_count)
+    %th
+
+  - @zones.each do |zone|
+    %tr
+      %td= zone.name
+      %td= zone.sub_zones.present? ? zone.sub_zones.map(&:name).join(",") : "无子区域"
+      %td= "#{zone.branches_count||0}家"
+      %td
+        %div.btn-group
+          %button.btn.btn-default.dropdown-toggle{:type=>"button", :"data-toggle"=>"dropdown"}
+            操作
+            %span.caret
+          %ul.dropdown-menu{:role=>"menu"}
+            %li
+              = link_to t('Show'), backend_shop_zone_path(@current_shop.slug, zone)
+              = link_to t('Edit'), edit_backend_shop_zone_path(@current_shop.slug, zone)
+              = link_to t('Destroy'), backend_shop_zone_path(@current_shop.slug, zone), :method => :delete, :data => { :confirm => '请注意，您一旦删除该服务区域，所有子区域都将被删除' }
+        = link_to '新建子区域', new_backend_shop_zone_path(@current_shop.slug, :parent_zone_id=>zone.id), :class=>"btn btn-default"
+
+%br
+
+= link_to '新建服务区域', new_backend_shop_zone_path(@current_shop.slug), :class=>"btn btn-default"

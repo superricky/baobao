@@ -1,0 +1,16 @@
+- if @current_account.is_admin?
+  %li{:class=>("active" if ( ['accounts'].include? controller_name))}
+    %a.dropdown-toggle{:href => "#{backend_shops_path}"}
+      %i.icon-flag-checkered
+      %span.menu-text 点账户列表
+      %b.arrow.icon-angle-right
+- if @current_shop.present? && (@current_account.is_boss? or @current_account.is_admin?)
+  %li{:class=>("active" if ( ['shops'].include? controller_name and action_name == 'dashboard'))}
+    %a.dropdown-toggle{:href => "#{dashboard_backend_shop_path(@current_shop)}"}
+      %i.icon-dashboard
+      %span.menu-text 控制面板
+  %li{:class=>("active" if ( ['shops', 'themes', 'accounts','mail_settings', 'product_units', 'currency_symbols'].include? controller_name and action_name != 'dashboard'))}
+    %a{href: "#{backend_shop_path(@current_shop) + '#/shop_info'}"}
+      %i.icon-leaf
+      %span.menu-text 基本信息
+   

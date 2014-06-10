@@ -1,0 +1,47 @@
+<% if notice.present? %>
+<p id="notice" class="alert alert-success">
+	<%= notice %>
+</p>
+<%end%>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		短信详情
+	</div>
+	<div class="panel-body">
+		<p>
+			<strong>短信编号:</strong>
+			<%= @sms_msg.id %>
+		</p>
+
+		<p>
+			<strong>系统编号:</strong>
+			<%= @sms_msg.sms_message_id %>
+		</p>
+		<p>
+			<strong>接收人:</strong>
+			<%= @sms_msg.to %>
+		</p>
+
+		<p>
+			<strong>发送者:</strong>
+			商户"<%= @sms_msg.branch.name %>"
+		</p>
+
+		<p>
+			<strong>短信条数:</strong>
+			<%= @sms_msg.size%>条
+		</p>
+
+		<p>
+			<strong>消息类型:</strong>
+			<%= @sms_msg.order_msg_name%>
+		</p>
+
+		<p>
+			<strong>内容:</strong>
+			<%= @sms_msg.body %>
+		</p>
+	</div>
+</div>
+<%= link_to '返回消息列表', get_index_sms_msg_path, :class=>"btn btn-default" %>

@@ -1,0 +1,26 @@
+- @form_elements.each do |form_element|
+  %li.row{data: {id: form_element.id}, style: "background:rgb(239, 243, 248);margin:5px 0;"}
+    .col-sm-2
+      = form_element.statement
+      %strong= form_element.need ? "*" : ""
+      %br/
+      = form_element.regex.present? ? "(#{t("activerecord.attributes.form_element.regexs.#{form_element.regex.to_sym}")})" : ""
+    .col-sm-8
+      -case form_element.type
+        -when FormElementText.name
+          %input.col-sm-6{placeholder: form_element.placeholder}
+        -when FormElementSelect.name
+          = select_tag nil, options_for_select(form_element.form_elements.map{|m| [m.statement, m.id]}.insert(0, ["请选择", ""]))
+    .col-sm-2
+      = link_to t('Edit'), edit_backend_shop_branch_form_element_path(@current_shop, @current_branch, form_element), class: "btn btn-grey", remote: true
+      = link_to t('Destroy'), backend_shop_branch_form_element_path(@current_shop, @current_branch, form_element), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "btn btn-danger", remote: true
+:javascript
+  $("#remote_sortable_list").sortable({
+    stop: function(e, u){
+      var ids = [];
+      $("#remote_sortable_list li").each(function(){
+        ids.push($(this).attr("data-id"));
+      });
+      $("#sequence").val(ids);
+    }
+  });

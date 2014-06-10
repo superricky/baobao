@@ -1,0 +1,101 @@
+.panel.panel-default
+  .panel-heading
+    基本信息
+  .panel-body
+    .field.form-group
+      = f.label :name , class: "col-sm-3 control-label required", required: "required"
+      .col-sm-5
+        = f.text_field :name, class: "form-control", required: "required"
+    .field.form-group
+      = f.label :image, class: "col-sm-3 control-label"
+      .col-sm-5
+        = f.file_field :image, class: "form-control col-sm-4"
+        = succeed "\u{5efa}\u{8bae}\u{56fe}\u{7247}\u{89c4}\u{683c}\u{4e3a}400*400\u{50cf}\u{7d20}\u{ff0c}\u{56fe}\u{7247}\u{5927}\u{5c0f}\u{4e0d}\u{5f97}\u{8d85}\u{8fc7}1MB" do
+          %span{:style => "color:red"} *
+    .field.form-group
+      = f.label :rect_image, class: "col-sm-3 control-label"
+      .col-sm-5
+        = f.file_field :rect_image, class: "form-control col-sm-4"
+        = succeed "\u{8be5}\u{56fe}\u{7247}\u{5c06}\u{663e}\u{793a}\u{5728}webApp\u{7248}\u{5e97}\u{94fa}\u{7684}\u{9996}\u{9875}\u{ff0c}\u{5efa}\u{8bae}\u{56fe}\u{7247}\u{89c4}\u{683c}\u{4e3a}720*400\u{50cf}\u{7d20}\u{ff0c}\u{56fe}\u{7247}\u{5927}\u{5c0f}\u{4e0d}\u{5f97}\u{8d85}\u{8fc7}0.5MB" do
+          %span{:style => "color:red"} *
+    .field.form-group
+      = f.label :supported_order_types, class: "col-sm-3 control-label required"
+      .col-sm-5
+        .row
+          - Order::get_order_types(@custom_ui_setting).each do |order_type|
+            .col-sm-4
+              = f.check_box :supported_order_types, {:checked=> f.object.split_supported_order_types.index(order_type[1]).present?, :multiple => true}, order_type[1], nil
+              %span.lbl
+              = order_type[0]
+    .field.form-group
+      = f.label :telephone, class: "col-sm-3 control-label"
+      .col-sm-5
+        = f.text_field :telephone, class: "form-control col-sm-4"
+        如果是分机号码的格式（如：400-0000000）
+    .field.form-group
+      = f.label :zip_code, class: "col-sm-3 control-label required"
+      .col-sm-5
+        = f.text_field :zip_code, class: "form-control col-sm-4"
+    .field.form-group
+      = f.label :address, class: "col-sm-3 control-label required"
+      .col-sm-5
+        = f.text_area :address, :rows=>2, :cols=> 50, class: "form-control col-sm-4"
+    .field.form-group
+      = f.label :is_open , class: "col-sm-3 control-label"
+      .col-sm-5
+        = f.check_box :is_open
+        %span.lbl
+    - if @current_account.is_admin? or @current_account.is_boss?
+      .field.form-group
+        = f.label :charge_method, class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.select :charge_method, [["按服务时间计费", Branch::CHARGE_METHOD_BY_TIME], ["按订单数量计费", Branch::CHARGE_METHOD_BY_ORDER_COUNT]],{}, {:onchange=>"change_options(this)", class: "form-control col-sm-4"}
+      #branch_expiration_time_field.field.form-group
+        = f.label :expiration_time, class: "col-sm-3 control-label required"
+        .col-sm-4
+          = f.datetime_select :expiration_time, class: "form-control col-sm-4"
+      #branch_left_order_count_field.field.form-group
+        = f.label :left_order_count, class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.number_field :left_order_count, class: "form-control col-sm-4"
+    .field.form-group
+      = f.label :enabled_verify_service_periods, class: "col-sm-3 control-label"
+      .col-sm-5.switch
+        = f.check_box :enabled_verify_service_periods
+        %span.lbl
+    #service_periods.field.form-group
+      = f.label :service_periods, class: "col-sm-3 control-label"
+      .col-sm-5
+        %span 商户的服务时间请用24小时制的格式进行设置
+        = f.fields_for :service_periods do |service_period_form|
+          = service_period_form.time_select :service_period_start
+          \&nbsp;~&nbsp;
+          \#{service_period_form.time_select :service_period_end}
+          \#{service_period_form.link_to_remove "删除", class: "btn btn-xs btn-danger"}
+          .space-10
+        %p= f.link_to_add "添加时间段", :service_periods, class: "btn btn-xs btn-primary"
+    .field.form-group
+      = f.label :location, class: "col-sm-3 control-label"
+      .col-sm-9
+        .row
+          .col-sm-4
+            = f.label :longitude, class: "required"
+            \:
+            \#{f.text_field :longitude, class: "form-control col-sm-3"}
+          .col-sm-4
+            = f.label :latitude, class: "required"
+            \:
+            \#{f.text_field :latitude,class: "form-control col-sm-4"}
+        可以参考
+        %a.label.label-success{:href => "http://api.map.baidu.com/lbsapi/getpoint/index.html", :target => "_blank"}> 此地图
+        获得您的商户坐标，再将其填入哦，比如您的坐标若为"112.890946,28.207488"，请填入经度112.890946，纬度:28.207488
+    .field.form-group
+      = f.label :introduction, class: "col-sm-3 control-label"
+      .col-sm-9
+        = f.cktext_area :introduction, :ckeditor => {:language => "zh-cn",:toolbar => 'mini'},  class: "form-control"
+  .panel.panel-footer
+    %center
+      - if params[:edit]
+        = f.submit :class=>"btn btn-primary"
+      - else
+        = f.submit "下一步" ,:class=>"btn btn-primary"

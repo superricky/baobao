@@ -1,0 +1,58 @@
+.modal.fade#order_modal_form{role: "dialog"}
+  .modal-dialog
+    .modal-content.col-xs-12.col-md-12
+      .modal-header
+        %button.close{data: {dismiss: "modal"}, aria: {hidden: true}} &times;
+        %h2.modal-title 新建订单
+      .modal-body.row
+        = simple_form_for @order, url: webstore_new_order_path(@current_shop, @branch), html: {role: "form", class: "form-horizontal new_order_form"} do |f|
+          %fieldset
+            %legend 我的篮子
+            %table.table
+              %thead
+                %tr
+                  %th.col-xs-6 菜单名
+                  %th.col-xs-2 单价
+                  %th.col-xs-2 数量
+                  %th.col-xs-2 小计
+              %tbody#cart_details
+          %fieldset
+            %legend 配送信息
+            .form-group
+              = f.label :order_type, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-cutlery"
+              .col-xs-8.col-md-9= f.select :order_type, order_type_options, {}, class: "form-control"
+            .form-group
+              = f.label :name, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-user"
+              .col-xs-8.col-md-9= f.text_field :name, class: "form-control", required: :required
+            .form-group
+              = f.label :phone, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-phone"
+              .col-xs-8.col-md-9= f.phone_field :phone, class: "form-control", required: :required
+            .form-group.delivery
+              = f.label :delivery_zone, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-home"
+              .col-xs-8.col-md-9= f.select :delivery_zone, options_from_collection_for_select(@branch.delivery_zones, :id, :name), class: "form-control"
+            .form-group.delivery
+              = f.label :address, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-home"
+              .col-xs-8.col-md-9= f.text_field :address, class: "form-control"
+            .form-group.not_delivery
+              = f.label :desk_no, class: "control-label col-xs-4 col-md-3"
+              .col-xs-8.col-md-9= f.text_field :desk_no, class: "form-control", placeholder: ""
+            .form-group.not_delivery
+              = f.label :guest_num, class: "control-label col-xs-4 col-md-3"
+              .col-xs-8.col-md-9= f.select :guest_num, (1..25).to_a, {}, class: "form-control", placeholder: ""
+            -@branch.form_elements.each do |element|
+              .form-group
+                %label.control-label.col-xs-4.col-md-3= element.statement
+                .col-xs-8.col-md-9
+                  = hidden_field_tag "#{@order.class.name.underscore}[form_contents_attributes][#{element.id}][form_element_id]", element.id
+                  = hidden_field_tag "#{@order.class.name.underscore}[form_contents_attributes][#{element.id}][label]", element.statement
+                  -if element.is_a?(FormElementText)
+                    = text_field_tag "#{@order.class.name.underscore}[form_contents_attributes][#{element.id}][content]", nil, class: "form-control", required: (element.need ? true : false), data: {validation: "#{FormElement::Regexs[element.regex.to_sym].source}"}
+                  -elsif element.is_a?(FormElementSelect)
+                    = select_tag "#{@order.class.name.underscore}[form_contents_attributes][#{element.id}][content]", options_from_collection_for_select(element.options, "statement", "statement"), class: "form-control"
+            .form-group
+              = f.label :note, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-edit"
+              .col-xs-8.col-md-9= f.text_area :note, class: "form-control", cols: 50, rows: 5
+            .form-group
+              = f.label :pay_type, class: "control-label col-xs-4 col-md-3 glyphicon glyphicon-credit-card"
+              .col-xs-8.col-md-9= f.text_field :pay_type, class: "form-control", disabled: :disabled, placeholder: "货到付款。微信商铺支持更多支付方式哟！"
+          %center= f.submit '下一步', class: "btn btn-primary"

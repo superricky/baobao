@@ -1,0 +1,72 @@
+= render layout: 'branch_form' do |f|
+  .panel.panel-default
+    .panel-heading
+      外送信息
+    .panel-body
+      .form-group
+        = f.label :min_order_time_gap, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.number_field :min_order_time_gap, class: "form-control col-sm-4"
+          （单位：分钟）
+      .form-group
+        = f.label :fixed_delivery_time, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :fixed_delivery_time
+          %span.lbl
+      #delivery_times.form-group
+        = f.label :delivery_times, class: "col-sm-3 control-label"
+        .col-sm-7
+          %span 商户的配送时间请用24小时制的格式进行设置
+          = f.fields_for :delivery_times do |delivery_time_form|
+            配送时间段：
+            \#{delivery_time_form.time_select :delivery_time_start}&nbsp;~&nbsp;
+            \#{delivery_time_form.time_select :delivery_time_end},
+            配送提前时间：
+            \#{delivery_time_form.text_field :time_advance, size: "3"}分钟
+            \#{delivery_time_form.link_to_remove "删除", class: "btn btn-xs btn-danger"}
+            .space-10
+          %p= f.link_to_add "添加时间段", :delivery_times, class: "btn btn-xs btn-primary"
+      .form-group
+        = f.label :delivery_radius, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :delivery_radius, placeholder:1.5, class: "form-control col-sm-4"
+      .form-group
+        = f.label :delivery_radius_txt, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :delivery_radius_txt, placeholder:"万达广场周边写字楼", class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :use_min_order_charge, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :use_min_order_charge, :onchange=>"change_min_order_charge()"
+          %span.lbl
+      .field.form-group
+        = f.label :min_order_charge, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :min_order_charge, class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :non_service_order_charge, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :non_service_order_charge, class: "form-control col-sm-4"
+      #delivery_zones.field.form-group
+        = f.label :delivery_zones, class: "col-sm-3 control-label"
+        .col-sm-7
+          = f.fields_for :delivery_zones do |delivery_form|
+            区域名:#{delivery_form.text_field :zone_name, size: "25"}
+            ,低于最低起送金额时收取外送费:#{delivery_form.text_field :charge, size: "5"}元
+            \#{delivery_form.link_to_remove "删除", class: "btn btn-xs btn-danger"}
+            .space-10
+          .space-10
+          %p= f.link_to_add "添加配送区域", :delivery_zones, class: "btn btn-xs btn-primary"
+    .panel.panel-footer
+      %center
+        - if params[:edit]
+          = link_to_back
+          = f.submit :class=>"btn btn-default"
+        - else
+          = link_to '上一步', previous_wizard_path, :class=>"btn btn-default"
+          = f.submit "下一步" ,:class=>"btn btn-primary"
+          = link_to '跳过这一步', next_wizard_path, :class=>"btn btn-primary"
+:javascript
+  $(document).on('nested:fieldAdded', function(event){
+    change_min_order_charge();
+  })

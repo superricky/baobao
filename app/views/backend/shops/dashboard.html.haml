@@ -1,0 +1,114 @@
+=link_to '查看详细报表',backend_shop_statistics_month_path(@current_shop.slug),class:"btn btn-info"
+
+
+-if !current_account.is_admin?
+	.content{style:"width: 700px;margin-bottom:350px"}
+		%h2{style:"margin-bottom: 10px;text-align: center;"} 今日订单情况
+		%div{id:"today",style:"height: 300px;width: 700px;float: left;margin-left: 10px;margin-right: 0;"}
+			%svg
+			%p{style:"text-align: center;font-weight: bold;"} 订单情况
+	.content{style:"width: 700px;margin-bottom:350px"}
+		%h2{style:"margin-bottom: 10px;text-align: center;"} 近一周内订单情况
+		%div{id:"sevendays",style:"height: 300px;width: 700px;float: left;margin-left: 10px;margin-right: 0;"}
+			%svg
+			%p{style:"text-align: center;font-weight: bold;"} 订单情况
+	.content{style:"width: 700px;margin-bottom:350px"}
+		%h2{style:"margin-bottom: 10px;text-align: center;"} 总体订单情况
+		%div{id:"all",style:"height: 300px;width: 700px;float: left;margin-left: 10px;margin-right: 0;"}
+			%svg
+			%p{style:"text-align: center;font-weight: bold;"} 订单情况
+:javascript
+	nv.addGraph(function() {
+	  var chart = nv.models.discreteBarChart()
+	    .x(function(d) { return d.label })
+	    .y(function(d) { return d.value })
+	    .staggerLabels(true)
+	    .tooltips(false)
+	    .showValues(true)
+
+	  d3.select('#today svg')
+	    .datum(bartoday)
+	    .transition().duration(500)
+	    .call(chart);
+	  d3.select('#sevendays svg')
+	    .datum(barSevendays)
+	    .transition().duration(500)
+	    .call(chart);
+	  d3.select('#all svg')
+	    .datum(barAll)
+	    .transition().duration(500)
+	    .call(chart);
+
+
+	  nv.utils.windowResize(chart.update);
+	  return chart;
+	});
+	bartoday = [
+	  {
+	    key: "Cumulative Return",
+	    values: [
+	      {
+	        "label" : "今日总共的订单数" ,
+	        "value" : "#{@order_today}"
+	      },
+	      {
+	        "label" : "今日完成的订单数",
+	        "value" : "#{@finished_orders_of_today.count}"
+	      },
+	      {
+	        "label" : "今日取消的订单数",
+	        "value" : "#{@canceled_orders_of_today.count}"
+	      },
+	      {
+	        "label" : "今日待完成的订单数",
+	        "value" : "#{@wait_finished_orders_of_today.count}"
+	      }
+	    ]
+	  }
+	]
+	barSevendays = [
+	  {
+	    key: "Cumulative Return",
+	    values: [
+	      {
+	        "label" : "近一周总共的订单数" ,
+	        "value" : "#{@order_today}"
+	      },
+	      {
+	        "label" : "近一周完成的订单数",
+	        "value" : "#{@orders_of_7_days.where(:state=>Order::COMPLETED).count}"
+	      },
+	      {
+	        "label" : "近一周取消的订单数",
+	        "value" : "#{@orders_of_7_days.where(:state=>Order::CANCELED).count}"
+	      },
+	      {
+	        "label" : "近一周待完成的订单数",
+	        "value" : "#{@orders_of_7_days.where(:state=>Order::WAIT_CONFIRMED).count}"
+	      }
+	    ]
+	  }
+	]
+	barAll = [
+	  {
+	    key: "Cumulative Return",
+	    values: [
+	      {
+	        "label" : "总共的订单数" ,
+	        "value" : "#{@current_shop.orders.count}"
+	      },
+	      {
+	        "label" : "总共完成的订单数",
+	        "value" : "#{@current_shop.orders.where(:state=>Order::COMPLETED).count}"
+	      },
+	      {
+	        "label" : "总共取消的订单数",
+	        "value" : "#{@current_shop.orders.where(:state=>Order::CANCELED).count}"
+	      },
+	      {
+	        "label" : "总共处理的订单数",
+	        "value" : "#{@current_shop.orders.where(:state=>Order::WAIT_CONFIRMED).count}"
+	      }
+	    ]
+	  }
+	]

@@ -1,0 +1,28 @@
+%p#notice= notice
+%div.panel.panel-default
+  %div.panel-heading 会员级别详情
+  %div.panel-body
+    %p
+      %b
+        = VipLevel.human_attribute_name("name")
+        \:
+      = @vip_level.name
+    %p
+      %b
+        = VipLevel.human_attribute_name("discount")
+        \:
+      = "#{@vip_level.discount}折"
+    %p
+      %b
+        = VipLevel.human_attribute_name("auto_upgrade")
+        \:
+      = @vip_level.auto_upgrade? ? "是" : "否"
+    - if @vip_level.auto_upgrade?
+      %p
+        %b
+          = VipLevel.human_attribute_name("min_total_amount")
+          \:
+        = "#{number_to_currency(@vip_level.min_total_amount, :unit=>'¥')}元"
+    = link_to t('Edit'), edit_backend_shop_vip_level_path(@current_shop.slug, @vip_level), :class=>"btn btn-default"
+    \|
+    = link_to t('Back'), backend_shop_vip_levels_path(@current_shop.slug), :class=>"btn btn-default"

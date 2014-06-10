@@ -1,0 +1,16 @@
+.alert.alert-info 根据腾讯微信开通微信支付的相关要求，开通微信支付的认证公众服务号必须具备接受腾讯微信关于微信支付相关的安全警告信息。
+%h1 微信支付警告信息
+%table.table.table-striped
+  %thead
+    %th= WeixinpayWarning::human_attribute_name(:system_config)
+    %th= WeixinpayWarning::human_attribute_name(:description)
+    %th= WeixinpayWarning::human_attribute_name(:alarm_content)
+    %th= WeixinpayWarning::human_attribute_name(:created_at)
+  %tbody
+    - if @weixinpay_warnings.present?
+      - @weixinpay_warnings.each do |weixinpay_warning|
+        %tr
+          %td= weixinpay_warning.system_config.public_account_name rescue nil
+          %td= weixinpay_warning.description
+          %td= weixinpay_warning.alarm_content
+          %td= weixinpay_warning.created_at.strftime("%Y-%m-%d %H:%M:%S")

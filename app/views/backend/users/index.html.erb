@@ -1,0 +1,45 @@
+<% url = @current_branch ? search_backend_shop_branch_users_path(@current_shop.slug, @current_branch) : search_backend_shop_users_path(@current_shop.slug) %>
+<%= search_form_for @q, url: url, class: "", method: :get do |f|%>
+  <%= hidden_field_tag "type", params[:type]%>
+  <div class="row">
+    <div class="form-group col-md-2">
+      <%= f.text_field :id_eq, class: "form-control", placeholder: User.human_attribute_name("id") %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.text_field :name_or_fake_user_name_cont, class: "form-control", placeholder: User.human_attribute_name("name") %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.text_field :phone_eq, class: "form-control", placeholder: User.human_attribute_name("phone") %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.text_field :vip_no_eq, class: "form-control", placeholder: User.human_attribute_name("vip_no") %>
+    </div>
+    <div class="form-group col-md-2">
+        <%= f.select :vip_present, options_for_select([ ["全部", "all"], ["VIP会员", "1"], [ "非VIP会员", "0"] ], selected: (params[:q][:vip_present] rescue nil) ), {}, {class: "form-control"} %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.submit "搜索", class: "btn btn-default", name: nil %>
+    </div>
+  </div>
+<% end %>
+<h1><%= t('Listing users')%></h1>
+<ul class="nav nav-tabs">
+  <li class="<%= 'active' if !params[:type] or params[:type] == 'User'%>">
+    <a href="<%=  @current_branch ? backend_shop_branch_users_path(@current_shop.slug, @current_branch ,type: "User") : backend_shop_users_path(@current_shop.slug, type: "User")%>">微信用户</a>
+  </li>
+  <li class="<%= 'active' if params[:type] == 'PhoneUser'%>">
+    <a href="<%= @current_branch ? backend_shop_branch_users_path(@current_shop.slug, @current_branch ,type: "PhoneUser") : backend_shop_users_path(@current_shop.slug, type: "PhoneUser")%>">电话用户</a>
+  </li>
+  <li class="<%= 'active' if params[:type] == 'Member'%>">
+    <a href="<%= @current_branch ? backend_shop_branch_users_path(@current_shop.slug, @current_branch ,type: "Member") : backend_shop_users_path(@current_shop.slug, type: "Member")%>">pc端用户</a>
+  </li>
+</ul>
+<% if !params[:type] or params[:type] == 'User'%>
+   <%= render "user_list"%>
+<% end %>
+<% if params[:type] == 'PhoneUser'%>
+   <%= render "user_list"%>
+<% end %>
+<% if params[:type] == 'Member'%>
+   <%= render "user_list"%>
+<% end %>

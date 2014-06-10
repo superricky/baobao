@@ -1,0 +1,72 @@
+.row
+  .col-xs-12.col-sm-3.center
+    %span.profile-picture
+      = image_tag @wx_user_info["headimgurl"], class: "editable img-responsive"
+  .col-sm-6
+    .profile-user-info
+      .profile-info-row
+        .profile-info-name
+          = User.human_attribute_name(:id)
+        .profile-info-value
+          = link_to @user.id, get_user_path(@user)
+      .profile-info-row
+        .profile-info-name
+          = User.human_attribute_name(:name)
+        .profile-info-value
+          = @user.name || "暂无"
+      .profile-info-row
+        .profile-info-name
+          = User.human_attribute_name(:subscribe_time)
+        .profile-info-value
+          = @user.subscribe_time.strftime("%Y-%m-%d %H:%M:%S") rescue nil
+      .profile-info-row
+        .profile-info-name
+          微信名
+        .profile-info-value
+          = @wx_user_info["nickname"] || "暂无"
+      .profile-info-row
+        .profile-info-name
+          性别
+        .profile-info-value
+          - if @wx_user_info["sex"]
+            = @wx_user_info["sex"] == 1 ? "男" : "女"
+          - else
+            = "不确定"
+      .profile-info-row
+        .profile-info-name
+          城市
+        .profile-info-value
+          = @wx_user_info["city"] || "暂无"
+      .profile-info-row
+        .profile-info-name
+          省份
+        .profile-info-value
+          = @wx_user_info["province"] || "暂无"
+      .profile-info-row
+        .profile-info-name
+          受众人数
+        .profile-info-value
+          = @audiences.size
+    .space-10
+    %table.table.table-striped
+      %thead
+        %tr
+          %th 受众者
+          %th 关注时间
+      %tbody
+        - @audiences.each do |audience|
+          %tr
+            %td= link_to (audience.name || audience.fake_user_name),promotion_user_backend_shop_qrcode_generalizes_path(@current_shop, user_id: audience.id), remote: true
+            %td= audience.subscribe_time.strftime("%Y-%m-%d %H:%M:%S") rescue nil
+    .pull-right
+      = will_paginate @audiences, renderer: BootstrapPagination::Rails, bootstrap: 3
+
+.modal.fade#user_info{tabindex: "-1", role: "dialog", aria: {labelledby: "myModalLabel", hidden: "true"}}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{type: "button", aria: {hidden: "true"}, data: {dismiss: "modal"}}
+          &times;
+        %h4.modal-title{id: "myModalLabel"}
+          用户信息
+      .modal-body

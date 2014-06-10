@@ -1,0 +1,54 @@
+-content_for :title do
+  配送信息
+%div{style: "background:rgb(235, 236, 237);"}
+  .m-2
+    - unless notice.nil? or notice.empty?
+      .alert.alert-success
+        = notice
+    - if flash[:error].present?
+      .alert.alert-danger
+        = flash[:error]
+      }
+    - if @user.errors.any?
+      #error_explanation.alert.alert-danger
+        %ul
+          - @user.errors.full_messages.each do |msg|
+            %li= msg
+    = form_for(@user, url: mobile_shop_branch_update_myprofile_path(@current_shop.slug, @current_branch)) do |f|
+      .field
+        %label
+          = User.human_attribute_name :id
+          ：
+          = f.object.id
+      .field
+        = f.label :name
+        .input= f.text_field :name, :class=>"form-control", :placeholder=>"请填写真实姓名"
+      .field
+        = f.label :phone
+        .input= f.text_field :phone, :class=>"form-control", :placeholder=>"联系人电话，11位数字"
+      -if f.object.vip_no.present?
+        .field
+          %label
+            = User.human_attribute_name :vip_no
+            ：
+            = f.object.vip_no
+      -if f.object.vip_level.present? && f.object.vip_level.name
+        .field
+          %label
+            会员级别
+            ：
+            = f.object.vip_level.name
+      - if @current_shop.use_credits.present?
+        .field
+          %label
+            = User.human_attribute_name :credits
+            ：
+            = f.object.credits
+      .field
+        = f.label :email_address
+        .input= f.email_field :email_address, :placeholder=>"name@example.com"
+      .field
+        = f.label :default_address
+        .input= f.text_field :default_address, :placeholder=>""
+      .actions
+        = f.submit '更新用户信息', class: "btn btn-commit"

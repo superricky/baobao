@@ -1,0 +1,117 @@
+= form_for @order, url: order_create_backend_shop_phone_order_path(@current_shop, @current_branch), html: {class: "form-horizontal", id: "order_info_form"}, remote: true do |f|
+  - if (@order && @order.errors.present?) || flash[:error]
+    .alert.alert-danger{id: "error_explanztion"}
+      %ul.list-unstyled
+        - if flash[:error]
+          %li= flash[:error]
+        - if @order
+          - @order.errors.full_messages.each do |msg|
+            %li
+              = msg
+  .form-group
+    = f.label :order_type, :class=>"col-xs-3 control-label"
+    .col-md-9
+      = f.select :order_type, options_for_select(Order.order_types_array.map{|type| [Order.get_order_type_name_by(@current_branch, type), type]}, selected: ((@order.order_type rescue false) || Order::ORDERTYPE_DELIVERY)), {}, {class: "form-control"}
+  .field.form-group.order_seat.delivery.eat_in_hall
+    = f.label :phone, :class=>"col-xs-3 control-label"
+    .col-xs-9
+      = f.text_field :phone , :class=>"form-control", data: {url: phone_user_info_backend_shop_phone_order_path(@current_shop, @current_branch)}
+  .field.form-group.order_seat.delivery
+    = f.label :name , :class=>"col-xs-3 control-label"
+    .col-xs-9{id: "phone_order_user_wrap"}
+      - if @current_shop.phone_users.where(phone: @order.phone).where.not(name: nil).size > 0
+        = render partial: "phone_users_select.html.haml", locals: {phone_users: @current_shop.phone_users.where(phone: @order.phone).where.not(name: nil)}
+      - else
+        = f.text_field :name, :class=>"form-control"
+  - if @current_branch.use_min_order_charge
+    .field.form-group.delivery
+      = f.label :delivery_zone , :class=>"col-xs-3 control-label"
+      .col-xs-9
+        = f.select :delivery_zone_id, options_from_collection_for_select(@current_branch.delivery_zones, 'id', 'zone_name'), {},{class: "form-control"}
+  - if @current_branch.fixed_delivery_time
+    .field.form-group.delivery
+      = f.label :delivery_period, class: "col-xs-3 control-label"
+      .col-xs-9
+        = f.select :delivery_period, options_for_select(@current_branch.select_delivery_times.map{|delivery_time| "#{delivery_time.delivery_time_start.strftime("%H:%M")}~~#{delivery_time.delivery_time_end.strftime("%H:%M")}"}), {}, {class: "form-control"}
+  - else
+    .field.form-group.delivery
+      = f.label :delivery_time , :class=>"col-xs-3 control-label"
+      .col-xs-9
+        = f.time_select :delivery_time
+        %small 请至少给予店家30分钟以上的配送时间
+  .field.form-group.delivery
+    = f.label :address , :class=>"col-xs-3 control-label"
+    .col-xs-9
+      = f.text_area :address, :class=>"form-control", :rows => 2
+  .field.form-group.order_seat
+    = f.label :arrive_time , :class=>"col-xs-3 control-label"
+    .col-xs-9
+      = f.datetime_select :arrive_time
+  .field.form-group.eat_in_hall.order_seat
+    = f.label :guest_num, :class=>"col-xs-3 control-label"
+    .col-xs-9
+      = f.number_field :guest_num , :class=>"form-control"
+  .field.form-group.eat_in_hall
+    = f.label :desk_no, :class=>"col-xs-3 control-label"
+    .col-xs-9
+      = f.number_field :desk_no , :class=>"form-control"
+  - @current_branch.form_elements.each do |form_element|
+    = f.fields_for :form_contents do |form_content|
+      .field.form-group.order_seat.delivery.eat_in_hall
+        = form_content.label form_element.statement, class: "col-xs-3 control-label"
+        .col-xs-9
+          = form_content.hidden_field :label, value: form_element.statement
+          = form_content.hidden_field :form_element_id, value: form_element.id
+          - if form_element.type == "FormElementSelect"
+            = form_content.select :content, options_for_select(form_element.options.map(&:statement))
+          - elsif form_element.type == "FormElementText"
+            = form_content.text_field :content, class: "form-control", placeholder: form_element.placeholder
+  .form-group
+    = f.label :note , :class=>"col-xs-3 control-label"
+    .col-xs-9
+      = f.text_area :note, :placeholder=>'例如：加辣，少放油等', :class=>"form-control", :rows => 3
+
+:javascript
+
+  function change_order_type(select_value){
+    $(".field").hide();
+    $("." + select_value).show();
+  }
+
+  $(function(){
+    change_order_type($("#phone_order_order_type").val());
+    $("#phone_order_order_type").change(function(){
+      change_order_type($(this).val());
+    });
+
+    $("#phone_order_phone").on("keyup", function(){
+      var phone_match = /^((0?(13[0-9]|15[012356789]|18[012356789]|14[57])[0-9]{8})|(0\d{9}))$/i;
+      $("#phone_order_user_wrap").html('<input class="form-control" id="phone_order_name" name="phone_order[name]" type="text">');
+      $("#phone_order_address").val("");
+      if($(this).val() != "" && phone_match.test($(this).val())){
+        var url = $(this).data("url");
+        $.ajax({
+          type: "POST",
+          url: url,
+          dataType: "json",
+          data: {phone: $(this).val()}
+        }).done(function(msg){
+          $("#phone_order_user_wrap").html(msg.phone_user_list);
+          $("#phone_order_user_id").change(function(){
+            fill_phone_user_info();
+          });
+          $("#phone_user_name_fill_in").click(function(){
+            $("#phone_order_user_wrap").html('<input class="form-control" id="phone_order_name" name="phone_order[name]" type="text">');
+            $("#phone_order_address").val("");
+          });
+          fill_phone_user_info();
+        });
+      }
+    });
+
+  });
+
+  function fill_phone_user_info(){
+    var address = $("#phone_order_user_id").find(":selected").data("address");
+    $("#phone_order_address").val(address);
+  }

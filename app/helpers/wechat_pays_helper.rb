@@ -1,0 +1,2 @@
+module WechatPaysHelper
+end

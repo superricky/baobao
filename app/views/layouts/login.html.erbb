@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" ></meta>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" name="viewport" ></meta>
+
+    <!--[if IE]><%= javascript_include_tag "compatibility_alert" %><![endif]-->
+    <title><%= find_or_set_title%></title>
+    <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <div id="banner" style="min-height:60px;">
+    </div>
+    <div class="container">
+    	<% flash.each do |key, value| %>
+    		<div class="alert alert-danger"><%= raw value %></div>
+    	<% end %>
+      <% unless resource.errors.full_messages.empty?%>
+        <div class="alert alert-danger"><%= raw resource.errors.full_messages.join("<br/>") %></div>
+      <% end %>
+    	<%= yield %>
+  	</div>
+  </body>
+</html>

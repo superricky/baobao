@@ -1,0 +1,63 @@
+<div style="background: #efefef;"> 
+ <table width="700" border="0" align="center" cellpadding="0" cellspacing="0" style="font-family: Microsoft Yahei"> 
+  <tbody> 
+   <tr> 
+    <td valign="bottom"></td> 
+    <td height="20" align="right" valign="bottom" style="font-size: 12px">&nbsp; </td> 
+   </tr> 
+   <tr>
+    <td width="550" valign="bottom"> 
+     <div style="padding: 0 4px 5px 0;text-align: left;font-size: 12px;color: #999999;">
+       此信为系统自动邮件，请不要直接回复。 
+     </div> </td> 
+   </tr> 
+  </tbody> 
+ </table> 
+ <table width="700" border="0" cellpadding="0" cellspacing="0" align="center"> 
+  <tbody> 
+   <tr> 
+    <td width="700" height="22" style="background: url(http://gtms01.alicdn.com/tps/i1/T1j3kEFeBXXXbjUZgB-700-22.png) right"></td> 
+   </tr> 
+  </tbody> 
+ </table> 
+ <table width="700" align="center" cellpadding="0" cellspacing="0" style="background-color: #ffffff;margin:0 auto;font-family: 'microsoft yahei';"> 
+  <tbody> 
+   <tr> 
+    <td> 
+     <table width="700" border="0" cellspacing="8" cellpadding="0"> 
+      <tbody> 
+       <tr> 
+        <td> 
+         <div class="assistant" style="padding: 10px 0 0 0;line-height: 24px;font-size: 14px;font-family: Microsoft Yahei;"> 
+          <div style="color: #ff6600;width: 650px;font-size: 16px;text-indent:2em;">
+            <center>
+            <h1 style="color:#ff6600;">恭喜您，您的帐号已注册成功！</h1>
+            </center>
+            <p>亲爱的<%= @resource.shop.name %>用户<font color="#f77616"><b><%= @resource.name %></b></font>，</p>
+            <p>您好！</p>
+            <p>欢迎注册 <%= @email %>!</p>
+
+            <p>请通过以下链接激活您的帐号：</p>
+
+            <p>
+            <center>
+              <a style="text-decoration:none;background:#fd9200;border-radius:3px;height:40px;font-size:10px;width:190px;margin:20px 0 30px;font-family: 'Microsoft Yahei';cursor:pointer;padding:8px 56px; color:#fff;" href="<%= "http://#{@resource.host}#{webstore_member_confirmation_path(@resource.shop, confirmation_token: @token)}" %>">验证帐号</a>
+            </center>
+            </p>
+          </div> 
+         </div>
+         </td> 
+       </tr> 
+      </tbody> 
+     </table> </td> 
+   </tr> 
+  </tbody>
+ </table>
+ <table width="700" border="0" cellpadding="0" cellspacing="0" align="center"> 
+  <tbody> 
+   <tr> 
+    <td width="700" height="22" style="background: url(http://gtms01.alicdn.com/tps/i1/T1OZ7HFd4XXXbjUZgB-700-22.png) 0 0 no-repeat"></td> 
+   </tr> 
+  </tbody> 
+ </table> 
+</div>

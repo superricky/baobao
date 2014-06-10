@@ -1,0 +1,17 @@
+.panel.panel-default
+  .panel-heading
+    账户信息
+  .panel-body
+    = render 'account_info'
+- if @current_account.is_admin?
+  = link_to t('Edit'), get_config_my_account_path, :class=>"btn btn-default"
+  |
+  \#{link_to t('Edit Password'), get_edit_my_password_path, :class=>"btn btn-default"}
+- elsif @current_account.is_boss?
+  = link_to t('Edit'), get_config_my_account_path, :class=>"btn btn-default"
+  |
+  \#{link_to t('Edit Password'), get_edit_my_password_path, :class=>"btn btn-default"}
+- elsif @current_account.is_worker?
+  = link_to t('Edit'), get_config_my_account_path, :class=>"btn btn-default"
+  |
+  \#{link_to t('Edit Password'), get_edit_my_password_path, :class=>"btn btn-default"}

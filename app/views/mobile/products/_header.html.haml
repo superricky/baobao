@@ -1,0 +1,10 @@
+-if controller.action_name == "list"
+  .products
+    %a.right.icon-cart.icon-with-out-border.icon-4{href: mobile_shop_branch_my_cart_path(@current_shop.slug, @current_branch)}
+    %span.number_of_product_in_cart
+      = get_line_items_count(@current_cart)
+    = link_to "", mobile_shop_branch_account_path(@current_shop.slug, @current_branch), class: "right icon-man icon-with-out-border icon-4"
+    %a{href: about_my_shop_mobile_shop_branch_path(@current_shop.slug, @current_branch)}
+      %h1= "#{@current_branch.name}"
+-else
+  = render "layouts/mobile/home_and_cart_header"

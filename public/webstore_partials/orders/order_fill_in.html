@@ -1,0 +1,99 @@
+<div ng-controller="orderFillInController">
+  <div ng-include="'webstore_partials/branch_header.html'"></div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">配送信息</h2>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal new_order_form" role="form">
+        <fieldset>
+          <div class="form-group">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-cutlery">用餐方式</label>
+            <div class="col-xs-8 col-md-9">
+              <select class="form-control" ng-model="order.order_type" ng-options="type.value as type.name for type in order_types"></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-user">姓名</label>
+            <div class="col-xs-8 col-md-9">
+              <input class="form-control" required="required" type="text" ng-model="order.name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-phone">手机</label>
+            <div class="col-xs-8 col-md-9">
+              <input class="form-control" required="required" type="tel" ng-model="order.phone" ng-change="set_not_validated(order.phone)">
+            </div>
+          </div>
+          <div class="form-group" ng-if="not_validated && phone_validable()">
+            <label class="control-label col-xs-4 col-md-3">手机验证码</label>
+            <div class="col-xs-4 col-md-5">
+              <input class="form-control" ng-disabled="input_code_is_disabled" ng-change="do_validate_code(validation_code)" ng-model="validation_code">
+            </div>
+            <div class="col-xs-4 col-md-4">
+              <input class="btn btn-primary" type="button" ng-click="send_phone_validation_code($event)" value="获取手机验证码">
+            </div>
+          </div>
+
+          <div class="form-group" ng-show="need_select_delivery_zone()">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-home">配送区域</label>
+            <div class="col-xs-8 col-md-9">
+              <select ng-model="order.delivery_zone_id" ng-options="delivery_zone.id as delivery_zone.zone_name for delivery_zone in branch.delivery_zones" class="form-control">
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group delivery" ng-show="branch.fixed_delivery_time">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-home">配送时间段</label>
+            <div class="col-xs-8 col-md-9">
+              <select ng-model="order.delivery_period" ng-options="delivery_time.time_period as delivery_time.time_period for delivery_time in branch.select_delivery_times" class="form-control">
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group delivery">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-home">配送地址</label>
+            <div class="col-xs-8 col-md-9">
+              <input class="form-control" type="text" ng-model="order.address" value="{{order.address}}">
+            </div>
+          </div>
+          <div class="form-group not_delivery" ng-show="order.order_type != 'delivery'">
+            <label class="control-label col-xs-4 col-md-3">桌号</label>
+            <div class="col-xs-8 col-md-9">
+              <input class="form-control" type="number" ng-model="order.desk_no">
+            </div>
+          </div>
+          <div class="form-group not_delivery" ng-show="order.order_type != 'delivery'">
+            <label class="control-label col-xs-4 col-md-3">就餐人数</label>
+            <div class="col-xs-8 col-md-9">
+              <select class="form-control" ng-model="order.guest_num" ng-options="num for num in order_guest_numbers"></select>
+            </div>
+          </div>
+          <div class="form-group" ng-repeat="element in branch.form_elements">
+            <label class="control-label col-xs-4 col-md-3">{{element.label}}</label>
+            <div class="col-xs-8 col-md-9">
+              <select ng-if="element.type == 'FormElementSelect'" ng-model="order.form_contents_attributes[$index].content" ng-options="option.html as option.html for option in element.options" class="form-control"></select>
+              <input type="text" ng-if="element.type == 'FormElementText'" placeholder="{{element.placeholder}}" ng-model="order.form_contents_attributes[$index].content" ng-required="{{element.need}}" ng-pattern="/{{element.regex}}/" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-edit">备注</label>
+            <div class="col-xs-8 col-md-9">
+              <textarea class="form-control" cols="50" rows="5" ng-model="order.note"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-xs-4 col-md-3 glyphicon glyphicon-credit-card">支付方式</label>
+            <div class="col-xs-8 col-md-9"><input class="form-control" disabled="disabled" placeholder="货到付款。微信商铺支持更多支付方式哟！" type="text" ng-model="order.pay_type"></div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    <div class="panel-footer">
+      <center>
+        <a href="javascript:history.back();" class="btn btn-default">返回</a>
+        <a ng-href="{{next_url()}}" class="btn btn-warning" ng-click="can_next_to_order_new()" ng-disabled="is_disabled()">下一步</a>
+      </center>
+    </div>
+  </div>
+</div>

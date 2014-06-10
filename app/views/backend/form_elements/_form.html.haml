@@ -1,0 +1,42 @@
+-action = @form_element.new_record? ? backend_shop_branch_form_elements_path(@current_shop, @current_branch) : backend_shop_branch_form_element_path(@current_shop, @current_branch, @form_element)
+= simple_nested_form_for @form_element, url: action, html: {class: "form-horizontal", role: "form"}, remote: true do |f|
+  = hidden_field_tag :type, @form_element.class
+  - if @form_element.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@form_element.errors.count, "error")} prohibited this form_element from being saved:"
+      %ul
+        - @form_element.errors.full_messages.each do |msg|
+          %li= msg
+  %fieldset
+    = f.hidden_field :type
+    = f.hidden_field :sequence
+    .field.form-group
+      = f.label :need, class: "control-label no-padding-right col-sm-2"
+      .col-sm-10
+        %label
+          = f.check_box :need, class: "ace ace-switch ace-switch-1"
+          %span.lbl
+    .field.form-group
+      = f.label :statement, class: "control-label no-padding-right col-sm-2"
+      .col-sm-10= f.text_field :statement, class: "col-sm-7", placeholder: "表单名称，例：其他送餐时间"
+    -if @form_element.is_a?(FormElementText)
+      .field.form-group
+        = f.label :placeholder, class: "control-label no-padding-right col-sm-2"
+        .col-sm-10= f.text_field :placeholder, class: "col-sm-7", placeholder: "表单提示，例：请填写送餐时间"
+      .field.form-group
+        = f.label :regex, class: "control-label no-padding-right col-sm-2"
+        .col-sm-10
+          = f.select :regex, form_element_regexs
+  -if @form_element.is_a?(FormElementSelect)
+    %strong{style: "color:red"} 温馨提示：点击“添加可选项目”以添加可供访客选择项
+    %center= f.link_to_add "添加可选项目", :form_elements, class: "btn btn-warning", data: {target: "#options"}
+    %br/
+    %fieldset#options
+      = f.fields_for :form_elements do |op|
+        .field.form-group
+          = op.label :statement, class:"control-label no-padding-right col-sm-2 col-sm-offset-1"
+          .col-sm-20
+            = op.text_field :statement, class: "col-sm-5", placeholder: "例：11点30分"
+            = op.link_to_remove '移除备填选项', class: "btn btn-danger"
+  %center.actions
+    = f.submit '保存', class: "btn btn-primary"

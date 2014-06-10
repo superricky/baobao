@@ -1,0 +1,6 @@
+<% if @errors.nil? %>
+  $('tr[data-branch-position="<%= @first_branch.position -%>"]').replaceWith($("<%= escape_javascript(render 'backend/branches/table_record', { branch: @first_branch, index:@branches.index(@first_branch), branches: @branches}) %>"))
+  $('tr[data-branch-position="<%= @second_branch.position -%>"]').replaceWith($("<%= escape_javascript(render 'backend/branches/table_record', { branch: @second_branch, index:@branches.index(@second_branch), branches: @branches}) %>"))
+<%else %>
+	alert('<%= @errors -%>')
+<%end%>

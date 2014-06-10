@@ -1,0 +1,9 @@
+<% if @brand_chain.errors.size > 0 %>
+  $('#brand_chain_modal .modal-body').html('<%= escape_javascript(render "form", remote: "true")%>');
+<% else %>
+  $('#brand_chain_modal').modal('hide');
+  $("#branch_brand_chain_id").append($('<option>', {
+        value: "<%= @brand_chain.id%>",
+        text : "<%= @brand_chain.name%>"
+    })).val("<%= @brand_chain.id%>");
+<% end %>

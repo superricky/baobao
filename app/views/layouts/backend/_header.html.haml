@@ -1,0 +1,66 @@
+.user_info_header{style: "padding:10px 10px 0 10px;"}
+  -if !current_account.is_admin?
+    .user_img{style:"float:left"}
+      = image_tag @current_shop.image.medium.url, :width => 360,:class=>"img-rounded avator"
+      用户:
+      = @current_account.name
+    .user_msg{style:"margin-left: 300px;"}
+      .ul
+        .ul_top{style:"padding-top:10px"}
+          .li.col-sm-3
+            平台到期时间:
+            %strong{style:"color:red"}
+              =@current_shop.expiration_time.strftime('%Y-%m-%d')
+          .li.col-sm-3
+            平台订单总量:
+            %strong{style:"color:red"}
+              =@current_shop.orders_count
+              笔
+          .li.col-sm-3
+            待处理订单量:
+            %strong{style:"color:red"}
+              =@orders_sum
+              笔
+          .li.col-sm-3
+            平台营业额:
+            %strong{style:"color:red"}
+              =number_to_currency(@current_shop.income, :unit=>"¥")
+        .ul_buttom{style:"padding-top:40px"}
+          .li.col-sm-3
+            待审核会员:
+            %strong{style:"color:red"}
+              =@user_count
+              个
+          .li.col-sm-3
+            店铺访问量:
+            %strong{style:"color:red"}
+              =@popular_branch_access_count
+              次
+          .li.col-sm-3
+            当前商户数量:
+            %strong{style:"color:red"}
+              = @current_shop.branches_count
+              家
+          .li.col-sm-3
+            畅销产品名称:
+            %strong{style:"color:red"}
+              =@popular_product
+    .user_link{style:"float:right;margin-top: -80px;"}
+      %a{:href => "#{show_my_account_backend_accounts_path}"}
+        %i.icon-user
+        个人设置
+      %a{:href => "#{backend_signout_path}", :data=>{:method => "delete"}}
+        %i.icon-off
+        退出
+  -else
+    .user_img{style:"float:left"}
+      %img.avator{src: "/assets/backend/avator.jpg"}
+      用户:
+      = @current_account.name
+    .user_link{style:"float:right;"}
+      %a{:href => "#{show_my_account_backend_accounts_path}"}
+        %i.icon-user
+        个人设置
+      %a{:href => "#{backend_signout_path}", :data=>{:method => "delete"}}
+        %i.icon-off
+        退出

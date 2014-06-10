@@ -1,0 +1,1 @@
+json.extract! @shop, :name, :slug, :introduction, :is_open, :show_detail_for_branch, :service_period_start, :service_period_end, :expiration_time, :notice, :orders_count, :income, :created_at, :updated_at

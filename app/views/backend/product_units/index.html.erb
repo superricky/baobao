@@ -1,0 +1,31 @@
+<h1><%= t('Listing product_units')%></h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>计量单位类型</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_units.each do |product_unit| %>
+      <tr>
+        <td><%= product_unit.name %></td>
+        <td><span class="label <%if product_unit.is_system_unit? %>label-success<%elsif product_unit.is_shop_unit?%>label-info<%else%>label-primary<%end%>"><%= product_unit.type_name %></span></td>
+        <td>
+        	<% if product_unit.is_powered_by(@current_account)%>
+	        	<%= link_to t('Show'), get_product_unit_path(product_unit), :class=>"btn btn-default" %>
+	        	<%= link_to t('Edit'), get_edit_product_unit_path(product_unit), :class=>"btn btn-default" %>
+	        	<%= link_to t('Destroy'), backend_product_unit_path(product_unit), method: :delete, data: { confirm: '确定要删除吗？' }, :class=>"btn btn-danger" %>
+	        <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to t('New product unit'), get_new_product_unit_path, :class=>"btn btn-primary" %>

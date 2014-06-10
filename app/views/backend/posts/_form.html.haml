@@ -1,0 +1,13 @@
+= form_for [:backend, @post_thread, @post] , :remote=>true, :html=>{:class=> "form-horizontal", :role=>"form"} do |f|
+  - if @post.errors.any?
+    #error_explanation
+      %h2= "#{@post.errors.count}个错误导致无法正确保存回复内容:"
+      %ul
+        - @post.errors.full_messages.each do |msg|
+          %li= msg
+  .field.form-group
+    .col-sm-12
+      = f.cktext_area :content, :class=>"form-control", :ckeditor => {:language => "zh-cn", toolbar: "mini"}
+  .actions
+    %button.btn.btn-default{:type=>"button", :data=>{:dismiss=>"modal"}} 关闭
+    = f.submit "提交", :class=>"btn btn-primary"

@@ -1,0 +1,75 @@
+.col-sm-8
+  %table.table.table-striped
+    %tr
+      %th
+        = Order.human_attribute_name("phone")
+      %td
+        = @order.phone
+    - if @order.order_type == Order::ORDERTYPE_DELIVERY
+      %tr
+        %th
+          = Order.human_attribute_name("order_type")
+        %td
+          = @order.order_type_name
+      %tr
+        %th
+          = Order.human_attribute_name("name")
+        %td
+          = @order.name
+      - if @current_branch.fixed_delivery_time
+        %tr
+          %th
+            = Order.human_attribute_name("delivery_period")
+          %td
+            = @order.delivery_period
+      - else
+        %tr
+          %th
+            = Order.human_attribute_name("delivery_time")
+          %td
+            = @order.delivery_time
+      %tr
+        %th
+          = Order.human_attribute_name("address")
+        %td
+          = @order.address
+    - if @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+      %tr
+        %th
+          = Order.human_attribute_name("name")
+        %td
+          = @order.name
+      %tr
+        %th
+          = Order.human_attribute_name("arrive_time")
+        %td
+          = @order.arrive_time
+      %tr
+        %th
+          = Order.human_attribute_name("guest_num")
+        %td
+          = @order.guest_num
+    - if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL
+      %tr
+        %th
+          = Order.human_attribute_name("guest_num")
+        %td
+          = @order.guest_num
+      %tr
+        %th
+          = Order.human_attribute_name("desk_no")
+        %td
+          = @order.desk_no
+    - @order.form_contents.each do |form_content|
+      %tr
+        %th
+          = form_content.label
+        %td
+          = form_content.content
+    %tr
+      %th
+        = Order.human_attribute_name("note")
+      %td
+        = @order.note
+
+

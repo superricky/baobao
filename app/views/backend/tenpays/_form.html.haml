@@ -1,0 +1,23 @@
+= form_for @tenpay, url: backend_shop_tenpay_path(@current_shop), html: {class: "form-horizontal", role: "form"} do |f|
+  - if @tenpay.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@tenpay.errors.count, "error")} prohibited this tenpay from being saved:"
+      %ul
+        - @tenpay.errors.full_messages.each do |msg|
+          %li= msg
+  .field.form-group
+    = f.label :use_tenpay , class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.check_box :use_tenpay
+      %span.lbl
+  .field.form-group
+    = f.label :pid , class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.text_field :pid, class: "form-control"
+  .field.form-group
+    = f.label :pkey, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.text_field :pkey, class: "form-control"
+  %center.actions
+    = f.submit t('Save'), :class=>"btn btn-primary"
+    = link_to t('Show'), backend_shop_tenpay_path(@current_shop), :class=>"btn btn-default"

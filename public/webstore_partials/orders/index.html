@@ -1,0 +1,42 @@
+<div ng-controller="ordersController">
+  <div ng-include="'webstore_partials/aside_menu.html'"></div>
+  <div class="col-xs-9">
+    <section ng-hide="my_orders" class="panel row my_orders">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          对不起，您暂无订单记录
+        </div>
+        <div class="panel-body">
+        </div>
+      </div>
+    </section>
+    <section class="panel row my_orders" ng-show="my_orders">
+      <div class="panel panel-default" ng-repeat="order in orders">
+        <div class="panel-heading">
+          {{order.created_at}}在{{order.shop.name}}的下单记录
+        </div>
+        <div class="panel-body">
+          <ul class="row">
+            <li class="col-xs-12 col-md-3" ng-repeat="item in order.order_items">
+              <img ng-src="{{item.image.thumb}}" class="product_picture"/>
+              <center>
+                <span class="label label-primary">{{item.name}}</span>
+                <span class="label label-info">{{item.price|currency: current_shop.current_currency_symbol}}元x{{item.quantity}}份</span>
+              </center>
+            </li>
+          </ul>
+          <h2 style="margin:0;padding:10px !important;background:#d4d4d4;">表单信息:</h2>
+          <div><strong>姓名:{{order.name}}</strong></div>
+          <div><strong>手机:{{order.phone}}</strong></div>
+          <div><strong>配送地址:{{order.address}}</strong></div>
+          <div ng-show="order.guest_num"><strong>就餐人数:{{order.guest_num}}</strong></div>
+          <div ng-show="order.desk_no"><strong>桌号:{{order.desk_no}}</strong></div>
+          <div ng-repeat="form_content in order.form_contents">
+            <strong>{{form_content.label}}:{{form_content.content}}</strong>
+          </div>
+          <div ng-show="order.note"><strong>备注:{{order.note}}</strong></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

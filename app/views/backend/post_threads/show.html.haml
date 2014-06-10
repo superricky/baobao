@@ -1,0 +1,62 @@
+%p#notice= notice
+
+.panel.panel-default
+  .panel-heading
+    - if @post_thread.current_state == :new
+      .label.label-danger
+        = @post_thread.workflow_state_name
+    - else
+      .label.label-default
+        = @post_thread.workflow_state_name
+
+    = @post_thread.title
+
+    - if current_account.is_admin? and @post_thread.is_published?
+      %span.label.label-success 已发布
+    .span.pull-right
+      - if @post_thread.created_at < 3.days.ago
+        = @post_thread.created_at.strftime("%Y-%m-%d %H:%M:%S")
+      - else
+        = "#{time_ago_in_words(@post_thread.created_at)}前"
+  .panel-body
+    标签:
+    - @post_thread.post_thread_labels.each do |label|
+      %a{:href=>backend_post_thread_label_path(label)}
+        %span.label.label-info= label.name
+    %p
+      = raw @post_thread.content
+  .panel-footer
+    - if current_account == @post_thread.account
+      = link_to t('Edit'), edit_backend_post_thread_path(@post_thread), :class=>"label label-default"
+      \|
+      = link_to t('Destroy'), backend_post_thread_path(@post_thread), method: :delete, data: { confirm: '确定要删除吗？' }, :class=>"label label-default"
+
+    = PostThread.human_attribute_name(:requested_times)
+    \:
+    = @post_thread.requested_times
+    \(
+    = PostThread.human_attribute_name(:last_requestd_at)
+    \:
+    = @post_thread.last_requestd_at.strftime("%Y-%m-%d %H:%M") rescue @post_thread.created_at.strftime("%Y-%m-%d %H:%M")
+    \)
+
+    .span.pull-right
+      = link_to '回复', new_backend_post_thread_post_path(@post_thread), :class=>"label label-primary", :remote=>true
+      - if @post_thread.current_state != :closed and (current_account.is_admin? or current_account == @post_thread.account)
+        = link_to '结帖', close_post_backend_post_thread_path(@post_thread), :class=>"label label-danger", :method=>"PUT"
+      - if current_account.is_admin?
+        = link_to @post_thread.is_published? ? '隐藏' : '发布', toggle_publish_backend_post_thread_path(@post_thread), :class=>"label label-success", :method=>"PUT"
+      - if current_account == @post_thread.account
+        = link_to '催单', request_for_feature_backend_post_thread_path(@post_thread), :class=>"label label-success", :remote=>true, :method=>"POST"
+#post-thread-replys
+  = render partial: 'backend/posts/post', collection: @post_thread.posts
+
+= link_to t('Back'), backend_post_threads_path, :class=>"btn btn-default"
+
+.modal.fade#new-post-modal{:tabindex=>"-1", :role=>"dialog", :"aria-labelledby"=>"new-post-modal-label", :"aria-hidden"=>"true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{:type=>"button", :data=>{:dismiss=>"modal"}, :"aria-hidden"=>"true"} &times;
+        %h4.modal-title#new-post-modal-label 回复需求
+      .modal-body#new-post-modal-body

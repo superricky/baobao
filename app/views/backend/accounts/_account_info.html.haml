@@ -1,0 +1,48 @@
+- unless notice.nil?
+  #notice.alert.alert-success= notice
+%p
+  %strong
+    = Account.human_attribute_name("login_id")
+    \:
+  = @account.login_id
+%p
+  %strong
+    = Account.human_attribute_name("name")
+    \:
+  = @account.name
+%p
+  %strong
+    = Account.human_attribute_name("email")
+    \:
+  = @account.email
+%p
+  %strong
+    = Account.human_attribute_name("last_login_ip")
+    \:
+  = @account.last_sign_in_ip
+%p
+  %strong
+    = Account.human_attribute_name("updated_at")
+    \:
+  = @account.updated_at
+%p
+  %strong
+    = Account.human_attribute_name("account_type")
+    \:
+  = t(@account.roles.first.name ) rescue nil
+%p
+  %strong
+    = Account.human_attribute_name("created_at")
+    \:
+  = @account.created_at
+- unless @account.is_admin?
+  %p
+    %strong
+      = Account.human_attribute_name("shop_id")
+      \:
+    = t(@account.shop.name)
+%p
+  %strong
+    = Account.human_attribute_name("phone")
+    \:
+  = @account.phone

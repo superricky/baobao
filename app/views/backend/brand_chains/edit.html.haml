@@ -1,0 +1,7 @@
+%h1 修改连锁品牌
+
+= render 'form', {remote: false}
+
+= link_to t('Show'), backend_shop_brand_chain_path(@current_shop, @brand_chain), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_brand_chains_path, :class=>"btn btn-default"

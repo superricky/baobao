@@ -1,0 +1,17 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= Branch.human_attribute_name("name")%></th>
+      <th><%= Branch.human_attribute_name("is_open")%></th>
+      <th>剩余配额</th>
+      <th><%= Branch.human_attribute_name("telephone")%></th>
+      <th><%= t("operation btn")%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @branches.each_with_index do |branch, index| %>
+      <%= render 'backend/branches/table_record', {branch: branch, index:index, branches: @branches}%>
+    <% end %>
+  </tbody>
+</table>

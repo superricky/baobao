@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style type="text/css">
+      #tuodanbao-body {
+        font-size:20px;
+        font-family: "微软雅黑"
+      }
+      #tuodanbao-body p{
+      padding-top: 5px;
+      padding-bottom:5px;
+      margin:0px;
+      border-collapse: collapse;
+      width: 100%;
+      }
+
+      #tuodanbao-body table
+      {
+      border-collapse:collapse;
+      width: 100%;
+      }
+
+    #tuodanbao-body table,
+    #tuodanbao-body td,
+    #tuodanbao-body th
+      {
+        font-size:20px;
+        text-align:left;
+        border:1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="tuodanbao-body">
+
+    <p>在<%= @order.branch.name %>定餐的客户刮奖结果</p>
+    <p>
+      订单编号:<%= @order.id%>
+    </p>
+    <p>点单方式:<%= @order.order_type_name %>
+    </p>
+    <p>订购时间:<%= @order.created_at.strftime('%Y-%m-%d %H:%M:%S')%>
+    </p>
+
+    <% if @order.order_type == Order::ORDERTYPE_DELIVERY %>
+      <p>刮奖客户姓名:<%= @order.name %>  </p>
+    <p>联系电话：<%= @order.phone %> </p>
+    <p>配送区域：<%= @order.delivery_zone.zone_name rescue nil%></p>
+    <p>送货地址：<%= @order.address %> </p>
+    <% if @order.delivery_time %>
+      <p>配送时间：<%= @order.delivery_time.strftime('%Y-%m-%d %H:%M') %> </p>
+    <% end %>
+    <% if @order.delivery_period.present?  %>
+      <p>配送时间段：<%= @order.delivery_period%></p>
+    <% end %>
+    <% elsif @order.order_type == Order::ORDERTYPE_EAT_IN_HALL%>
+    <p>桌号：<%= @order.desk_no %> </p>
+    <p>就餐人数：<%= @order.guest_num %> </p>
+    <%elsif @order.order_type == Order::ORDERTYPE_ORDER_SEAT%>
+    <p>联系电话：<a href="tel:<%= @order.phone %>"><%= @order.phone %></a></p>
+    <p>用餐人数：<%= @order.guest_num %> </p>
+    <% if @order.arrive_time.present? %>
+    <p>到店时间：<%= @order.arrive_time.strftime('%Y-%m-%d %H:%M') %> </p>
+    <%end%>
+    <%end%>
+    <% if @order.scrachpad.present?%>
+      <p>刮刮奖结果：<span style="color:red;font-weight:bold;"><%= @order.scrachpad.card_result%></span>
+      </p>
+    <%end%>
+    <p>刮奖对应的订单编号:<%= @order.id%>
+    </p>
+    <p>如有任何疑问，请直接拨打<%= @shop.hide_support_company? ? @shop.telephone : "0731-89903595" %>
+      与我们取得联系，谢谢！</p>
+    </div>
+  </body>
+</html>

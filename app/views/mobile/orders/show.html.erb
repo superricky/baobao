@@ -1,0 +1,150 @@
+<% unless notice.nil? %>
+<div id="notice" class="alert alert-success" style="text-align:center;">
+	<strong><%= notice%></strong>
+</div>
+<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">订单详情</div>
+
+  <div class="panel-body">
+  	<table class="table table-bordered">
+	<% if @order.order_items.empty? %>
+		<tr><td>购物车为空，请返回选择您要购买的商品</td></tr>
+	<% else %>
+	    <% @order.order_items.each_with_index do |order_item, index| %>
+	    <tr class="<%= cycle("success", "active",  "warning")%>">
+	    	<td><%= index+1 %></td>
+	    	<td><strong><%= order_item.name %></strong></td>
+			<td> <%= number_to_currency(order_item.price, :unit=>"¥") %>/<%= order_item.product_unit%> x <%= order_item.quantity %></small></td>
+
+		</tr>
+	    <% end %>
+	<% end %>
+	</table>
+    <table class="table">
+    	<tr>
+		  <td class="col-xs-3"><strong><%= Order.human_attribute_name("order_type")%>:</strong></td>
+		  <td class="col-xs-9"><%= @order.order_type_name %></td>
+	  	</tr>
+    	<% if @order.order_type == Order::ORDERTYPE_DELIVERY or @order.order_type == Order::ORDERTYPE_ORDER_SEAT%>
+    	<tr>
+		  <td class="col-xs-3"><strong><%= Order.human_attribute_name("name")%>:</strong></td>
+		  <td class="col-xs-9"><%= @order.name %></td>
+	  	</tr>
+	  	<tr>
+		  <td class="col-xs-3"><strong><%= Order.human_attribute_name("phone")%>:</strong></td>
+	  	  <td class="col-xs-9"><%= @order.phone %></td>
+	  	</tr>
+	  	<%end%>
+	  	<% if @order.order_type == Order::ORDERTYPE_DELIVERY %>
+	  	<tr>
+	  <td class="col-xs-3"><strong><%= Order.human_attribute_name("address")%>:</strong></td>
+	  <td class="col-xs-9"><%= @order.address %></td>
+	  	</tr>
+	  	<% if @order.delivery_time.present? %>
+		  	<tr>
+				  <td class="col-xs-3"><strong><%= Order.human_attribute_name("delivery_time")%>:</strong></td>
+				  <td class="col-xs-9"><%= @order.delivery_time.strftime('%Y-%m-%d %H:%M') %></td>
+		  	</tr>
+	  	<%end%>
+	  	<%end%>
+	  	<% if @order.order_type == Order::ORDERTYPE_ORDER_SEAT %>
+	  	<% if @order.arrive_time.present? %>
+	  	<tr>
+	  <td class="col-xs-3"><strong><%= Order.human_attribute_name("arrive_time")%>:</strong></td>
+	  <td class="col-xs-9"><%= @order.arrive_time.strftime('%Y-%m-%d %H:%M') %></td>
+	  	</tr>
+	  	<% end %>
+	  	<% end %>
+	  <%if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL or @order.order_type == Order::ORDERTYPE_ORDER_SEAT%>
+	  	<tr>
+	  <td class="col-xs-3"><strong><%= Order.human_attribute_name("guest_num")%>:</strong></td>
+	  <td class="col-xs-9"><%= @order.guest_num %></td>
+	  	</tr>
+	  <%end%>
+
+	  <%if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL%>
+	  	<tr>
+	  <td class="col-xs-3"><strong><%= Order.human_attribute_name("desk_no")%>:</strong></td>
+	  <td class="col-xs-9"><%= @order.desk_no %>号桌</td>
+	  	</tr>
+
+	  <%end%>
+	  <tr>
+	  <td class="col-xs-3"><strong><%= Order.human_attribute_name("state")%>:</strong></td>
+	  <td class="col-xs-9"><%= @order.state_name %></td>
+	  	</tr>
+	  	<tr>
+	  <td class="col-xs-3"><strong><%= Order.human_attribute_name("note")%>:</strong></td>
+	  <td class="col-xs-9">
+	  	<% unless @order.note.present? %>
+	  		用户没有备注
+	  	<% else %>
+	  		<%= @order.note %>
+	  	<% end %></td>
+	  	</tr>
+	  	<% if @order.form_contents.present? %>
+	  		<% @order.form_contents.each do |form_content| %>
+	  			<tr>
+	  				<td class="col-xs-3"><strong><%= form_content.label %></strong></td>
+	  				<td class="col-xs-9"><%= form_content.content %></td>
+	  			</tr>
+	  		<% end %>
+	  	<% end %>
+
+	  	<% if @order.consume_credit > 0 %>
+	  	<tr>
+			  <td class="col-xs-3"><strong><%= Order.human_attribute_name("consume_credit")%>:</strong></td>
+			  <td class="col-xs-9"><%= @order.consume_credit %></td>
+	  	</tr>
+	  	<% end %>
+	  	<% if @order.consume_wallet > 0 %>
+	  	<tr>
+			  <td class="col-xs-3"><strong><%= Order.human_attribute_name("consume_wallet")%>:</strong></td>
+			  <td class="col-xs-9"><%= @order.consume_wallet %></td>
+	  	</tr>
+	  	<% end %>
+	  	<% if @order.credits > 0  %>
+	  	<tr>
+			  <td class="col-xs-3"><strong><%= Order.human_attribute_name("credits")%>:</strong></td>
+			  <td class="col-xs-9"><%= @order.credits %></td>
+	  	</tr>
+	  	<%end%>
+	  	<tr>
+			  <td class="col-xs-3"><strong><%= Order.human_attribute_name("amount")%>:</strong></td>
+			  <td class="col-xs-9"><%= number_to_currency(@order.amount, :unit=>'¥') %>元</td>
+	  	</tr>
+	  	<tr>
+			  <td class="col-xs-3"><strong><%= Order.human_attribute_name("cash_amount")%>:</strong></td>
+			  <td class="col-xs-9"><%= number_to_currency(@order.cash_amount, :unit=>'¥') %>元</td>
+	  	</tr>
+	  	<tr>
+	  	<td class="col-xs-3"><strong><%= Order.human_attribute_name("pay_type")%>:</strong></td>
+	  	<td class="col-xs-9"><%= @order.pay_type_name %></td>
+	  	</tr>
+
+	  	<% if @order.is_weixin_pay_type? %>
+		  	<tr>
+		  	<td class="col-xs-3"><strong><%= Order.human_attribute_name("is_paid")%>:</strong></td>
+		  	<td class="col-xs-9">
+		  		<% if @order.is_paid? %>
+		  			<span class="label label-success">
+		  				已支付
+		  			</span>
+		  		<% else %>
+		  			<span class="label label-danger">
+		  				未支付
+		  			</span>
+		  		<% end %>
+		  	</td>
+		  	</tr>
+		  <% end %>
+	  	</table>
+	  </div>
+  </div>
+
+
+	<div><%= link_to t('Back'), backend_shop_branch_orders_path(@current_shop, @current_branch, {state: @order.state, page:params[:page]}), class: 'btn btn-default' %></div>
+</div>
+
+

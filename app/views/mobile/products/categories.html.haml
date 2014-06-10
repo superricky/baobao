@@ -1,0 +1,43 @@
+-content_for :title do
+  商品分类
+%div{style: "background-color:#fff;"}
+  .m-1
+    = form_tag search_mobile_shop_branch_products_path(@current_shop, @current_branch), class: "search" do
+      = submit_tag "", class: "right"
+      = text_field_tag :keyword, nil, placeholder: "搜索关键词"
+      %hr/
+    %nav.product_categories.category
+      %ul
+        %li
+          %a{href: list_mobile_shop_branch_products_path(@current_shop, @current_branch)}
+            全部产品
+        -@categories.each do |category|
+          -if category.categories.present?
+            %li
+              %a{href: "javascript:void(0);", class: "to_sub_category_btn", data: {id: category.id}}
+                %i.right
+                = category.name
+                = "(#{category.products.length})"
+          -else
+            %li
+              %a{href: [list_mobile_shop_branch_products_path(@current_shop, @current_branch), "category=#{category.id}"].join("&")}
+                %i.right
+                = category.name
+                = "(#{category.products.length})"
+    -@categories.each do |category|
+      - if category.categories.present?
+        %nav.product_categories.sub_category.hide{id: "sub_categories_in_category_#{category.id}"}
+          %ul
+            %li
+              %a{href: "javascript:void(0);", class: "back_to_category"} 返回上级菜单
+            %li
+              %a{href: [list_mobile_shop_branch_products_path(@current_shop, @current_branch), "category=#{category.id}"].join("&")}
+                %i.right
+                = category.name
+                = "(#{category.products.length})"
+            -category.categories.each do |sub_category|
+              %li
+                %a{href: [list_mobile_shop_branch_products_path(@current_shop, @current_branch), "category=#{sub_category.id}"].join("&")}
+                  %i.right
+                  = sub_category.name
+                  = "(#{sub_category.products.length})"

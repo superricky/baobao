@@ -1,0 +1,7 @@
+%h1 编辑需求讨论
+
+= render 'form'
+
+= link_to t('Show'), [:backend, @post_thread], :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_post_threads_path, :class=>"btn btn-default"

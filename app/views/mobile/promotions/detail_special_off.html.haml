@@ -1,0 +1,30 @@
+-content_for :title do
+  促销活动
+.promotions
+  .m-2
+    %article
+      - if @promotion.nil?
+        %strong 当前该商户暂无活动
+      - else
+        %h1= @promotion.name
+        %center= image_tag @promotion.image.medium.url if @promotion.image.present?
+        %h2
+          = Promotion.human_attribute_name("start_time_and_end_time")
+          ：
+          \#{@promotion.start_time.strftime('%Y-%m-%d %H:%M')}~#{@promotion.end_time.strftime('%Y-%m-%d %H:%M')}
+        %h2 承办方：#{@promotion.branch.name}
+        = @promotion.description.html_safe
+        %table
+          %tr
+            %th 产品
+            %th 原价
+            %th 促销价格
+          - @promotion.promotion_details.each do |promotion_detail|
+            - unless promotion_detail.product.nil?
+              %tr
+                %td.title= promotion_detail.product.name
+                %td.origin_price= number_to_currency(promotion_detail.product.original_price, :unit=>currency_symbol)
+                %td.sale= number_to_currency(promotion_detail.price, :unit=>currency_symbol)
+            - else
+              %tr
+                %td{:rowspan => "3"} 该特价产品已经下架删除

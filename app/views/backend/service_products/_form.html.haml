@@ -1,0 +1,43 @@
+= form_for [:backend, @service_product], :html=>{:role=>"form", :class=>"form-horizontal"} do |f|
+  - if @service_product.errors.any?
+    #error_explanation.alert.alert-danger
+      %h2= "#{@service_product.errors.count}个错误导致无法正确保存"
+      %ul
+        - @service_product.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :subject
+    .col-sm-9
+      = f.text_field :subject, :class=>"col-xs-10 col-sm-5"
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :product_type
+    .col-sm-9
+      = f.select :product_type, options_for_select(ServiceProduct::SERVICE_PRODUCT_TYPES.map{|type| [ServiceProduct.product_type_name(type), type]}), :class=>"col-xs-10 col-sm-5"
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :available_shop_versions
+    .col-sm-9
+      = f.select :available_shop_versions, options_for_select(Shop::SHOP_VERSIONS.map{|version| [Shop::version_name(version), version]}), {:prompt => "选择可购买该服务的商户类型"}, {:multiple => true, :size => 5, :class=>"col-xs-10 col-sm-5"}
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :price
+    .col-sm-9
+      = f.text_field :price, :class=>"col-xs-10 col-sm-5"
+      %small 注：不同产品类型的价格单位不同，服务续期产品单位为每月（例如165/月），订单配额产品的价格单位为每个订单（例如0.01/单），短信配额产品的价格单位为每条短信（例如0.01/条）。
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :quantity
+    .col-sm-9
+      = f.number_field :quantity, :class=>"col-xs-10 col-sm-5"
+      %small 注：不同产品类型的数量单位不同，服务续期产品数量单位为月，订单配额产品的数量单位为订单，短信配额产品的数量单位为短信条数。
+  .form-group.field
+    %label.col-sm-3.control-label.no-padding-right
+      = f.label :description
+    .col-sm-9
+      = f.text_area :description, :class=>"col-xs-10 col-sm-5"
+  .actions
+    .col-sm-9.col-sm-offset-3
+      = f.submit t('Save'), :class=>"btn btn-success"
+%br

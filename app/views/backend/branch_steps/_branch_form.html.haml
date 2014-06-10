@@ -1,0 +1,104 @@
+#modal_buffer
+= nested_form_for(@branch, url: (wizard_path + "?edit=#{params[:edit]}") , html: {class: "form-horizontal", role: "form", id: "branch_form", method: "patch"} ) do |f|
+  - if @branch && @branch.errors.any?
+    #error_explanation
+      %h2
+        = @branch.errors.count
+        个错误导致无法正确保存分店信息:
+      %ul
+        - @branch.errors.full_messages.each do |msg|
+          %li= msg
+  = yield f
+:javascript
+  function change_min_order_charge(){
+    if($('#branch_use_min_order_charge').is(':checked')){
+      $('#branch_min_order_charge').closest('.field').show();
+      $('#branch_delivery_charge').closest('.field').show();
+      $('#delivery_zones').show();
+    }else{
+      $('#branch_min_order_charge').closest('.field').hide();
+      $('#branch_delivery_charge').closest('.field').hide();
+      $('#delivery_zones').hide();
+    }
+  }
+
+  function change_use_scrachpad(){
+    if($('#branch_use_scrachpad').is(':checked')){
+      $('#branch_first_prize_possibility').closest('.field').show();
+      $('#branch_first_prize').closest('.field').show();
+      $('#branch_second_prize_possibility').closest('.field').show();
+      $('#branch_second_prize').closest('.field').show();
+      $('#branch_third_prize_possibility').closest('.field').show();
+      $('#branch_third_prize').closest('.field').show();
+      $('#branch_no_prize').closest('.field').show();
+      $('#branch_valid_before_field').show();
+      $('#branch_min_charge_for_scratch').closest('.field').show();
+      $('#branch_max_scratch_times_in_day').closest('.field').show();
+      $('#branch_supported_scratchpad_order_types').show();
+      $('#branch_separate_notice_of_praise_and_new_order').closest('.field').show();
+    }else{
+      $('#branch_first_prize_possibility').closest('.field').hide();
+      $('#branch_first_prize').closest('.field').hide();
+      $('#branch_second_prize_possibility').closest('.field').hide();
+      $('#branch_second_prize').closest('.field').hide();
+      $('#branch_third_prize_possibility').closest('.field').hide();
+      $('#branch_third_prize').closest('.field').hide();
+      $('#branch_no_prize').closest('.field').hide();
+      $('#branch_valid_before_field').hide();
+      $('#branch_min_charge_for_scratch').closest('.field').hide();
+      $('#branch_max_scratch_times_in_day').closest('.field').hide();
+      $('#branch_supported_scratchpad_order_types').hide();
+      $('#branch_separate_notice_of_praise_and_new_order').closest('.field').hide();
+    }
+  }
+
+  function change_charge_method(way){
+      if (way == "#{Branch::CHARGE_METHOD_BY_TIME}"){
+        $('#branch_expiration_time_field').show();
+        $('#branch_left_order_count_field').hide();
+      }else if(way == "#{Branch::CHARGE_METHOD_BY_ORDER_COUNT}"){
+        $('#branch_expiration_time_field').hide();
+        $('#branch_left_order_count_field').show();
+      }else{
+        $('#branch_expiration_time_field').hide();
+        $('#branch_left_order_count_field').hide();
+      }
+    }
+
+    function change_options(e){
+    change_charge_method(e.value);
+  }
+
+  function change_enabled_verify_service_periods(){
+    if($('#branch_enabled_verify_service_periods').is(':checked')){
+      $("#service_periods").show();
+    }else{
+      $("#service_periods").hide();
+    }
+  }
+
+  function change_fixed_delivery_time(){
+    if($('#branch_fixed_delivery_time').is(':checked')){
+      $("#delivery_times").show();
+    }else{
+      $("#delivery_times").hide();
+    }
+  }
+
+  $(document).ready(function(){
+    change_charge_method($('#branch_charge_method').val());
+    change_min_order_charge();
+    change_enabled_verify_service_periods();
+    change_fixed_delivery_time();
+    $('#branch_enabled_verify_service_periods').change(function(){
+      change_enabled_verify_service_periods();
+    });
+    $('#branch_fixed_delivery_time').change(function(){
+      change_fixed_delivery_time();
+    });
+    change_use_scrachpad();
+    $('.selectpicker').selectpicker({
+      'selectedText': 'cat',
+      'noneSelectedText': "没有选择任何区域"
+    });
+  });

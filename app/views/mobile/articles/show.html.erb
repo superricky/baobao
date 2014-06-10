@@ -1,0 +1,11 @@
+<div class="container ">
+  <div class="wx_article">
+    <h3 class="title"><%= @article.title%></h3>
+    <div class="wx_article_picture">
+      <%= image_tag @article.image.medium.url, class: "img-rounded", width: "100%"%>
+    </div>
+    <div class="wx_article_description">
+      <p><%= sanitize @article.description%></p>
+    </div>
+  </div>
+</div>

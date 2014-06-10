@@ -1,0 +1,11 @@
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		编辑积分消费备注
+	</div>
+	<div class="panel panel-body">
+		<%= render 'form' %>
+	</div>
+</div>
+
+<%= link_to t('Show'), get_credits_log_path(@credits_log), :class=>"btn btn-default" %> |
+<%= link_to t('Back'), get_credits_logs_path, :class=>"btn btn-default" %>

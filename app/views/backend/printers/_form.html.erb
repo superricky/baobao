@@ -1,0 +1,79 @@
+<%= form_for([:backend ,@current_shop, @current_branch, @printer]) do |f| %>
+  <% if @printer.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <div><%= @printer.errors.count %> 个错误导致无法保存系统设置:</div>
+
+      <ul>
+      <% @printer.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+  	<%= f.label :name%>
+  	<%= f.text_field :name%> * (给打印机取个名字，任意）
+  </div>
+  <div class="field">
+    <%= f.label :print_on_order %><br />
+    <%= f.check_box :print_on_order, :onchange=>"change_use_printe_on_new_order()"%><div class="alert alert-warning"><strong>温馨提示:</strong>一旦启用自动打印装置，用户下单后订单状态将立即自动变为已确认！</div>
+  </div>
+
+  <div class="field printer">
+  	<%= f.label :printer_type%><br/>
+  	<%= f.select :printer_type, Printer::PRINTERTYPES, {}, :onchange => "change_printer_type()" %>
+  </div>
+  <div class="field printer">
+  	<%= f.label :copy_count%><br/>
+  	<%= f.number_field :copy_count %>
+  </div>
+
+
+  <div class="field feiyin_printer printer">
+  	<%= f.label :phone %><br/>
+  	<%= f.text_field :phone %>
+  </div>
+
+  <div class="field feiyin_printer printer">
+    <%= f.label :memberCode %><br />
+    <%= f.text_field :memberCode %>
+    <br />
+  </div>
+
+  <div class="field feiyin_printer printer">
+    <%= f.label :deviceNo %><br />
+    <%= f.text_field :deviceNo %>
+    <br />
+  </div>
+
+  <div class="field feiyin_printer printer">
+    <%= f.label :apiKey %><br />
+    <%= f.text_field :apiKey %>
+    <br />
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: "btn btn-info"%>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+	function change_use_printe_on_new_order(){
+		var print_on_order = $('#printer_print_on_order').is(':checked');
+		if(!print_on_order){
+			$('.field.printer').hide();
+		}else{
+			$('#printer_printer_type').closest('.field.printer').show();
+			change_printer_type();
+		}
+	}
+
+	function change_printer_type(){
+		var printer_type = $('#printer_printer_type').val()
+		if( printer_type == "<%= Printer::FEIYIN_PRINTER%>"){
+			$('.field.feiyin_printer').show();
+		}
+	}
+	change_printer_type();
+	change_use_printe_on_new_order()
+</script>

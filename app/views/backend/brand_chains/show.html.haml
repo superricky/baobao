@@ -1,0 +1,48 @@
+%p#notice= notice
+.col-xs-12
+  .form-vertical
+    .panel.panel-default
+      .panel.panel-heading
+        连锁品牌详情
+      .panel-body
+        %p
+          %b= BrandChain.human_attribute_name(:name)
+          \:
+          = @brand_chain.name
+        %p
+          %b= BrandChain.human_attribute_name(:branches_count)
+          \:
+          = @brand_chain.branches_count
+        %p
+          %b= BrandChain.human_attribute_name(:is_open)
+          \:
+          = @brand_chain.is_open? ? "正常营业" : "暂停营业"
+        %p
+          %b= BrandChain.human_attribute_name(:image)
+          \:
+          = image_tag @brand_chain.image.medium.url, :class=>"round-image", :width=>200
+        %p
+          %b= BrandChain.human_attribute_name(:introduction)
+          \:
+          = @brand_chain.introduction
+
+    .panel.panel-default
+      .panel.panel-heading
+        = BrandChain.human_attribute_name(:branch_ids)
+      .panel-body
+        %table.table.table-striped
+          %thead
+            %tr
+              %th= Branch.human_attribute_name("name")
+              %th= Branch.human_attribute_name("is_open")
+              %th 剩余配额
+              %th= Branch.human_attribute_name("telephone")
+              %th= t("operation btn")
+          %tbody
+            - @brand_chain.branches.each_with_index do |branch, index|
+              = render 'backend/branches/table_record', {branch: branch, index:index, branches: @brand_chain.branches}
+
+.col-xs-12
+  = link_to t('Edit'), edit_backend_shop_brand_chain_path(@current_shop, @brand_chain), :class=>"btn btn-default"
+  \|
+  = link_to t('Back'), backend_shop_brand_chains_path, :class=>"btn btn-default"

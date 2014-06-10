@@ -1,0 +1,44 @@
+%p#notice= notice
+
+.panel.panel-default
+  .panel-heading= @post_thread_label.name
+  .panel-body
+    %table.table.table-striped
+      %tr
+        %th= PostThread.human_attribute_name(:title)
+        %th.col-sm-1= PostThread.human_attribute_name(:account)
+        %th.col-sm-1= PostThread.human_attribute_name(:created_at)
+        %th.col-sm-1= PostThread.human_attribute_name(:post_count)
+        - if current_account.is_admin?
+          %th.col-sm-1= PostThread.human_attribute_name(:last_requestd_at)
+
+      - @post_thread_label.post_threads.each do |post_thread|
+        %tr
+          %td
+            - if current_account.is_admin? or post_thread.account == current_account
+              - if post_thread.current_state == :new
+                .label.label-danger
+                  = post_thread.workflow_state_name
+              - else
+                .label.label-default
+                  = post_thread.workflow_state_name
+            = link_to post_thread.title, [:backend, post_thread]
+            - if current_account.is_admin? and post_thread.is_published?
+              %span.label.label-success 已发布
+          %td= post_thread.account.name rescue nil
+          %td
+            - if post_thread.created_at < 3.days.ago
+              = post_thread.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            - else
+              = "#{time_ago_in_words(post_thread.created_at)}前"
+          %td= post_thread.posts.count
+          - if current_account.is_admin?
+            %td
+              = post_thread.last_requestd_at.strftime("%Y-%m-%d %H:%M") rescue post_thread.created_at.strftime("%Y-%m-%d %H:%M")
+              %br
+              = "催促#{post_thread.requested_times||0}次"
+
+
+= link_to t('Edit'), edit_backend_post_thread_label_path(@post_thread_label),:class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_post_thread_labels_path,:class=>"btn btn-default"

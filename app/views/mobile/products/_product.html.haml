@@ -1,0 +1,16 @@
+%tr.product-item{"data-credits_for_each_product" => product.credits_for_each_product, "data-description" => product.description, "data-img" => product.image.thumb.url, "data-medium-img" => product.image.medium.url, "data-name" => product.name, "data-original-price" => product.original_price, "data-price" => product.price(@current_user), "data-product-id" => product.id, "data-product_unit" => product.product_unit, "data-stock" => product.stock}
+  %td.product-list-in-cart
+    .product
+      = link_to "", mobile_shop_branch_product_path(@current_shop, @current_branch, product), class: "right icon-more icon-2"
+      = image_tag product.image.thumb.url
+      .content
+        %h1= product.name
+        %strong
+          售价：
+          = "#{number_to_currency(product.price(@current_user), :unit=>currency_symbol)}/#{product.product_unit}"
+        %br/
+        %strong
+          数量：
+          %button.minus{onclick: "dec_bought_num(this);"} -
+          %span.count= quantity
+          %button.plus{onclick: "inc_bought_num(this);"} +

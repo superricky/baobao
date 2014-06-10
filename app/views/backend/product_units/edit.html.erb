@@ -1,0 +1,11 @@
+<h1><%= t('Editing product unit')%></h1>
+<div class="panel panel-default">
+  <div class="panel-heading">计量单位信息</div>
+  
+  <div class="panel-body">
+<%= render 'form' %>
+</div>
+</div>
+
+<%= link_to t('Show'), get_product_unit_path(@product_unit), :class=>"btn btn-default" %> |
+<%= link_to t('Back'), get_product_units_path, :class=>"btn btn-default" %>

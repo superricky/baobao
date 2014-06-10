@@ -1,0 +1,51 @@
+<h1 style="font-family: 微软雅黑">
+	<% if @current_branch %>
+		已发短信列表<small>(您的商户已经发送了<%= (@current_branch || @current_shop).sms_msgs.count %>条短信)</small></h1>
+	<% else %>
+		已发短信列表<small>(您的帐号已经发送了<%= (@current_branch || @current_shop).sms_msgs.count %>条短信)</small></h1>
+	<% end %>
+<%= render "search"%>
+<% if @current_branch %>
+	<div class="row-fluid">
+		<div class="btn-toolbar pull-right">
+			<div class="btn-group">
+				<%= link_to '新建短信', new_backend_shop_branch_sms_msg_path, :class=>"btn btn-primary" %>
+			</div>
+		</div>
+	</div>
+<% end %>
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>信息ID</th>
+			<th>接受用户</th>
+			<% unless @current_branch %>
+				<th>商户</th>
+			<% end %>
+			<th class="col-md-3">内容</th>
+			<th>发送时间</th>
+			<th>消息类型</th>
+			<th></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<% @sms_msgs.each do |sms_msg| %>
+		<tr>
+			<td><%= sms_msg.id %></td>
+			<td><%= sms_msg.to %></td>
+			<% unless @current_branch %>
+				<td><%= sms_msg.branch.name%></td>
+			<% end %>
+			<td><%= "#{cut_body(sms_msg.body)}(#{sms_msg.size}条)" %></td>
+			<td><%= sms_msg.date_created.to_time.strftime('%Y-%m-%d %H:%M:%S')%></td>
+			<td><%= sms_msg.order_msg_name%></td>
+			<td><%= link_to "短信详情", get_show_sms_msg_path(sms_msg), :class=>"btn btn-default"%></td>
+		</tr>
+		<% end %>
+	</tbody>
+</table>
+<div class="pull-right">
+	<%= will_paginate @sms_msgs , renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>

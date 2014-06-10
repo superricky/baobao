@@ -1,0 +1,48 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require jquery.ui.all
+ *= require jquery.minicolors
+ *= require bootstrap
+ *= require css/font-awesome.min
+ *= require bootstrap-select
+ *= require css/ace-fonts
+ *= require css/ace.min
+ *= require css/ace-rtl.min
+ *= require css/ace-skins.min
+ *= require backend/articles
+ *= require backend/phone_orders
+ *= require backend/materials
+ *= require backend/branches
+ */
+
+#footer.footer {
+  margin-top: 40px;
+  font-size:12px;
+  font-weight:bold;
+}
+.sidebar-shortcuts-large>.btn {
+  width:auto !important;
+}
+
+
+form label.required{
+  color: blue;
+}
+
+form label.field_with_errors {
+  padding: 2px;
+  color: red;
+}
+
+form label.required::after {
+  content: "*";
+  color: red;
+}

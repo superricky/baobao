@@ -1,0 +1,22 @@
+- if (@current_shop.branches.count == 0 && controller_name != "branches") || (@current_shop.system_configs.count == 0 && controller_name != "system_configs")
+  #deshboard_notice.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} &times;
+          %h4#myModalLabel.modal-title 提示
+        .modal-body
+          - if @current_shop.system_configs.count == 0 && controller_name != "system_configs"
+            .well
+              %h4.green.smaller.lighter= link_to "公众帐号配置", new_backend_shop_system_config_path(@current_shop.slug), class: "btn btn-info"
+              您的帐号尚未配置公众帐号，如果您想在微信中进入您的系统，请点击配置公众帐号
+          - if @current_shop.branches.count == 0 && controller_name != "branches"
+            .well
+              %h4.green.smaller.lighter= link_to "创建商户", new_backend_shop_branch_path(@current_shop.slug), class: "btn btn-info"
+              您的帐号尚未创建店铺，请先点击创建商户。
+  :javascript
+    $(function(){
+      $('#deshboard_notice').modal({
+        keyboard: false
+      })
+    });

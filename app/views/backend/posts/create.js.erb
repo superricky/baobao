@@ -1,0 +1,7 @@
+<% if @post.errors.size > 0 %>
+  $("#new-post-modal-body").html('<%= escape_javascript(render "backend/posts/form" )%>');
+<% else %>
+  $("#new-post-modal-body").html('');
+  $('#post-thread-replys').append('<%= escape_javascript(render partial: "backend/posts/post", locals: { post: @post} )%>')
+  $('#new-post-modal').modal('hide')
+<% end %>

@@ -1,0 +1,32 @@
+.col-xs-6
+  .widget-box.transparent
+    .widget-header
+      %h4
+        %i.icon-comments-alt.orange
+        用户留言
+    .widget-body
+      .widget-main.padding-4
+        .tab-content.padding-8.overflow-visible
+          .tab-pane.active
+            .comments{:style=>"height:200px;overflow-y:scroll;"}
+              - @current_shop.messages.leave_messages.limit(10).each do |message|
+                .itemdiv.commentdiv
+                  .user
+                    %img{:alt=>"avatar", :src=>"/assets/avatars/avatar2.png"}
+                  .body
+                    .name
+                      %a{:href=>"#"}= message.user.name||message.user.fake_user_name
+                    .time
+                      %i.icon-time
+                      %span.green= message.created_at.strftime("%Y-%m-%d %H:%M:%S")
+                    .text
+                      %i.icon-quote-left
+                      = message.content
+            .hr.hr8
+            .center
+              %i.icon-comments-alt.icon-2x.green
+              &nbsp;
+              %a{:href=>"#{leave_messages_backend_shop_messages_path(@current_shop)}"}
+                察看所有用户留言 &nbsp;
+                %i.icon-arrow-right
+            .hr.hr8

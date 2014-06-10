@@ -1,0 +1,1 @@
+$('tr[data-scratchpad-id="<%= @scrachpad.id -%>"]').replaceWith("<%= escape_javascript(render 'scrachpad_result', { scrachpad: @scrachpad}) -%>");

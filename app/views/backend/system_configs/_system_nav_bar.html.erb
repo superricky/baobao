@@ -1,0 +1,58 @@
+<ul class="nav nav-pills nav-stacked col-md-2">
+  <li <% if controller_name == 'shops' %>class="active"<% end %>>
+    <%= link_to "我的账户", show_my_shop_backend_shop_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'system_configs' %>class="active"<% end %>>
+    <%= link_to "微信公众账号", backend_shop_system_configs_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'branches' %>class="active"<% end %>>
+    <%= link_to "商户列表", backend_shop_branches_path(@current_shop.slug) %></li>
+  <li <% if controller_name == 'vip_levels' %>class="active"<% end %>>
+    <%= link_to "会员级别管理", backend_shop_vip_levels_path(@current_shop.slug) %>
+  </li>
+  <li <% if params[:action] == 'appling_vip' %>class="active"<% end %>>
+    <a href="<%= appling_vip_backend_shop_users_path(@current_shop.slug) %>">待审核的VIP客户<span class="badge"><%= @current_shop.users.appling_vips.count%></span></a></li>
+  <li <% if (controller_name == 'users') && (params[:action] != 'appling_vip') %>class="active"<% end %>>
+    <%= link_to "微信用户", backend_shop_users_path(@current_shop.slug) %></li>
+  <li <% if controller_name == 'messages' or controller_name == 'message_threads' %>class="active"<% end %>>
+    <%= link_to "用户留言", leave_messages_backend_shop_messages_path(@current_shop.slug) %></a>
+  </li>
+  <li <% if controller_name == 'reports' %>class="active"<% end %>>
+    <%= link_to "企业新闻", backend_shop_reports_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'themes' %>class="active"<% end %>>
+    <%= link_to "主题定制", backend_shop_theme_path(@current_shop.slug) %>
+  </li>
+  <% if @current_shop.use_credits %>
+  <li <% if controller_name == 'credits_logs' %>class="active"<% end %>>
+  	<%= link_to "积分消费记录", backend_shop_credits_logs_path(@current_shop.slug) %>
+  </li>
+  <%end%>
+  <li <% if controller_name == 'wallet_logs' %>class="active"<% end %>>
+    <%= link_to "余额充值消费记录", backend_shop_wallet_logs_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'materials' %>class="active"<% end %>>
+  	<%= link_to "素材配置", backend_shop_materials_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'statistics' %>class="active"<% end %>>
+    <%= link_to "统计报表", backend_shop_statistics_month_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'events' %>class="active"<% end %>>
+  	<%= link_to "自动回复", backend_shop_events_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'product_units' %>class="active"<% end %>>
+  	<%= link_to "点号计量单位", backend_shop_product_units_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'branch_sliders' %>class="active"<% end %>>
+    <%= link_to "商户推荐幻灯片", backend_shop_branch_sliders_path(@current_shop.slug) %></li>
+  <li <% if controller_name == 'zones' %>class="active"<% end %>>
+    <%= link_to "服务区域", backend_shop_zones_path(@current_shop.slug) %></li>
+    <li <% if controller_name == 'branch_types' %>class="active"<% end %>>
+    <%= link_to "商户分类", backend_shop_branch_types_path(@current_shop.slug) %></li>
+  <li <% if controller_name == 'branch_comments' %>class="active"<% end %>>
+    <%= link_to "客户评论", backend_shop_branch_comments_path(@current_shop.slug) %>
+  </li>
+  <li <% if controller_name == 'mail_settings' %>class="active"<% end %>>
+    <%= link_to "邮件通知", backend_shop_mail_settings_path(@current_shop.slug) %>
+  </li>
+</ul>

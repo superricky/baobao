@@ -1,0 +1,35 @@
+.panel.panel-default
+  .panel-heading 流水详情
+  .panel-body
+    %table.table.table-striped
+      %tbody
+        %tr
+          %td= Trade.human_attribute_name(:trade_id)
+          %td= @trade.trade_id
+        %tr
+          %td= Trade.human_attribute_name(:out_trade_no)
+          %td= link_to @trade.out_trade_no, [:backend, @trade.shop, @trade.branch, @trade.order]
+        %tr
+          %td= Trade.human_attribute_name(:total_fee)
+          %td
+            = number_to_currency(cent_to_yuan(@trade.total_fee), :unit=>"¥")
+            \元
+        %tr
+          %td= Trade.human_attribute_name(:partner)
+          %td
+            - if @trade.system_config and !current_account.is_worker?
+              = link_to @trade.partner, [:backend, @current_shop, @trade.system_config]
+            - else
+              = @trade.partner
+        %tr
+          %td= Trade.human_attribute_name(:branch_id)
+          %td= link_to @trade.branch.name, [:backend, @current_shop, @trade.branch] rescue nil
+        %tr
+          %td= Trade.human_attribute_name(:created_at)
+          %td= @trade.created_at.strftime("%Y-%m-%d %H:%M:%S")
+
+%br
+- if @current_branch.present?
+  = link_to t("Back"), backend_shop_branch_trades_path(@current_shop, @current_branch, {:page=>params[:page]}), :class=>"btn btn-default"
+- else
+  = link_to t("Back"), backend_shop_trades_path(@current_shop, {:page=>params[:page]}), :class=>"btn btn-default"

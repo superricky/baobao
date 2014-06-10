@@ -1,0 +1,35 @@
+
+<h1>购物车列表</h1>
+<div class="pull-right">
+  <%= will_paginate @carts, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>购物车ID</th>
+      <th>购物品种数量</th>
+      <th>数量</th>
+      <th>金额</th>
+      <th>最后更新时间</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @carts.each do |cart| %>
+      <tr>
+        <td><%= cart.id%></td>
+        <td><%= cart.line_items.count%>种</td>
+        <td><%= cart.line_items_count%>件</td>
+        <th><%= number_to_currency(cart.line_items_amount, :unit=>"¥") %></th>
+        <td><%= cart.updated_at %></td>
+        <td><%= link_to t('Show'), backend_shop_branch_cart_path(@current_shop, @current_branch, cart), :class =>'btn btn-default' %>
+        	<%= link_to t('Destroy'), backend_shop_branch_cart_path(@current_shop, @current_branch, cart), method: :delete, data: { confirm: '确定要删除吗？' }, :class =>'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="pull-right">
+  <%= will_paginate @carts, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+

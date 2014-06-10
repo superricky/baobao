@@ -1,0 +1,2 @@
+module Webstore::MemberHelper
+end

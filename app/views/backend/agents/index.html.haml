@@ -1,0 +1,31 @@
+%h1 区域代理列表
+
+%table.table.table-striped.table-bordered
+  %tr
+    %th= Agent.human_attribute_name(:aid)
+    %th= Agent.human_attribute_name(:name)
+    %th 代理期限
+    %th= Agent.human_attribute_name(:balance)
+    %th
+
+  - @agents.each do |agent|
+    %tr
+      %td= link_to agent.aid,[:backend, agent]
+      %td= link_to agent.name,[:backend, agent]
+      %td
+        - agent.agent_rels.each do |agent_rel|
+          = agent_rel.agent_zone.name
+          \(
+          = agent_rel.agent_from.strftime("%Y-%m-%d")
+          \~
+          = agent_rel.agent_to.strftime("%Y-%m-%d")
+          \)
+          %br
+      %td= agent.balance
+      %td
+        = link_to t('Edit'), edit_backend_agent_path(agent), :class=>"btn btn-default"
+        = link_to t('Destroy'), [:backend, agent], :method => :delete, :data => { :confirm => 'Are you sure?' }, :class=>"btn btn-danger"
+
+%br
+
+= link_to '新增代理', new_backend_agent_path, :class=>"btn btn-default"

@@ -1,0 +1,24 @@
+<% if index == 0%>
+	<a href="<%=article.url%>">
+		<div class="news-big" style="background:url('<%= get_article_url(article,index) %>');background-size: 210px 100px;background-repeat:no-repeat;">
+			<div class="news-big-text-div">
+				<span class="news-big-text">
+					<%= article.title%>
+				</span>
+			</div>
+		</div>
+	</a>
+<%else%>
+	<a href="<%=article.url%>">
+	<div style="width:208px;height:64px;line-height:64px;margin:auto;">
+		<div style="width:154px;float:left;text-align:left;">
+			<span class="news-small-text">
+				<%= article.title%>
+			</span>
+		</div>
+		<div class="news-small-image" style="background:url('<%= get_article_url(article,index)%>') no-repeat center center;background-size: 50px 50px;">
+			
+		</div>
+	</div>
+	</a>
+<%end%>

@@ -1,0 +1,7 @@
+= render "form"
+-if @registration_confirmation_mail_sended
+  :javascript
+    alert("验证邮件已发送，请注意查收您的注册邮箱！");
+-elsif @confirmation_success
+  :javascript
+    alert("验证成功，感谢您的注册！");

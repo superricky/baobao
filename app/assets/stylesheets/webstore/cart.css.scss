@@ -1,0 +1,48 @@
+// Place all the styles related to the webstore/cart controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+$color_shadow: rgba(0,0,0,0.4);
+$color_border: #bebebe;
+$color_bar: #fefefe;
+$color_list_hover:#f1fafc;
+$color_actions_hover_border:#febf40;
+$color_actions_hover:#fdffb8;
+$color_red:#cc0000;
+
+.glyphicon-remove{
+  cursor: pointer;
+}
+
+.cart_dynamic_btn{
+  display:inline-block;
+  width:auto;
+  .minus, .plus, .number{
+    float:left;
+    border:1px solid $color_border;
+    display:inline-block;
+    width:30px;
+    text-align:center;
+    letter-spacing:0;
+    text-decoration:none;
+  }
+  .number{
+    line-height:30px;
+  }
+  .minus, .plus{
+    font-weight:bolder;
+    background:#d4d4d4;
+    line-height:25px;
+  }
+  .price{
+    display:inline-block;
+    color:$color_red;
+    width:90px;
+    padding-top:6px;
+    text-align:right;
+  }
+}
+
+.total_price{
+  color:$color_red;
+  font-size:15pt;
+}

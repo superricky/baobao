@@ -1,0 +1,57 @@
+"zh-CN":
+  devise:
+    confirmations:
+      confirmed: "您的帐号已经激活，请登录."
+      send_instructions: "几分后，您将收到帐号激活的电子邮件."
+      send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions about how to confirm your account in a few minutes."
+    failure:
+      already_authenticated: "您已经登录."
+      inactive: "您还没有激活帐户."
+      invalid: "帐号或密码错误"
+      locked: "您的帐号已被锁定."
+      last_attempt: "您还剩下一次尝试登录的机会，若失败，您的账户将被锁定"
+      not_found_in_database: "没有该用户."
+      timeout: "您的会话已过期,请登录后继续操作"
+      unauthenticated: "继续操作前请注册或者登录."
+      unconfirmed: "请先激活您的帐号"
+    mailer:
+      confirmation_instructions:
+        subject: "请先激活您的微信点单账号"
+      reset_password_instructions:
+        subject: "重置密码信息"
+      unlock_instructions:
+        subject: "请先解锁您的账户"
+    omniauth_callbacks:
+      failure: "Could not authenticate you from %{kind} because \"%{reason}\"."
+      success: "Successfully authenticated from %{kind} account."
+    passwords:
+      no_token: "您需要收到一封带有token的密码重置邮件才能继续登录本网站."
+      send_instructions: "几分钟后，您将收到重置密码的电子邮件."
+      send_paranoid_instructions: "如果您的账户存在于我们的数据库中，您将在几分钟后收到密码重置邮件"
+      updated: "您的密码已修改成功，请重新登录."
+      updated_not_active: "您的密码已经成功更新."
+    registrations:
+      destroyed: "Bye! Your account was successfully cancelled. We hope to see you again soon."
+      signed_up: "欢迎您，您已经成功登录."
+      signed_up_but_inactive: "恭喜，您已经成功注册，但是在您成功登录前，请先登录您的邮箱并激活您的账户."
+      signed_up_but_locked: "恭喜，您已经成功注册，但是您暂时仍然无法登录，因为您的账户已经被锁定."
+      signed_up_but_unconfirmed: "邮箱验证已发送，请进入邮箱点击链接激活帐号。"
+      update_needs_confirmation: "You updated your account successfully, but we need to verify your new email address. Please check your email and click on the confirm link to finalize confirming your new email address."
+      updated: "账户成功更新."
+    sessions:
+      signed_in: "登录成功."
+      signed_out: "退出成功"
+    unlocks:
+      send_instructions: "您将会在几分钟内收到一封有关账户解锁操作的说明，请按照说明进行解锁操作。"
+      send_paranoid_instructions: "如果您的账户存在于我们的数据库中，您将在几分钟后收到一封有关账户解锁操作的说邮件"
+      unlocked: "您的账户已经成功解锁，请重新登录进行操作！"
+  errors:
+    messages:
+      already_confirmed: "已经被确认，请重新登录"
+      confirmation_period_expired: "需要在%{period}内被确认，请重新申请一封账户确认邮件"
+      expired: "已过期，请重新申请"
+      not_found: "没有找到"
+      not_locked: "没有被解锁"
+      not_saved:
+        one: "1个错误导致%{resource}无法被成功保存:"
+        other: "%{count}个错误导致%{resource}无法被成功保存:"

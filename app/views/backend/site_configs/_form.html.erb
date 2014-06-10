@@ -1,0 +1,27 @@
+<%= form_for([:backend, @site_config]) do |f| %>
+  <% if @site_config.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@site_config.errors.count, "error") %> prohibited this site_config from being saved:</h2>
+
+      <ul>
+      <% @site_config.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label @site_config.display_name %>
+	<% if @site_config.is_string? %>
+		<%= f.text_area :value_s, :cols=>40, :rows=>8 %>
+	<% elsif @site_config.is_boolean? %>
+		<%= f.check_box :value_b %>
+	<% end %>
+
+  </div>
+
+
+  <div class="actions">
+    <%= f.submit '保存',  :class=>"btn btn-default"%>
+  </div>
+<% end %>

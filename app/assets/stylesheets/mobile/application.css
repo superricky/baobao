@@ -1,0 +1,104 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require mobile/mobile
+ *= require responsiveslides
+ */
+html{margin:0;padding:0;width:100%;background-color:#f4f4f4;}
+body{margin:0 auto;padding:0;width:100%;}
+body *{font-size:10pt;color:#2b2b2b;letter-spacing:0.05em;overflow:hidden;}
+* {
+    -webkit-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
+    -moz-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
+    -ms-touch-action:none;
+    -webkit-touch-callout: none; /* prevent the popup menu on any links*/
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  border-spacing:0;
+  overflow:auto;
+}
+header{border-bottom:0px solid #ccc;background-image: url(/assets/mobile/header-bg.png);}
+h1, h2, h3, h4, h5{line-height:1.5em;margin:0;padding:0;}
+h1{font-size:1.5em;}
+h2{font-size:1.25em;}
+h3{font-size:1.1em;}
+h4{font-size:1em;}
+h5{font-size:0.8em;}
+a{text-decoration: none;}
+nav, ul{margin:0;padding:0;}
+.center{margin:0 auto;}
+.left{float:left;}
+.right{float:right;}
+.hide{display:none;}
+.col-1{width:100%;}
+.col-2{width:50%;}
+.col-3{width:33%;}
+.col-4{width:25%;}
+.col-5{width:20%;}
+.m-1{margin:10px;}
+.m-2{margin:20px;}
+.p-1{padding:10px;}
+.p-2{padding:20px;}
+.percent-width-1{width:100%;}
+.percent-width-2{width:50%;}
+.percent-width-3{width:33%;}
+.percent-width-4{width:25%;}
+.percent-width-5{width:20%;}
+.box-1{width:60px;height:60px;}
+.box-2{width:90px;height:90px;}
+.box-3{width:120px;height:120px;}
+.box-4{width:150px;height:150px;}
+.box-5{width:180px;height:180px;}
+.box-6{width:210px;height:210px;}
+
+.icon{
+  display:inline-block;
+  background-position:center;
+  background-repeat:no-repeat;
+  text-align: center;
+  border:1px solid #ababab;
+  border-radius:15px;
+  background:#efefef;
+}
+.icon-with-out-border{
+  border:0;
+}
+.icon-hover{
+  background-position:top;
+  &:hover{
+    background-position:100% 100%;
+  }
+}
+
+.icon-menus{background-image:url(menus.png);}
+.icon-region{background-image:url(region.png);}
+
+.icon-1{background-size:18px !important;width:18px;height:18px;line-height: 18px;}
+.icon-2{background-size:24px !important;width:24px;height:24px;line-height: 24px;}
+.icon-3{background-size:30px !important;width:30px;height:30px;line-height: 30px;}
+.icon-4{background-size:36px !important;width:36px;height:36px;line-height: 36px;}
+.icon-5{background-size:48px !important;width:48px;height:48px;line-height: 48px;}
+.icon-more{background:url(pro_more.png);}
+.icon-home{background:url(home.png);}
+.icon-cart{background:url(cart-in-header.png);}
+.icon-rubbish{background:url(rubbish.png);}
+.icon-man{background:url(/assets/mobile/member.png);}
+.icon-store{background-image:url(store.png);}
+.icon-kind{background-image:url(kind.png);}
+.icon-search{background-image:url(search.png);}
+.icon-sale{background-image:url(sale.png);}
+/*.icon-big{background-position: center 20%;background-repeat: no-repeat; background-size: 80%;}*/
+.icon-big{background-size:100%;background-repeat: no-repeat;}
+.icon-guaguacard{background-image: url(guaguacard.png);background-repeat: no-repeat;}
+.icon-myprofile{background-image: url(myprofile.png);background-repeat: no-repeat;}
+.icon-order{background-image: url(order.png);background-repeat: no-repeat;}

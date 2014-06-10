@@ -1,0 +1,52 @@
+- if flash[:error].present?
+  .alert.alert-danger=  flash[:error]
+- unless @current_shop.present?
+  %h3.header.smaller.red 可选套餐列表
+  %table.table.table-striped
+    %tr
+      %th= ServiceProduct.human_attribute_name(:subject)
+      %th= ServiceProduct.human_attribute_name(:price)
+      %th= ServiceProduct.human_attribute_name(:product_type)
+      %th.col-sm-4= ServiceProduct.human_attribute_name(:description)
+      %th
+
+    - @service_products.each_with_index do |service_product, index|
+      %tr
+        %td= service_product.subject
+        %td
+          = number_to_currency(service_product.amount, :unit=>"¥")
+          \元
+        %td
+          = service_product.product_type_name
+          %br
+          \(
+          = ServiceProduct.human_attribute_name(:available_shop_versions)
+          \:
+          = service_product.available_shop_versions.map{|version| Shop::version_name(version)}.join("、")
+          \)
+
+        %td= service_product.description
+        %td
+          - if @service_products.size > 1
+            .btn-group
+              %button.btn.btn-default.dropdown-toggle{:type=>"button", :"data-toggle"=>"dropdown"}
+                排序
+                %span.caret
+              %ul.dropdown-menu{:role=>"menu"}
+                - unless index == 0
+                  %li
+                    %a{:href=>"#{change_position_backend_service_products_path(service_product_ids:[@service_products[index-1].id, service_product.id])}", :data=>{:method=>"put"}}
+                      %i.glyphicon.glyphicon-arrow-up
+                      向上移一位
+                - unless index == @service_products.size-1
+                  %li
+                    %a{:href=>"#{change_position_backend_service_products_path(service_product_ids:[service_product.id, @service_products[index+1].id])}", :data=>{:method=>"put"}}
+                      %i.glyphicon.glyphicon-arrow-down
+                      向下移一位
+          = link_to t('Show'), [:backend, service_product], :class=>"btn btn-default"
+          = link_to t('Edit'), edit_backend_service_product_path(service_product), :class=>"btn btn-default"
+          = link_to t('Destroy'), [:backend, service_product], :method => :delete, :data => { :confirm => 'Are you sure?' }, :class=>"btn btn-danger"
+
+  %br
+  = link_to '添加可选套餐', new_backend_service_product_path, :class=>"btn btn-default"
+= render 'service_product_record'

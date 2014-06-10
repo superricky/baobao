@@ -1,0 +1,4 @@
+$("table.table").after("<%= escape_javascript(render 'backend/articles/promotion_article' )%>");
+$('#promotion_article').modal({
+  keyboard: false
+});

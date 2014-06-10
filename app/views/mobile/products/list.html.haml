@@ -1,0 +1,41 @@
+-content_for :title do
+  #{@current_shop.name}
+%ul#product_slides.rslides{style: "margin-bottom:1px;"}
+  -@slides.each do |slide|
+    -if slide.product
+      %li
+        %a{href: mobile_shop_branch_product_path(@current_shop, @current_branch, slide.product)}= image_tag slide.img.medium.url, alt: ""
+        %strong= slide.desc
+:javascript
+  document.ready = function(){
+    $("#product_slides").responsiveSlides({
+      speed: 800
+    });
+  };
+%nav.btns-nav
+  %ul
+    %li.left{style: "width:20%;margin:0"}
+      %a.icon-store.icon-big{href: list_mobile_shop_branches_path(@current_shop), style: "background-image:url(/assets/mobile/ico_01.gif);"}
+        /%strong 更多店铺
+    %li.left{style: "width:20%;margin:0"}
+      %a.icon-kind.icon-big{href: categories_mobile_shop_branch_products_path(@current_shop.slug, @current_branch), style: "background-image:url(/assets/mobile/ico_02.gif);"}
+        /%strong 商品分类
+    %li.left{style: "width:20%;margin:0"}
+      %a.icon-search.icon-big{href: search_mobile_shop_branch_products_path(@current_shop, @current_branch), style: "background-image:url(/assets/mobile/ico_03.gif);"}
+        /%strong 搜索
+    %li.left{style: "width:20%;margin:0"}
+      %a.icon-sale.icon-big{href: mobile_shop_branch_detail_special_off_path(@current_shop.slug, @current_branch), style: "background-image:url(/assets/mobile/ico_04.gif);"}
+        /%strong 促销活动
+    %li.left{style: "width:20%;margin:0"}
+      %a.icon-sale.icon-big{href: about_my_shop_mobile_shop_branch_path(@current_shop.slug, @current_branch), style: "background-image:url(/assets/mobile/ico_05.jpg);"}
+        /%strong 促销活动
+.m-1{style: "margin:0;"}
+  -group_products(@products).each do |group|
+    %nav.products-nav
+      %ul
+        -group.each do |product|
+          %li.col-2
+            %a{href: mobile_shop_branch_product_path(@current_shop, @current_branch, product), class: lateral_or_vertial(group, product)}
+              %h1= product.name
+              %strong= number_to_currency(product.price(@current_user), :unit=>currency_symbol)
+              %center= image_tag product.image.medium.url

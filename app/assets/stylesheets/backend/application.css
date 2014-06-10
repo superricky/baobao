@@ -1,0 +1,14 @@
+/*
+  *= require nv.d3
+  *= require jquery.ui.all
+  *= require bootstrap
+  *= require bootstrap-select
+  *= require backend/backend
+  *= require backend/materials
+  *= require backend/articles
+  *= require backend/phone_orders
+  *= require backend/branches
+  *= require bootstrap-switch
+  *require_tree .
+  *require_self
+*/

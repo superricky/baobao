@@ -1,0 +1,24 @@
+<div data-ng-controller="shopController">
+  <section class="shop">
+    <div class="row">
+      <img ng-src="{{shop.image}}" class="left col-xs-11 col-sm-2"/>
+      <div class="col-xs-12 col-sm-7">
+        <h1>{{shop.name}}</h1>
+        <p>{{shop.introduction}}</p>
+      </div>
+      <img ng-src="{{shop.qrcode}}" class="right col-xs-11 col-sm-2" ng-show="shop.qrcode"/>
+    </div>
+  </section>
+  <section class="branches">
+    <ul>
+      <li class="left col-xs-12 col-md-3"  ng-repeat="branch in shop.branches">
+        <img ng-src="{{branch.image}}" class="left">
+        <h2><a ng-href="#/branches/{{branch.id}}">{{branch.name}}</a></h2>
+        <h3>
+          <span class="label label-primary" ng-show="branch.is_on_service">营业中</span>
+          <span class="label label-default" ng-show="!branch.is_on_service">休息中</span>
+        </h3>
+      </li>
+    </ul>
+  </section>
+</div>

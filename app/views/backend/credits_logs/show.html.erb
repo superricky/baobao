@@ -1,0 +1,81 @@
+<% if notice.present? %>
+	<p id="notice" class="alert alert-success">
+		<%= notice %>
+	</p>
+<%end%>
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		积分流水详情
+	</div>
+	<div class="panel panel-body">
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("id")%>:</strong>
+		  <%= @credits_log.id %>
+		</p>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("credit_log_type")%>:</strong>
+		  <%= @credits_log.credit_log_type_name %>
+		</p>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("credits")%>:</strong>
+		  <%= @credits_log.credits %>
+		</p>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("shop")%>:</strong>
+		  <%= @credits_log.shop.name %>
+		</p>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("branch")%>:</strong>
+		  <%= @credits_log.branch.name  rescue nil%>
+		</p>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("user")%>:</strong>
+		  <%= link_to "#{@credits_log.user.name}(用户ID:#{@credits_log.user.id})", get_user_path(@credits_log.user) %>
+		</p>
+
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("note")%>:</strong>
+		  <%= @credits_log.note %>
+		</p>
+		<% if @credits_log.is_consume_type? && @credits_log.account %>
+			<p>
+			  <strong><%= CreditsLog.human_attribute_name("account")%>:</strong>
+			  <%= @credits_log.account.name %>
+			</p>
+		<%end%>
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("user_credits_balance_after")%>:</strong>
+		  <%= @credits_log.shop_credits_given_after %>
+		</p>
+		<% if @current_account.is_admin? or  @current_account.is_boss? %>
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("shop_credits_consume_after")%>:</strong>
+		  <%= @credits_log.shop_credits_consume_after %>
+		</p>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("shop_credits_given_after")%>:</strong>
+		  <%= @credits_log.shop_credits_given_after %>
+		</p>
+		<%end%>
+
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("branch_credits_consume_after")%>:</strong>
+		  <%= @credits_log.branch_credits_consume_after %>
+		</p>
+		<p>
+		  <strong><%= CreditsLog.human_attribute_name("branch_credits_given_after")%>:</strong>
+		  <%= @credits_log.branch_credits_given_after %>
+		</p>
+	</div>
+</div>
+<% if @current_branch.present? and @credits_log.is_consume_type? %>
+	<%= link_to '编辑备注', edit_backend_shop_branch_credits_log_path(@current_shop.slug, @current_branch, @credits_log), :class=>"btn btn-default" %> |
+<%end%>
+<%= link_to t('Back'), get_credits_logs_path, :class=>"btn btn-default" %>

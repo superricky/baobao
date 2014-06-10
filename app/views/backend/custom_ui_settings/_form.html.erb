@@ -1,0 +1,25 @@
+<div class="alert alert-info">
+由于不同行业对下单过程中的术语不尽相同，本功能允许用户个性化下单称谓。但请使用相近词语作为替代，例如：对外送而言，餐饮行业可以叫“外卖”，生活服务业可以使用“上门服务代替”，其他商品可以使用“货到付款”代替
+</div>
+<%= form_for(@custom_ui_setting, url: backend_shop_branch_custom_ui_setting_path(@current_shop.slug, @current_branch)) do |f| %>
+  <% if @custom_ui_setting.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= @custom_ui_setting.errors.count %>个错误导致无法正确保存:</h2>
+
+      <ul>
+      <% @custom_ui_setting.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% @custom_ui_setting.attributes.delete_if{|key, value| [:created_at, :updated_at, :id, :branch_id].include? key.to_sym }.each do |key, value| %>
+    <div class="field">
+      <%= f.label key.to_sym %><br>
+      <%= f.text_field key.to_sym %>
+    </div>
+  <% end %>
+  <div class="actions">
+    <%= f.submit "修改", :class=>"btn btn-primary"%>
+  </div>
+<% end %>

@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-sm-8">
+    <table class="table table-striped">
+      <tr>
+        <th class="right"><%= Branch.human_attribute_name("min_order_time_gap")%></th>
+        <td class="left" ><%= @branch.min_order_time_gap%>分钟</td>
+        <th class="right"><%= Branch.human_attribute_name("delivery_radius")%></th>
+        <td class="left" ><%= @branch.delivery_radius %>公里范围内可送</td>
+      </tr>
+      <tr>
+        <th class="right"><%= Branch.human_attribute_name("delivery_radius_txt")%></th>
+        <td class="left" >
+          <%= @branch.delivery_radius_txt %>
+        </td>
+        <th class="right"><%= Branch.human_attribute_name("use_min_order_charge")%></th>
+        <td class="left" ><%= @branch.use_min_order_charge ? "启用":"不启用" %></td>
+      </tr>
+      <tr>
+        <th class="right"><%= Branch.human_attribute_name("min_order_charge")%></th>
+        <td class="left" ><%= @branch.min_order_charge || "未设定" %></td>
+        <th class="right">
+          <%= Branch.human_attribute_name("non_service_order_charge")%>
+        </th>
+        <td class="left" ><%= @branch.non_service_order_charge || "未设定"%></td>
+      </tr>
+    </table>
+    <% if @branch.use_min_order_charge %>
+      <div class="col-sm-6">
+        <div class="widget-box transparent left">
+          <div class="widget-header widget-header-small">
+            <h4 class="smaller">
+            <%= Branch.human_attribute_name("delivery_zones") %>
+            </h4>
+          </div>
+          <div class="widget-body">
+            <table class="table table-striped">
+              <tr>
+                <th >配送区域</th>
+                <th >配送费</th>
+              </tr>
+              <% @branch.delivery_zones.each do |zone|%>
+                <tr>
+                  <td ><%= zone.zone_name%></td>
+                  <% if @branch.use_min_order_charge %>
+                    <td ><%= zone.charge%></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <% if @branch.fixed_delivery_time %>
+      <div class="col-sm-6">
+        <div class="widget-box transparent left">
+          <div class="widget-header widget-header-small">
+            <h4 class="smaller">
+            <%= Branch.human_attribute_name("fixed_delivery_time") %>
+            </h4>
+          </div>
+          <div class="widget-body">
+            <table class="table table-striped">
+              <tr>
+                <th >配送时间段</th>
+                <th >提前订单时间</th>
+              </tr>
+              <% @branch.delivery_times.each do |delivery_time|%>
+                <tr>
+                  <td >
+                  <%= delivery_time.delivery_time_start.strftime("%H:%M")%>~~<%= delivery_time.delivery_time_end.strftime("%H:%M")%></td>
+                  <td ><%= delivery_time.time_advance%>分钟</td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+module Webstore::ProductsHelper
+end

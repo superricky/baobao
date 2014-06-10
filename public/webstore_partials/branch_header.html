@@ -1,0 +1,48 @@
+
+  <header>
+    <section class="status_bar">
+      <div class="container">
+        <aside class="summary col-xs-11 col-md-5">
+          <img ng-src="{{branch.image}}" class="col-xs-4 branch_logo thumbnail"/>
+          <div class="col-xs-8">
+            <h1><a href='#/branches/{{branch.id}}'>{{branch.name}}</a></h1>
+            <div class="row">
+              <div class="col-xs-12">
+                <i class="glyphicon glyphicon-time"></i>
+                {{branch.service_period_start}}~{{branch.service_period_end}}
+                <i class="glyphicon glyphicon-phone-alt">
+                </i>
+                {{branch.telephone}}
+              </div>
+              <div class="col-xs-12">
+                <i class="glyphicon glyphicon-map-marker"></i>{{branch.address}}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <strong>商户介绍：</strong>
+            <hr/>{{branch.introduction}}
+          </div>
+        </aside>
+        <aside class="notice right">
+          <ul>
+            <li>
+              {{branch.min_order_time_gap}}
+              <center>所需时间/分钟</center>
+            </li>
+            <li>
+              {{branch.non_service_order_charge}}
+              <center>起送价/元</center>
+            </li>
+            <li ng-show="branch.delivery_radius_txt">
+              <center>{{branch.delivery_radius_txt}}</center>
+            </li>
+            <li ng-hide="branch.delivery_radius_txt">
+              {{branch.delivery_radius}}
+              <center>外送范围/公里</center>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </header>

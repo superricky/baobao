@@ -1,0 +1,97 @@
+- content_for :title do
+  订单详情
+.body
+  .m-1
+    - unless flash[:scrachpad_id].nil?
+      .alert.alert-success
+        恭喜您获得了本商户赠送的一张刮刮卡抽奖券，有机会获得本店赠送的大奖！点击#{link_to "开始刮奖", mobile_shop_branch_scrachpad_path(@current_shop.slug, @current_branch, flash[:scrachpad_id]), :class=>"btn btn-commit"}
+    .radius-box.m_0010
+      %table.form_info
+        %tr
+          %td.label= Order.human_attribute_name("id")
+          %td.content= @order.id
+        %tr
+          %td.label= Order.human_attribute_name("branch")
+          %td.content= @order.branch.name
+        - if @order.order_type == Order::ORDERTYPE_DELIVERY or @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+          %tr
+            %td.label= Order.human_attribute_name("name")
+            %td.content= @order.name
+          %tr
+            %td.label= Order.human_attribute_name("phone")
+            %td.content= @order.phone
+        %tr
+          %td.label= Order.human_attribute_name("order_type")
+          %td.content= @order.order_type_name
+        - if @order.order_type == Order::ORDERTYPE_DELIVERY
+          %tr
+            %td.label= Order.human_attribute_name("address")
+            %td.content= @order.address
+          - if @order.delivery_time.present?
+            %tr
+              %td.label= Order.human_attribute_name("delivery_time")
+              %td.content= @order.delivery_time.strftime('%Y-%m-%d %H:%M')
+          - if @order.delivery_period.present?
+            %tr
+              %td.label= Order.human_attribute_name("delivery_period")
+              %td.content= @order.delivery_period
+        - if @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+          - if @order.arrive_time.present?
+            %tr
+              %td.label= Order.human_attribute_name("arrive_time")
+              %td.content= @order.arrive_time.strftime('%Y-%m-%d %H:%M')
+        - if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL or @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+          %tr
+            %td.label= Order.human_attribute_name("guest_num")
+            %td.content= @order.guest_num
+        - if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL
+          %tr
+            %td.label= Order.human_attribute_name("desk_no")
+            %td.content= @order.desk_no
+        %tr
+          %td.label= Order.human_attribute_name("amount")
+          %td.content= number_to_currency(@order.amount, :unit=>currency_symbol)
+        - if @current_shop.use_credits
+          %tr
+            %td.label= Order.human_attribute_name("credits")
+            %td.content= @order.credits
+        %tr
+          %td.label= Order.human_attribute_name("state")
+          %td.content= @order.state_name
+        %tr
+          %td.label= Order.human_attribute_name("note")
+          %td.content
+            - unless @order.note.present?
+              用户没有备注
+            - else
+              = @order.note
+        -@order.form_contents.each do |fc|
+          %tr
+            %td.label= fc.label
+            %td.content= fc.content
+        %tr
+          %td.label= Order.human_attribute_name :pay_type
+          %td.content= Hash[@current_branch.supported_pay_types_array_with_ui_setting(@current_user.system_config, @custom_ui_setting, @tenpay.use_tenpay, @mobile_alipay.use_mobile_alipay).collect{|t| t.reverse}][@order.pay_type]
+        %tr
+          %td.label= Order.human_attribute_name :is_paid
+          %td.content= @order.is_paid? ? "已支付" : "未支付"
+    = link_to "立即支付", pay_url(@order), class: "btn btn-commit" if @order.is_online_pay? and !@order.is_paid?
+    - if @order.order_items.empty?
+      该订单中没有商品
+    - else
+      %nav.combo
+        %ul
+          - @order.order_items.each_with_index do |order_item, index|
+            %li
+              = image_tag order_item.product.image.thumb.url if order_item.product
+              .content
+                %h2= order_item.name
+                %strong
+                  售价：#{number_to_currency(order_item.price, :unit=>currency_symbol)}
+                %br/
+                %strong
+                  数量：#{order_item.quantity}#{order_item.product_unit}
+    = link_to "拨打电话", "tel:#{@current_branch.telephone}", class: "btn btn-commit" if can_make_a_call
+-if flash[:notice]
+  :javascript
+    alert("#{flash[:notice]}");

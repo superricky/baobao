@@ -1,0 +1,21 @@
+= form_for([:backend, @current_shop, @current_branch ,@currency_symbol],
+  :html => { :multipart => true, :class => "form-horizontal", :role=>"form" }) do |f|
+  - if @currency_symbol.errors.any?
+    .alert.alert-danger{id: "error_explanation"}
+      %div
+        = "#{@currency_symbol.errors.count}个错误导致无法正确保存产品:"
+        %ul
+          - @currency_symbol.errors.full_messages.each do |msg|
+            %li= msg
+  .form-group.field
+    = f.label :symbol, class: "col-xs-3 control-label required"
+    .col-xs-6
+      = f.text_field :symbol, :class=>"form-control"
+  .form-group.field
+    = f.label :decoration, class: "col-xs-3 control-label required"
+    .col-xs-6
+      = f.text_field :decoration, :class=>"form-control"
+  .form-group.field
+    .col-xs-6.col-md-offset-3
+      = f.submit class:"btn btn-primary"
+      = link_to "返回列表", backend_shop_currency_symbols_path(@current_shop.slug) ,class:"btn btn-primary"

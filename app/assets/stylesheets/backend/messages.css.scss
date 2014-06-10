@@ -1,0 +1,23 @@
+// Place all the styles related to the messages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.receive_msg{
+  text-align:left;
+}
+
+.receive_msg .msg-content{
+  width:60%;
+  text-align:left;
+  float:left;
+}
+
+.send_msg {
+  text-align:right;
+}
+
+
+.send_msg .msg-content{
+  width:60%;
+  text-align:right;
+  float:right;
+}

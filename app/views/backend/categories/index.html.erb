@@ -1,0 +1,36 @@
+<div class="pull-left col-md-6 col-lg-6 title">分类管理</div>
+<div class="pull-right col-md-6 col-lg-6 title"><%= link_to t('New category'), new_backend_shop_branch_category_path, :class=>"btn btn-primary pull-right" %></div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= Category.human_attribute_name("name")%></th>
+      <th>产品数量</th>
+      <th>排序</th>
+      <th><%= t('operation btn')%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @categories.each_with_index do |category, index| %>
+      <tr>
+        <td><%= category.name %></td>
+        <td><%= category.products.count %></td>
+        <td class="col-md-2">
+          <%= form_tag change_position_backend_shop_branch_category_path(@current_shop,@current_branch,category) do%>
+            <%= select_tag "position", options_for_select(get_position_select_option(@categories), selected: (get_position_number(@categories, index))), class: "form-control", onchange: "this.form.submit();" %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to t('Show'), backend_shop_branch_category_path(@current_shop.slug, @current_branch, category), :class=>"btn btn-default" %>
+        	<%= link_to t('Edit'), edit_backend_shop_branch_category_path(@current_shop.slug, @current_branch, category), :class=>"btn btn-default" %>
+        	<%= link_to t('Destroy'),  backend_shop_branch_category_path(@current_shop.slug, @current_branch, category), method: :delete, data: { confirm: '确定要删除吗？' }, :class=>"btn btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="pull-right">
+  <%= will_paginate @categories, renderer: BootstrapPagination::Rails, bootstrap: 3 %>
+</div>
+

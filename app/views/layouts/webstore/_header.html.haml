@@ -1,0 +1,11 @@
+%nav.navbar.navbar-inverse{role: "navigation"}
+  .container
+    .navbar-header
+      %a.navbar-brand{href: webstore_welcome_path}
+        = image_tag @current_shop.image.medium.url, :style=>"width:72px;height:40px;"
+        = @current_shop.name
+    .navbar-collapse.collapse
+      %ul.nav.navbar-nav.right
+        %li{:"ng-show"=>"currentMember"}= link_to "会员中心", "#member/show"
+        %li{:"ng-show"=>"currentMember", :"ng-click"=>"logout()" }= link_to "退出", 'javascript:void(0);'
+        %li{:"ng-hide"=>"currentMember"}= link_to "登录/注册", "#/member/login"

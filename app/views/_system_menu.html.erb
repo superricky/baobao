@@ -1,0 +1,14 @@
+<div id="outer-menu" style="width:100%;background-color:#459935;">
+	<div id="inner-menu" style="width:980px;margin:auto;">
+		<ul style="padding-left: 0;list-style-type: none;">
+			<li <% if selected == 'site_configs' %>class="selected"<% end %>>
+				<%= link_to "网站配置", backend_site_configs_path %></li>
+			<li <% if selected == 'shops' %>class="selected"<% end %>>
+				<%= link_to "点号配置", backend_shops_path %></li>
+<!-- 			<li <% if selected == 'account' %>class="selected"<% end %>><%#= link_to "个人设置", get_show_my_account_path %></li>
+			<li <% if selected == 'product_units' %>class="selected"<% end %>><%#= link_to "计量单位", product_units_path %></li> -->
+			<li><%= link_to "Sidekiq", backend_sidekiq_web_path, :target=>"_blank"%></li>
+		</ul>
+	</div>
+</div>
+

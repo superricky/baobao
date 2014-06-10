@@ -1,0 +1,44 @@
+= render layout: 'shop_form' do |f|
+  .panel.panel-default
+    .panel-heading
+      积分设置
+    .panel-body
+      .field.form-group
+        = f.label :use_credits, class: "col-sm-3 control-label"
+        .col-sm-5
+          .switch{data:{on:"info", off:"primary"}}
+            = f.check_box :use_credits
+      .field.form-group
+        = f.label :money_for_each_credit, class: "col-sm-3 control-label"
+        .col-sm-5
+          = f.text_field :money_for_each_credit, class: " form-control",style:"width:100px;display:inline"
+          元兑换1积分
+      .field.form-group
+        = f.label :award_credits_at_follow, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :award_credits_at_follow
+          %span.lbl
+      .field.form-group
+        = f.label :award_credits, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.number_field :award_credits, class: "form-control"
+      .field.form-group
+        = f.label :support_credits_pay, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :support_credits_pay
+          %span.lbl
+      .field.form-group
+        = f.label :credit_for_each_money, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.number_field :credit_for_each_money, class: "form-control"
+          %br/
+          可换一元钱的积分数必须为100的倍数
+    .panel.panel-footer
+      %center
+        - if params[:edit]
+          = link_to_back
+          = f.submit :class=>"btn btn-primary"
+        - else
+          = link_to '上一步', previous_wizard_path, :class=>"btn btn-primary"
+          = f.submit "下一步" ,:class=>"btn btn-primary"
+          = link_to '跳过这一步', next_wizard_path, :class=>"btn btn-primary"

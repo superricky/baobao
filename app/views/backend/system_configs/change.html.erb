@@ -1,0 +1,14 @@
+<%= render "system_configs/system_nav_bar", { active_item: 'system_configs' }  %>
+<div class="col-md-10">
+<h1>编辑系统设置</h1>
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		系统信息
+	</div>
+	<div class="panel panel-body">
+		<%= render 'form' %>
+	</div>
+	</div>
+
+<%= link_to t('Back'), system_configs_path, :class=>"btn btn-default" %>
+</div>

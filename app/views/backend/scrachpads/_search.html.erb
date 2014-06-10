@@ -1,0 +1,19 @@
+<%= search_form_for @q, url: search_backend_shop_branch_scrachpads_path(@current_shop.slug, @current_branch), class: "", method: :post do |f|%>
+  <div class="row">
+    <div class="form-group col-md-2">
+      <%= f.text_field :user_name_cont, class: "form-control", placeholder: User.human_attribute_name("name") %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.select :card_result_cont, options_for_select(get_card_result_type_array, selected: (params[:q][:card_result_cont] rescue nil) ), {}, {class: "form-control"} %>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.select :is_used_eq, options_for_select([ ["全部状态", ""], ["未刮奖", "0"], [ "已使用", "1"] ], selected: (params[:q][:is_used_eq] rescue nil) ), {}, {class: "form-control"} %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.text_field :order_id_eq, class: "form-control", placeholder: Order.human_attribute_name("id") %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.submit "搜索", class: "btn btn-default" %>
+    </div>
+  </div>
+<% end %>

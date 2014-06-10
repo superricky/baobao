@@ -1,0 +1,10 @@
+.panel.panel-default
+  .panel-heading
+    选择下单方式
+  .panel-body
+    - unless @current_branch.split_supported_order_types.index(Order::ORDERTYPE_DELIVERY).nil?
+      = link_to @custom_ui_setting.get_value(:order_delivery_btn), new_mobile_shop_branch_order_path(@current_shop.slug, @current_branch, :order_type=>Order::ORDERTYPE_DELIVERY), :class=>"btn btn-primary btn-lg btn-block"
+    - unless @current_branch.split_supported_order_types.index(Order::ORDERTYPE_EAT_IN_HALL).nil?
+      = link_to @custom_ui_setting.get_value(:order_eat_in_hall_btn), new_mobile_shop_branch_order_path(@current_shop.slug, @current_branch, :order_type=>Order::ORDERTYPE_EAT_IN_HALL), :class=>"btn btn-success btn-lg btn-block"
+    - unless @current_branch.split_supported_order_types.index(Order::ORDERTYPE_ORDER_SEAT).nil?
+      = link_to @custom_ui_setting.get_value(:order_order_seat), new_mobile_shop_branch_order_path(@current_shop.slug, @current_branch, :order_type=>Order::ORDERTYPE_ORDER_SEAT), :class=>"btn btn-info btn-lg btn-block"

@@ -1,0 +1,25 @@
+<% if @current_shop.enable_unrecognized_reply_message%>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <td colspan="2" align="center"><strong>未识别消息自动回复</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @unmatch_event.present? %>
+        <tr>
+          <td colspan="2">
+            您现在使用的是系统默认的未识别回复，如果您想自定义请点击“新建自定回复”创建属于您自己的回复。
+          </td>
+        </tr>
+      <% else %>
+        <tr>
+          <td>素材名: <%= @unmatch_event.material.material_name rescue Event::SYSTEM_KEY.select{|key| key[1] == "key_#{@unmatch_event.system_keyword}"}[0][0] rescue nil%></td>
+          <td>
+          <%= link_to t('Edit'), edit_backend_shop_event_path(@current_shop.slug, @unmatch_event), :class => 'btn btn-default' %>
+          <%= link_to t('Destroy'), backend_shop_event_path(@current_shop.slug, @unmatch_event), method: :delete, data: { confirm: "确定要删除自动回复吗,一旦删除，绑定到该自动回复上的菜单也将被删除？"} , :class => 'btn btn-danger'%></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

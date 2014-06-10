@@ -1,0 +1,28 @@
+= form_for @mobile_alipay, url: backend_shop_mobile_alipay_path(@current_shop), html: {class: "form-horizontal", role: "form"}  do |f|
+  - if @mobile_alipay.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@mobile_alipay.errors.count, "error")} prohibited this mobile_alipay from being saved:"
+      %ul
+        - @mobile_alipay.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field.form-group
+    = f.label :use_mobile_alipay, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.check_box :use_mobile_alipay
+      %span.lbl
+  .field.form-group
+    = f.label :pid, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.text_field :pid, class: "form-control"
+  .field.form-group
+    = f.label :pkey, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.text_field :pkey, class: "form-control"
+  .field.form-group
+    = f.label :email, class: "col-sm-2 control-label"
+    .col-sm-4
+      = f.text_field :email, class: "form-control"
+  %center.actions
+    = f.submit t('Save'), :class => "btn btn-primary"
+    = link_to t('Show'), backend_shop_mobile_alipay_path(@current_shop), :class=>"btn btn-default"

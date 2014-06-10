@@ -1,0 +1,23 @@
+%p#notice= notice
+%div.panel.panel-default
+  %div.panel-heading 商户推荐幻灯片
+  %div.panel-body
+    %p
+      %b
+        = BranchSlider.human_attribute_name(:img)
+        \:
+      = image_tag @branch_slider.img.medium.url, :class=>"img-rounded", :width=>360
+    %p
+      %b
+        = BranchSlider.human_attribute_name(:desc)
+        \:
+      = @branch_slider.desc
+    %p
+      %b
+        = BranchSlider.human_attribute_name(:branch)
+        \:
+      = @branch_slider.branch.name
+
+= link_to t('Edit'), edit_backend_shop_branch_slider_path(@current_shop.slug,@branch_slider)
+\|
+= link_to t('Back'), backend_shop_branch_sliders_path(@current_shop.slug)

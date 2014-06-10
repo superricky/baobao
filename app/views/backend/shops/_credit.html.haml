@@ -1,0 +1,35 @@
+.row
+  .col-sm-5
+    %table.table.table-striped
+      %tr
+        %th.right= Shop.human_attribute_name("award_credits_at_follow")
+        %td.left= @shop.award_credits_at_follow ? "是" : "否"
+      %tr
+        %th.right= Shop.human_attribute_name("award_credits")
+        %td.left= @shop.award_credits
+      %tr
+        %th.right
+          = Shop.human_attribute_name("use_credits")
+        %td.left
+          - if @shop.use_credits
+            是，每#{@shop.money_for_each_credit}块钱换1积分
+          - else
+            否
+      %tr
+        %th.right= Shop.human_attribute_name("support_credits_pay")
+        %td.left
+          - if @shop.support_credits_pay
+            支持
+          - else
+            不支持
+      %tr
+        %th.right= Shop.human_attribute_name("credit_for_each_money")
+        %td.left
+          = @shop.credit_for_each_money
+          积分 = 一元钱
+      %tr
+        %th.right= Shop.human_attribute_name("credits_given")
+        %td.left= @shop.credits_given
+      %tr
+        %th.right= Shop.human_attribute_name("credits_consume")
+        %td.left= @shop.credits_consume

@@ -1,0 +1,31 @@
+* 您的讨论帖必须等到管理员审核发布后再会被其他人看到
+= nested_form_for [:backend, @post_thread] , :html=>{:class=> "form-horizontal", :role=>"form"} do |f|
+  - if @post_thread.errors.any?
+    #error_explanation
+      %h2= "#{@post_thread.errors.count}个错误导致无法保存:"
+      %ul
+        - @post_thread.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field.form-group
+    = f.label :title, :class=>"col-sm-2 control-label"
+    .col-sm-10
+      = f.text_field :title, :class=>"form-control"
+  .field.form-group
+    = f.label :content, :class=>"col-sm-2 control-label"
+    .col-sm-10
+      = f.cktext_area :content, :class=>"form-control", :ckeditor => {:language => "zh-cn"}
+  .field.form-group
+    = f.label :post_thread_label_ids, :class=>"col-sm-2 control-label"
+    .col-sm-10
+      = f.select :post_thread_label_ids, options_from_collection_for_select(PostThreadLabel.all, :id, :name, selected: f.object.post_thread_labels), {}, {:class=>"selectpicker show-tick form-control", multiple: true, data: {:"live-search"=> "true"}}
+  .actions.col-sm-offset-2
+    = f.submit '发布', :class=>"btn btn-default"
+
+:javascript
+  $(document).ready(function () {
+    $('.selectpicker').selectpicker({
+      'selectedText': 'cat',
+      'noneSelectedText': "没有选择任何标签"
+    });
+  });

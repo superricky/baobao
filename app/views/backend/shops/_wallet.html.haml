@@ -1,0 +1,16 @@
+.row
+  .col-sm-5
+    %table.table.table-striped
+      %tr
+        %th.right= Shop.human_attribute_name("support_wallet_pay")
+        %td.left
+          - if @shop.support_wallet_pay
+            支持
+          - else
+            不支持
+      %tr
+        %th.right= Shop.human_attribute_name("wallet_given")
+        %td.left= @shop.wallet_given
+      %tr
+        %th.right= Shop.human_attribute_name("wallet_consume")
+        %td.left= @shop.wallet_consume

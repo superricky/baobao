@@ -1,0 +1,32 @@
+<%= nested_form_for( [:backend, @current_shop, @current_branch, @category]) do |f| %>
+  <% if @category.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger">
+      <div><%= @category.errors.count %>个错误导致无法保存分类：</div>
+
+      <ul>
+      <% @category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field form-group">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <fieldset id="categories" style="padding-left:4em;">
+    <%= f.fields_for :categories do |c| %>
+      <div class="field form-group">
+        <label>二级分类名称</label><br/>
+        <%= c.text_field :name %>
+        <%= c.link_to_remove "移除二级分类", class: "btn btn-warning" %>
+      </div>
+    <% end %>
+  </fieldset>
+  <div class="actions">
+    <%= f.link_to_add "添加二级分类", :categories, {data: {target: "#categories"}, class: "btn"} %>
+    <%= f.submit class:"btn btn-primary"%>
+  </div>
+<% end %>

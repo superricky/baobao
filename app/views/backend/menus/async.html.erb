@@ -1,0 +1,13 @@
+  <% if not flash[:error].nil? %>
+    <div id="error_explanation" class="alert alert-danger" style="text-align:center;padding:20px;">
+      对不起，同步失败，失败原因为：<%= flash[:error] %>
+    </div>
+
+  	<%= link_to '返回修改', backend_shop_system_config_menus_path(@current_shop, @system_config), :class=>"btn btn-default" %>
+  <% else %>
+  <%= notice%>
+  <div style="text-align:center;padding:20px;">
+  	<h1>恭喜你，所有关注您公众平台的微信客户端已经被同步啦！</h1>
+  	<%= link_to t('Back'), backend_shop_system_config_menus_path(@current_shop, @system_config), :class=>"btn btn-default" %>
+  </div>
+  <% end %>

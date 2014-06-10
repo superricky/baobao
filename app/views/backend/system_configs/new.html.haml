@@ -1,0 +1,16 @@
+.col-md-9
+  - unless flash[:notice].nil?
+    .alert.alert-danger= flash[:notice]
+  %h1 新建公众帐号
+  .panel.panel-default
+    .panel-heading
+      以下为您在微信后台配置的接口信息
+    .panel-body
+      %div
+        %strong URL:
+        = message_validate_root_url(@current_shop.slug)
+  .panel.panel-default
+    .panel.panel-heading
+      新建微信公众号
+    .panel.panel-body
+      = render 'form', {url: backend_shop_system_configs_path(@current_shop.slug)}

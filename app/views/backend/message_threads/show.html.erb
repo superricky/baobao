@@ -1,0 +1,16 @@
+<% unless notice.nil? %>
+<div class="alert alert-success" id="notice"><%= notice %></div>
+<% end %>
+
+<p>
+  <strong>Last update time:</strong>
+  <%= @message_thread.updated_at %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @message_thread.user %>
+</p>
+
+<%= link_to 'Edit', edit_message_thread_path(@message_thread) %> |
+<%= link_to 'Back', message_threads_path %>

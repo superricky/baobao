@@ -1,0 +1,19 @@
+= form_for [:backend, @current_shop, @branch_slider] do |f|
+  - if @branch_slider.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@branch_slider.errors.count, "error")} prohibited this branch_slider from being saved:"
+      %ul
+        - @branch_slider.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :img
+    = f.file_field :img
+  .field
+    = f.label :desc
+    = f.text_area :desc, :cols=>80
+  .field
+    = f.label :branch_id
+    = f.select :branch_id, options_for_select(@current_shop.branches.map{|branch| [branch.name, branch.id]})
+  .actions
+    = f.submit '保存', :class=>"btn btn-default"

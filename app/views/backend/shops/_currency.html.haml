@@ -1,0 +1,13 @@
+.row
+  .col-sm-5
+    %table.table.table-striped
+      %tr
+        %th.right
+          = Shop.human_attribute_name("enable_foreign_currency")
+        %td.left
+          = @shop.enable_foreign_currency ? "启用" : "不启用"
+      %tr
+        - if @shop.enable_foreign_currency
+          %th.right= Shop.human_attribute_name(:foreign_currency_symbol)
+          %td.left
+            = @shop.foreign_currency_symbol

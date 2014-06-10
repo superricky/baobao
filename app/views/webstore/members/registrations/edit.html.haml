@@ -1,0 +1,23 @@
+= render "layouts/webstore/aside_menus"
+.col-xs-9
+  %section.panel.panel-default
+    .panel-body.view_area
+      = simple_form_for(resource, :as => resource_name, :url => webstore_registration_path(@current_shop), :html => { :method => :put, role: "form", class: "form-horizontal"}) do |f|
+        = f.hidden_field :shop_id
+        %fieldset
+          %legend 密码修改
+          = devise_error_messages!
+          -if resource.id
+            .form-group.hidden
+              = f.label :id
+          .form-group
+            = f.label :current_password, class: "control-label col-xs-2"
+            .col-xs-6= f.password_field :current_password, :hint => "we need your current password to confirm your changes", :required => true, class: "form-control"
+          .form-group
+            = f.label :password, class: "control-label col-xs-2"
+            .col-xs-6= f.password_field :password, :autocomplete => "off", :hint => "leave it blank if you don't want to change it", :required => false, class: "form-control"
+          .form-group
+            = f.label :password_confirmation, class: "control-label col-xs-2"
+            .col-xs-6= f.password_field :password_confirmation, :required => false, class: "form-control"
+          %center.form-actions
+            = f.button :submit, "修改密码", class: "btn btn-primary"

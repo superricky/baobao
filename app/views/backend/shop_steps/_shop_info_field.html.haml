@@ -1,0 +1,160 @@
+:javascript
+  $(function(){
+    $("#1").mouseenter(function(){
+      $("#span_1").show();
+    });
+    $("#1").mouseleave(function(){
+      $("#span_1").hide();
+    });
+  });
+
+
+.panel.panel-default
+  .panel-heading
+    基本信息
+  .panel-body
+    .field.form-group.col-sm-6{style:"float:left"}
+      = f.label :name, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6
+        = f.text_field :name, class: "form-control col-sm-6"
+    .field.form-group.col-sm-6
+      = f.label :slug, class: "col-xs-6 col-sm-6 control-label"
+      &nbsp;
+      .col-sm-6{style:"margin-top: -10px;margin-bottom: 10px;"}
+        - if current_account.is_admin?
+          = f.text_field :slug, class: "form-control col-sm-3"
+        - else
+          = f.object.slug
+
+    - if current_account.is_admin?
+      .field.form-group
+        = f.label :aid, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.select :aid, options_for_select(Agent.all.map{|agent| [agent.name, agent.aid]} , selected: f.object.aid), {:include_blank=>true}, {class: "form-control col-sm-4"}
+
+    .field.form-group.col-sm-6{style:"float:left"}
+      = f.label :image, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6
+        = f.file_field :image
+        %span{:style => "color:red"} *
+        为达到最佳显示效果，建议像素为720x400，图片大小不得超过1MB。
+    .field.form-group.col-sm-6
+      = f.label :qrcode, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6
+        = f.file_field :qrcode
+        %span{:style => "color:red"} *
+        该图片用于客户扫描，建议像素为400x400，图片大小不得超过1MB。
+
+    .field.form-group.col-sm-6{style:"float:left"}
+      = f.label :is_open, class: " col-xs-6 col-sm-6 control-label"
+      .col-sm-6{style:"margin-top: 7px;"}
+        - if current_account.is_admin?
+          = f.check_box :is_open
+          %span.lbl
+        - elsif f.object.is_open
+          %span{style:"color:blue"}正常营运
+        - else
+          %span{style:"color:red"}暂停营运
+    .field.form-group.col-sm-6
+      = f.label :charge_method, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6{style:"margin-top: 7px;"}
+        - if current_account.is_admin?
+          = f.select :charge_method, [["按服务时间计费", Shop::CHARGE_METHOD_BY_TIME], ["按订单数量计费", Shop::CHARGE_METHOD_BY_ORDER_COUNT]],{}, :onchange=>"change_options(this)"
+        - else
+          = f.object.charge_method_name
+
+    - if current_account.is_admin?
+      .field.form-group
+        = f.label :support_auto_buy_service, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :support_auto_buy_service
+          %span.lbl
+      .field.form-group
+        = f.label :hide_support_company, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.check_box :hide_support_company
+          %span.lbl
+      .field.form-group
+        = f.label :support_link_name, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :support_link_name, class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :support_link, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :support_link, class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :copy_right_footer, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_area :copy_right_footer, class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :product_image_limit, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.number_field :product_image_limit, class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :product_slider_limit, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.number_field :product_slider_limit, class: "form-control col-sm-4"
+      .field.form-group
+        = f.label :max_branch_sliders, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.number_field :max_branch_sliders, class: "form-control col-sm-4"
+
+    .field.form-group.col-sm-6{style:"float:left"}
+      = f.label :expiration_time, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6{style:"margin-top: 7px;"}
+        - if current_account.is_admin?
+          = f.datetime_select :expiration_time
+        - else
+          = f.object.expiration_time
+    .field.form-group.col-sm-6
+      = f.label :left_order_count, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6{style:"margin-top: 7px;"}
+        - if current_account.is_admin?
+          = f.number_field :left_order_count
+        - else
+          = f.object.left_order_count
+
+    .field.form-group.col-sm-6{style:"float:left"}
+      = f.label :state, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6{style:"margin-top: 7px;"}
+        - if current_account.is_admin?
+          = f.select :state, [[Shop::shop_state_name_by_state("trial"), "trial"], [Shop::shop_state_name_by_state("normally"), "normally"]],{}
+        - else
+          = f.object.state == "normally" ? "正常" : "停止服务"
+    .field.form-group.col-sm-6
+      = f.label :reply_num_of_orders, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6
+        = f.select :reply_num_of_orders, options_for_select(Shop.reply_orders_type_array, selected: @shop.reply_num_of_orders), {}, {class: "form-control col-sm-6"}
+
+    .field.form-group.col-sm-6{style:"float:left"}
+      = f.label :default_reply_content_type, class: "col-sx-6 col-sm-6 control-label"
+      .col-sm-6
+        = f.select :default_reply_content_type, [["图文消息", Shop::REPLY_CONTENT_TYPE_NEWS], ["文本消息", Shop::REPLY_CONTENT_TYPE_TEXT]]
+    .field.form-group.col-sm-6
+      = f.label :telephone, class: "col-xs-6 col-sm-6 control-label"
+      .col-sm-6
+        = f.text_field :telephone, class: "form-control col-sm-6"
+
+    - if current_account.is_admin?
+      .field.form-group
+        = f.label :max_branches_count, class: "col-sm-3 control-label"
+        .col-sm-4
+          = f.text_field :max_branches_count, class: "form-control col-sm-4"
+
+
+    .field.form-group
+      = f.label :introduction, class: "col-sm-3 control-label"
+      .col-sm-6
+        = f.text_area :introduction, rows: 5, class: "form-control col-sm-6"
+    .field.form-group
+      = f.label "自定义欢迎词", class: "col-sm-3 control-label"
+      .col-sm-6
+        系统默认关键词(留空将会使用系统默认欢迎词)：#{welcome_msg_unchanged}
+        \#{f.text_area :welcome_msg ,class: "form-control col-sm-4", rows: 5}
+  .panel.panel-footer
+    %center
+      - if params[:edit]
+        = link_to_back
+        = f.submit :class=>"btn btn-primary"
+      - else
+        = f.submit "下一步" ,:class=>"btn btn-primary"

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= find_or_set_title %></title>
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/assets/css/ace-ie.min.css" />
+  <![endif]-->
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <%= yield(:javascripts)%>
+  <%= yield(:css)%>
+</head>
+<body id="freedom-body">
+
+<%= yield(:menu) %>
+<% if (not @current_account.nil?) and (@current_account.is_boss? or @current_account.is_worker?) %>
+<%if @current_account.is_worker? && @current_branch.present? %>
+	<%= subscribe_to "/messages/branch/#{@current_branch.id}"%>
+<%elsif @current_account.is_boss? %>
+	<%= subscribe_to "/messages/shop/#{@current_shop.slug}"%>
+<%end%>
+<div id="messages" class="alert alert-success" style="display:none;width:980px;margin:auto;">
+	 <button type="button" class="close" aria-hidden="true">&times;</button>
+	 <div>
+	 	<strong id="message_title"></strong><span id="message_content"></span>
+	 	详情请点击<a href="#" id="message_link" class="label label-success">这里</a>
+	 </div>
+</div>
+
+<script>
+$(document).ready(function(){
+	<%if @current_account.is_worker? && @current_branch.present? %>
+		PrivatePub.subscribe("/messages/branch/<%= @current_branch.id%>", notifyNewMsg);
+	<%elsif @current_account.is_boss? %>
+		PrivatePub.subscribe("/messages/shop/<%= @current_shop.slug%>", notifyNewMsg);
+	<%end%>
+
+	var oldTitle = document.title;
+	var interval = null;
+	var isOldTitle = true;
+	var newTitle = null;
+	var link = null;
+	$('#messages').on('click', function(){
+		$('#messages').fadeOut();
+	});
+	function notifyNewMsg(data, channel) {
+		  $('#messages').fadeIn();
+		  newTitle = data.msg.title;
+		  content = data.msg.content;
+		  link = data.msg.link;
+		  $('#message_title').text(newTitle);
+		  $('#message_content').text(content);
+		  $('#message_link').attr('href', link);
+		  interval = setInterval(changeTitle, 700);
+		  soundPlay();
+		}
+
+	function changeTitle() {
+	    document.title = isOldTitle ? oldTitle : newTitle;
+	    isOldTitle = !isOldTitle;
+	}
+
+	var soundEmbed = null;
+	function soundPlay() {
+		var which = "<%= audio_url "new_message.mp3" %>"
+	    document.getElementById("sound").innerHTML='<audio autoplay="autoplay"><source src="'
+	    	+ which
+	    	+ '" type="audio/mpeg" /><embed hidden="true" autostart="true" loop="false" src="'
+	    	+ which
+	    	+'" /></audio>';
+    }
+
+	$(window).focus(function () {
+    	clearInterval(interval);
+    	document.title = oldTitle;
+	});
+});
+</script>
+<% end %>
+<div style="width:980px;margin:auto;min-height:650px;margin-bottom: 20px;margin-top: 20px;" class="container">
+	<%= yield(:content) or yield %>
+</div>
+<div id="sound"></div>
+<%= render "/footer" %>
+</body>
+</html>

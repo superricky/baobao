@@ -1,0 +1,52 @@
+%p#notice= notice
+.panel.panel-default
+  .panel-heading= @agent.name
+  .panel-body
+    %p
+      %b= Agent.human_attribute_name(:aid)
+      \:
+      = @agent.aid
+    %p
+      %b= Agent.human_attribute_name(:name)
+      \:
+      = @agent.name
+    %p
+      %b= Agent.human_attribute_name(:balance)
+      \:
+      = @agent.balance
+
+    %p
+      %b= Agent.human_attribute_name(:agent_rels)
+      \:
+      %table.table.table-striped.table-bordered
+        %thead
+          %th= AgentRel.human_attribute_name(:agent_zone_id)
+          %th= AgentRel.human_attribute_name(:agent_from)
+          %th= AgentRel.human_attribute_name(:agent_to)
+        %tbody
+          - @agent.agent_rels.each do |agent_rel|
+            %tr
+              %td= link_to agent_rel.agent_zone.name, [:backend, agent_rel.agent_zone] if agent_rel.agent_zone.present?
+              %td= agent_rel.agent_from.strftime("%Y-%m-%d")
+              %td= agent_rel.agent_from.strftime("%Y-%m-%d")
+    %p
+      %b= Agent.human_attribute_name(:shops)
+      \:
+      %table.table.table-striped.table-bordered
+        %thead
+          %th= Shop.human_attribute_name(:name)
+          %th 剩余配额
+        %tbody
+          - @agent.shops.each do |shop|
+            %tr
+              %td= link_to shop.name, [:backend, shop]
+              %td
+                - if shop.charge_method == Shop::CHARGE_METHOD_BY_ORDER_COUNT
+                  = "剩余订单数：#{shop.left_order_count}"
+                - elsif shop.charge_method == Shop::CHARGE_METHOD_BY_TIME
+                  = "到期时间：#{shop.expiration_time.strftime('%Y-%m-%d')}"
+
+
+= link_to t('Edit'), edit_backend_agent_path(@agent), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_agents_path, :class=>"btn btn-default"

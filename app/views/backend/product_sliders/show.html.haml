@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b
+    = ProductSlider.human_attribute_name(:img)
+    \:
+  = image_tag @product_slider.img.medium.url, :class=>"img-rounded", :width=>360
+%p
+  %b
+    = ProductSlider.human_attribute_name(:desc)
+    \:
+  = @product_slider.desc
+%p
+  %b
+    = ProductSlider.human_attribute_name(:product)
+    \:
+  = @product_slider.product.name
+
+= link_to t('Edit'), edit_backend_shop_branch_product_slider_path(@current_shop.slug, @current_branch, @product_slider)
+\|
+= link_to t('Back'), backend_shop_branch_product_sliders_path(@current_shop.slug, @current_branch)

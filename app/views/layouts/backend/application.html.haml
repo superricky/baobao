@@ -1,0 +1,24 @@
+!!!
+%html
+  %head
+    %meta{charset: "utf-8"}
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    = csrf_meta_tags
+    = stylesheet_link_tag "backend/application", media: "all", data: {turbolinks: {track: true}}
+    = javascript_include_tag "backend/application"
+    /[if lt IE 9]
+      = javascript_include_tag "html5shiv"
+      = javascript_include_tag "respond.min"
+      = javascript_include_tag "json3.min"
+    %title= @current_shop.name rescue nil
+  %body
+    .container
+      = render "layouts/backend/header"
+      .workspace{style:"width:910px"}
+        = render "layouts/backend/nav"
+        = yield
+      = render '/backend/sidemenu'
+    #sound
+  = raw render("layouts/backend/audio")
+  /:javascript
+  / $("[type='checkbox']").bootstrapSwitch();

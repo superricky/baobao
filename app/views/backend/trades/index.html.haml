@@ -1,0 +1,50 @@
+%h1 支付流水
+
+= search_form_for @q, url: @current_branch.present? ? backend_shop_branch_trades_path(@current_shop, @current_branch) : backend_shop_trades_path(@current_shop), :html=>{:class=>"form-inline pull-right", :role=>"form"} do |f|
+  .form-group
+    = f.label :trade_id
+    = f.text_field :trade_id_cont, :class=>"form-control"
+  .form-group
+    = f.label :partner
+    = f.text_field :partner_cont, :class=>"form-control"
+  .form-group
+    = f.label :out_trade_no
+    = f.text_field :out_trade_no_cont, :class=>"form-control"
+  = f.submit "搜索", :class=>"btn btn-default"
+.pull-right= will_paginate @trades , renderer: BootstrapPagination::Rails, bootstrap: 3
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th= Trade.human_attribute_name(:trade_id)
+      %th= Trade.human_attribute_name(:trade_type)
+      %th= Trade.human_attribute_name(:partner)
+      %th= Trade.human_attribute_name(:total_fee)
+      %th= Trade.human_attribute_name(:out_trade_no)
+      %th= Trade.human_attribute_name(:branch_id)
+      %th= t("operation btn")
+  %tbody
+    - @trades.each do |trade|
+      %tr
+        %td= trade.trade_id
+        %td= trade.trade_type_name
+        %td
+          - if trade.system_config and !current_account.is_worker?
+            = link_to trade.partner, [:backend, @current_shop, trade.system_config]
+          - elsif trade.trade_type == Order::PAY_BY_MOBILE_ALIPAY_TYPE and @current_shop.mobile_alipay.present?
+            = link_to trade.partner, backend_shop_mobile_alipay_path(@current_shop)
+          - elsif trade.trade_type == Order::PAY_BY_TENPAY_TYPE and @current_shop.tenpay.present?
+            = link_to trade.partner, backend_shop_tenpay_path(@current_shop)
+          - else
+            = trade.partner
+
+        %td
+          = number_to_currency(cent_to_yuan(trade.total_fee), :unit=>"¥")
+          \元
+        %td= link_to trade.out_trade_no, [:backend, @current_shop, trade.branch, trade.order]
+        %td= link_to trade.branch.name, [:backend, @current_shop, trade.branch]
+        %td
+          - unless @current_branch
+            = link_to t('Show'), backend_shop_trade_path(@current_shop, trade, {:page=>params[:page]}), :class=>"btn btn-default"
+          - else
+            = link_to t('Show'), backend_shop_branch_trade_path(@current_shop, @current_branch, trade, {:page=>params[:page]}), :class=>"btn btn-default"

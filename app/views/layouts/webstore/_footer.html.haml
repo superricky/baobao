@@ -1,0 +1,18 @@
+%center
+  %p.copyright
+    - if @current_shop.hide_support_company && @current_shop.copy_right_footer
+      = raw @current_shop.copy_right_footer
+    - else
+      Copyright&copy;
+      = "2013-#{Time.now.strftime "%Y"}"
+      【拓单宝】
+      %br/
+      tuodanbao.com, All Rights Reserved.
+      %br/
+      技术支持：#{@technical_support}
+.right_bar{style: "display:none"}
+  %a.glyphicon.glyphicon-chevron-up.back_to_top
+  %br/
+  -if @current_shop.present? && @current_shop.qrcode.present?
+    %a.glyphicon.glyphicon-qrcode
+      %img.qrcode{src: @current_shop.qrcode.medium.url, style: "width:200px;height:200px;border:1px solid #2b2b2b"}

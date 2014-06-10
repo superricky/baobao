@@ -1,0 +1,1 @@
+json.extract! @theme, :id, :background_color, :text_color, :header_bg_color, :header_text_color, :navbar_bg_color, :navbar_text_color, :menu_bg_color, :menu_text_color, :theme_type, :shop_id, :created_at, :updated_at

@@ -1,0 +1,20 @@
+.panel.content.col-xs-12.col-md-4{style:"margin:50px auto;padding:0 10px 10px 10px;float:none;"}
+  %h2 注册会员
+  = simple_form_for(resource, :as => resource_name, :url => (resource.new_record? ? webstore_registrations_path(@current_shop) : webstore_registration_path(@current_shop, resource_name))) do |f|
+    = f.hidden_field :shop_id, value: @current_shop.id
+    = devise_error_messages!
+    .form-group
+      = f.label :name, class: "control-label"
+      = f.text_field :name, :required => true, :autofocus => true, class: "form-control"
+    .form-group
+      = f.label :email, class: "control-label"
+      = f.email_field :email, :required => true, :autofocus => true, class: "form-control"
+    .form-group
+      = f.label :password, class: "control-label"
+      = f.password_field :password, :required => true, class: "form-control"
+    .form-group
+      = f.label :password_confirmation, class: "control"
+      = f.password_field :password_confirmation, :required => true, class: "form-control"
+    %center.form-actions
+      = f.button :submit, "注册", class: "btn btn-primary"
+      = link_to '取消返回', webstore_login_path(@current_shop), class: "btn btn-default"

@@ -1,0 +1,79 @@
+.row
+  .col-xs-12.col-sm-3
+
+    .profile-picture
+      = image_tag @branch.rect_image.thumb.url, :alt=>"200x200", :class=>"img-rounded"
+  .col-xs-12.col-sm-9
+    %table.table.table-striped
+      %tr
+        %th.right= Branch.human_attribute_name("name")
+        %td.left= @branch.name
+        %th.right= Branch.human_attribute_name("shop")
+        %td.left= @branch.shop.name
+        %th.right= Branch.human_attribute_name("is_open")
+        %td.left
+          - if @branch.is_open
+            正常营业
+          - else
+            暂停营业
+      %tr
+        %th.right= Branch.human_attribute_name("charge_method")
+        %td.left
+          = @branch.charge_method_name
+        - if @branch.charge_method == Branch::CHARGE_METHOD_BY_TIME
+          %th.right
+            = Branch.human_attribute_name("expiration_time")
+          %td.left
+            = @branch.expiration_time.strftime('%Y-%m-%d %H:%M')
+        - elsif @branch.charge_method == Branch::CHARGE_METHOD_BY_ORDER_COUNT
+          %th.right
+            = Branch.human_attribute_name("left_order_count")
+          %td.left
+            = @branch.left_order_count
+        %th.right
+          = Branch.human_attribute_name("supported_order_types")
+        %td.left
+          = @branch.supported_order_types_name
+      %tr
+        %th.right= Branch.human_attribute_name("credits_given")
+        %td.left
+          = @branch.credits_given
+        %th.right
+          = Branch.human_attribute_name("credits_consume")
+        %td.left
+          = @branch.credits_consume
+        %th.right
+          = Branch.human_attribute_name("telephone")
+        %td.left
+          = @branch.telephone
+    .row
+      .col-xs-12.col-sm-6
+        .widget-box
+          .widget-header.widget-header-flat
+            %h4.smaller= Branch.human_attribute_name("location")
+          .widget-body
+            .widget-main.center
+              %img{:src => location_img({:location_x => @branch.latitude, :location_y=>@branch.longitude, :width=>250, :height=>240, :zoom=>13})}/
+      .col-xs-12.col-sm-6
+        .widget-box.transparent
+          .widget-header.widget-header-small
+            %h4.smaller
+              %i.icon-check.bigger-110
+              = Branch.human_attribute_name("introduction")
+          .widget-body
+            .widget-main
+              %p.muted= raw(@branch.introduction || "暂无介绍")
+      - if @branch.enabled_verify_service_periods
+        .col-xs-12.col-sm-6
+          .widget-box.transparent
+            .widget-header.widget-header-small
+              %h4.smaller
+                %i.icon-check.bigger-110
+                = Branch.human_attribute_name("service_periods")
+            .widget-body
+              .widget-main
+                %ul.list-inline
+                  - @branch.service_periods.each do |service_period|
+                    %li
+                      = service_period.service_period_start.strftime("%H:%M:%S")
+                      \&nbsp;~&nbsp;#{service_period.service_period_end.strftime("%H:%M")}

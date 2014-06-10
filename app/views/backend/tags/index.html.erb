@@ -1,0 +1,22 @@
+<div class="pull-left col-md-6 col-lg-6 title"><%= t('Listing tags')%></div>
+<div class="pull-right col-md-6 col-lg-6 title"><%= link_to t('New tag'), new_backend_shop_branch_tag_path, :class=>"btn btn-primary pull-right" %></div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= Tag.human_attribute_name("name")%></th>
+      <th><%= t('operation btn')%></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tags.each do |tag| %>
+      <tr>
+        <td><%= tag.name %></td>
+        <td><%= link_to t('Show'), backend_shop_branch_tag_path(@current_shop.slug, @current_branch, tag), :class=>'btn btn-default' %>
+        <%= link_to t('Edit'), edit_backend_shop_branch_tag_path(@current_shop.slug, @current_branch, tag), :class=>'btn btn-default' %>
+       <%= link_to t('Destroy'), backend_shop_branch_tag_path(@current_shop.slug, @current_branch, tag), method: :delete, data: { confirm: '确定删除标签吗?' }, :class=>'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

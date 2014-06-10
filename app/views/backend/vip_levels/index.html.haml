@@ -1,0 +1,22 @@
+%h1 会员级别
+
+%table.table.table-stripped
+  %tr
+    %th= VipLevel.human_attribute_name("name")
+    %th= VipLevel.human_attribute_name("discount")
+    %th= VipLevel.human_attribute_name("auto_upgrade")
+    %th
+
+  - @vip_levels.each do |vip_level|
+    %tr
+      %td= vip_level.name
+      %td= "#{vip_level.discount}折"
+      %td= vip_level.auto_upgrade? ? "是(#{number_to_currency(vip_level.min_total_amount, :unit=>'¥')}元)" : "否"
+      %td
+        = link_to t('Show'), backend_shop_vip_level_path(@current_shop.slug, vip_level), :class=>"btn btn-default"
+        = link_to t('Edit'), edit_backend_shop_vip_level_path(@current_shop.slug, vip_level), :class=>"btn btn-default"
+        = link_to t('Destroy'), backend_shop_vip_level_path(@current_shop.slug, vip_level), :method => :delete, :data => { :confirm => '确定删除会员级别？注意，与之相关的会员都会收到影响' }, :class=>"btn btn-danger"
+
+%br
+
+= link_to '新建会员级别', new_backend_shop_vip_level_path(@current_shop.slug), :class=>"btn btn-default"

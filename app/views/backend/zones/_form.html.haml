@@ -1,0 +1,19 @@
+= form_for [:backend, @current_shop, @zone] do |f|
+  - if @zone.errors.any?
+    #error_explanation
+      %h2= "#{@zone.errors.count}个错误导致无法成功保存:"
+      %ul
+        - @zone.errors.full_messages.each do |msg|
+          %li= msg
+
+  - if @zone.parent_zone.present?
+    .field
+      = f.label :parent_zone_id
+      = @zone.parent_zone.name
+      = f.hidden_field :parent_zone_id
+  .field
+    = f.label :name
+    = f.text_field :name
+
+  .actions
+    = f.submit '保存', :class=>"btn btn-default"

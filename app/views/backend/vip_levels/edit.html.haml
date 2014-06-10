@@ -1,0 +1,7 @@
+%h1 会员级别
+
+= render 'form'
+
+= link_to t('Show'), backend_shop_vip_levels_path(@current_shop.slug, @vip_level), :class=>"btn btn-default"
+\|
+= link_to t('Back'), backend_shop_vip_levels_path(@current_shop.slug), :class=>"btn btn-default"

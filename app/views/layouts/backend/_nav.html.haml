@@ -1,0 +1,12 @@
+#breadcrumbs.breadcrumbs
+  %ul.breadcrumb
+    %li
+      %i.icon-home.home-icon
+      %a{:href => "#{@current_account.is_admin? ? backend_shops_path : (@current_account.is_boss? ? dashboard_backend_shop_path(@current_shop) : backend_shop_branches_path(@current_shop) )}"} 首页
+    - if @current_shop.present? and (@current_account.is_boss? or @current_account.is_admin?)
+      %li
+        %a{:href => "#{dashboard_backend_shop_path(@current_shop)}"}= @current_shop.name
+    - if @current_branch.present?
+      %li
+        %a{:href => "#{dashboard_backend_shop_path(@current_shop)}"}= @current_branch.name
+    %li.active= t("activerecord.models.#{controller_name.classify.underscore}")

@@ -1,0 +1,6 @@
+<h1><%= t('Editing tag')%></h1>
+
+<%= render 'form' %>
+
+<%= link_to t('Show'), edit_backend_shop_branch_tag_path(@current_shop.slug, @current_branch,  @tag) %> |
+<%= link_to t('Back'), backend_shop_branch_tags_path %>

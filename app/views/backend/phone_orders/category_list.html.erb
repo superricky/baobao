@@ -1,0 +1,281 @@
+<script type="text/html" id="cartTemplate">
+  <div class="panel panel-default">
+    <div class="panel panel-heading">
+      <div data-content="title"></div>
+    </div>
+    <div class="panel panel-body">
+      <table class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th>产品名</th>
+            <th>单价</th>
+            <th>数量</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-content="line_items" data-format="nestedTemplateFormatter" data-format-options='{"parentElement": "tr", "template": "#lineItemTemplate"}'>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>总价:￥<span data-content="amount"></span></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="panel panel-footer">
+      <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create_order">结算</button>
+      <button class="btn btn-danger btn-sm" data-toggle="modal" onclick="emptyCart()">清空</button>
+    </div>
+  </div>
+</script>
+
+<script type="text/html" id="lineItemTemplate">
+  <tr>
+    <td data-content="name"></td>
+    <td>
+      ￥<span data-content="price"></span>/
+      <span data-content="product_unit"></span>
+    </td>
+    <td>
+      <input type="text" data-value="quantity" data-productId="product_id" size="2" onkeyup="changeLineItmeQuantity(this)" data-template-bind='[{"attribute": "data-productid", "value": "product_id"}]'></input>
+    </td>
+    <td>
+      <button class="btn btn-minier btn-danger btn-sm" alt="删除"  data-template-bind='[{"attribute": "data-productid", "value": "product_id"}]' onclick="deleteLineItme(this)">
+        <i class="icon-trash bigger-200"></i>
+      </button>
+    </td>
+  <tr>
+</script>
+
+<div class="row phone_order_product_list">
+  <div class="col-sm-8 col-md-8">
+    <div class="tabbable tabs-left" id="category_tabbable">
+      <ul id="categoryTab" class="nav nav-tabs" style="overflow-y:scroll;overflow-x:hidden">
+        <% @category_list.each do |category| %>
+          <% if category.products.size != 0 || category.categories.collect{|sub| sub.products.length== 0}.index(false)%>
+            <li style="width:100px">
+              <a data-toggle="tab" href="#category_<%= category.id %>">
+                <i class="green bigger-110"></i>
+                <%= category.name %>
+              </a>
+            </li>
+            <% category.categories.each do |sub| %>
+              <% if sub.products.length > 0 %>
+                <li style="width:100px">
+                  <a data-toggle="tab" href="#category_<%= sub.id %>">
+                    <i class="green bigger-110"></i>
+                    &nbsp;|-<%= sub.name %>
+                  </a>
+                </li>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if @current_branch.products.select{|product| product.categories.size == 0 }.size > 0 %>
+          <li>
+            <a data-toggle="tab" href="#category_other">
+              <i class="green bigger-110"></i>
+              其他
+            </a>
+          </li>
+        <% end %>
+      </ul>
+      <div class="tab-content" id="tab_content" style="overflow-y:scroll;overflow-x:hidden">
+        <% @category_list.each do |category| %>
+          <% if category.products.size > 0 %>
+            <div class="tab-pane" id="category_<%= category.id%>">
+              <div class="row">
+                <% category.products.each do |product| %>
+                  <div class="col-sm-3 col-md-3 product_show" style="padding:0px 7px">
+                    <%= render "product", {product: product}%>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          <% category.categories.each do |sub| %>
+            <% if sub.products.size > 0 %>
+              <div class="tab-pane" id="category_<%= sub.id%>">
+                <div class="row">
+                  <% sub.products.each do |product| %>
+                    <div class="col-sm-3 col-md-3 product_show" style="padding:0px 7px">
+                      <%= render "product", {product: product}%>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+        <div class="tab-pane" id="category_other">
+          <div class="row">
+            <% @current_branch.products.select{|product| product.categories.size == 0 }.each do |product| %>
+              <div class="col-sm-3 col-md-3 product_show" style="padding:0px 7px">
+                <%= render "product", {product: product}%>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=""></div>
+  </div>
+  <div class="col-md-4 col-sm-4 cart_list">
+    <div id="cart"></div>
+  </div>
+</div>
+
+<div class="modal fade" id="create_order">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal" data-aria-hidden="true">&times;</button>
+        <h4 class="modal-title">下单</h4>
+      </div>
+      <div class="modal-body">
+        <%= render "order_info_form"%>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-info" id="submit_order">提交订单</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="show_order">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" type="button" data-dismiss="modal" data-aria-hidden="true">&times;</button>
+        <h4 class="modal-title">下单</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var cart = {
+    title: "购物车",
+    line_items: [],
+    amount: 0,
+  }
+
+  $(function(){
+    $('#category_tabbable a:first').tab('show')
+    $("#cart").loadTemplate("#cartTemplate", cart);
+    $(".add_product").on("click", function(){
+      var product_id = parseInt($(this).data("id"));
+      var name = $(this).data("name");
+      var price = parseFloat($(this).data("price"));
+      var product_unit = $(this).data("productunit")
+      line_items = add_product_to_cart(cart.line_items, product_id, name, price, product_unit);
+      update_cart_amount(cart);
+      $("#cart").loadTemplate("#cartTemplate", cart);
+    });
+
+    $("#submit_order").on("click", function(event){
+      event.preventDefault(event);
+      var url = $("#order_info_form").attr("action");
+      var data = jQuery.param({"line_items": cart.line_items})+ "&" + $("#order_info_form").serialize();
+      $.ajax({
+        type: "POST",
+        url: url,
+        dataType: "json",
+        data: data
+      }).done(function(msg) {
+        $("#show_order .modal-body").empty();
+        $("#show_order .modal-body").append(msg.order_items);
+        $("#show_order .modal-body").append(msg.order_info);
+        $("#create_order").modal('hide');
+        $("#show_order").modal('show');
+        resert_form();
+        cart.line_items = [];
+        update_cart_amount(cart);
+        $("#cart").loadTemplate("#cartTemplate", cart);
+      }).fail(function(msg){
+        $("#create_order .modal-body").html(jQuery.parseJSON(msg.responseText).order_form);
+      });
+    });
+  });
+
+  function emptyCart(){
+    cart.line_items = [];
+    update_cart_amount(cart);
+    $("#cart").loadTemplate("#cartTemplate", cart);
+  }
+
+  function changeLineItmeQuantity(input){
+    var product_id = parseInt($(input).data("productid"));
+    if(isNaN(parseInt($(input).val()))){
+      update_line_item(product_id, 1);
+    }else{
+      update_line_item(product_id, parseInt($(input).val()));
+    }
+  }
+
+  function deleteLineItme(button){
+    var product_id = parseInt($(button).data("productid"));
+    cart.line_items = jQuery.grep(cart.line_items, function(line_item) {
+      return line_item.product_id != product_id;
+    });
+    update_cart_amount(cart);
+    $("#cart").loadTemplate("#cartTemplate", cart);
+  }
+
+  function resert_form(){
+    $("#error_explanztion").remove();
+    $('#create_order form')[0].reset();
+    $("#create_order form .field_with_errors").removeClass("field_with_errors");
+    change_order_type("delivery");
+  }
+
+
+  function add_product_to_cart(line_items, product_id, name, price, product_unit){
+    var product_ids = jQuery.map(line_items,function(line_item){
+      return line_item.product_id
+    });
+    if(jQuery.inArray(product_id, product_ids) > -1){
+      jQuery.each(line_items, function(index, line_item){
+        if(line_item.product_id == product_id){
+          line_item.quantity += 1
+        }
+      });
+    }else{
+      line_items.push({product_id: product_id, name: name, price: price ,quantity: 1, product_unit: product_unit})
+    }
+    return line_items
+  }
+
+  function update_line_item(product_id, quantity){
+    jQuery.each(cart.line_items,function(index, line_item){
+      if(line_item.product_id == product_id){
+        line_item.quantity = quantity
+      }
+    });
+    update_cart_amount(cart);
+    $("#cart").loadTemplate("#cartTemplate", cart);
+  }
+
+  function update_cart_amount(cart){
+    var amount = 0
+    jQuery.each(cart.line_items,function(index, line_item){
+      amount += line_item.price * line_item.quantity
+    });
+    cart.amount = amount;
+  }
+  $(function()
+    {
+      $('#categoryTab').height($(window).height()-130);
+      $('#tab_content').height($(window).height()-163);
+    });
+  $(window).resize(function()
+    {
+      $('#categoryTab').height($(window).height()-130);
+      $('#tab_content').height($(window).height()-160);
+    });
+
+</script>

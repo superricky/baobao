@@ -1,0 +1,62 @@
+%p#notice= notice
+%div.panel.panel-default
+  %div.panel-heading 服务区域详情
+  %div.panel-body
+    %p
+      %b
+        = Zone.human_attribute_name(:parent_zone)
+        \:
+      = @zone.parent_zone.present? ? @zone.parent_zone.name : "无上级区域"
+    %p
+      %b
+        = Zone.human_attribute_name(:name)
+        \:
+      = @zone.name
+    %p
+      %b
+        = Zone.human_attribute_name(:branches_count)
+        \:
+      = "#{@zone.branches_count || 0}家"
+- if @zone.parent_zone.nil?
+  %div.panel.panel-default
+    %div.panel-heading 子区域
+    %div.panel-body
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= Zone.human_attribute_name(:name)
+            %th= Zone.human_attribute_name(:branches_count)
+            %th
+        %tbody
+          - @zone.sub_zones.each do |sub_zone|
+            %tr
+              %td= sub_zone.name
+              %td= "#{sub_zone.branches_count}家"
+              %td
+                = link_to t('Show'), backend_shop_zone_path(@current_shop.slug, sub_zone), :class=>"btn btn-default"
+                = link_to t('Edit'), edit_backend_shop_zone_path(@current_shop.slug, sub_zone), :class=>"btn btn-default"
+                = link_to t('Destroy'), backend_shop_zone_path(@current_shop.slug, sub_zone), :method => :delete, :data => { :confirm => '请注意，您一旦删除该服务区域，所有子区域都将被删除' }, :class=>"btn btn-danger"
+      = link_to '新建子区域', new_backend_shop_zone_path(@current_shop.slug, :parent_zone_id=>@zone.id), :class=>"btn btn-default"
+- else
+  %div.panel.panel-default
+  %div.panel-heading 属于该子区域的商户
+  %div.panel-body
+    %table.table.table-striped
+      %thead
+        %tr
+          %th= Branch.human_attribute_name("name")
+          %th= Branch.human_attribute_name("is_open")
+          %th 剩余配额
+          %th= Branch.human_attribute_name("telephone")
+          %th= t("operation btn")
+      %tbody
+        - if @branches.empty?
+          %tr
+            %th{:colspan=>5} 该分类暂无商户
+        - @branches.each_with_index do |branch, index|
+          = render 'backend/branches/table_record', {branch: branch, index:index, branches: @branches}
+
+
+= link_to t('Edit'), edit_backend_shop_zone_path(@current_shop.slug, @zone), :class=>"btn btn-default"
+\|
+= link_to t('Back'), @zone.parent_zone.present? ? backend_shop_zone_path(@current_shop.slug, @zone.parent_zone) : backend_shop_zones_path(@current_shop.slug), :class=>"btn btn-default"

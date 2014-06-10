@@ -1,0 +1,25 @@
+- content_for :title do
+  我的刮刮卡
+.body
+  .m-1
+    - if @scrachpads.empty?
+      %h1 您暂时没有获得刮刮卡
+    - else
+      %nav.combo
+        %ul
+          - @scrachpads.each do |scrachpad|
+            %li
+              .content
+                %h2
+                  商户：#{scrachpad.branch.name}
+                %strong
+                  刮奖结果：
+                  - if scrachpad.is_opened
+                    = scrachpad.card_result
+                  - else
+                    等待刮奖
+                %br/
+                %strong
+                  有效期：#{scrachpad.valid_before.strftime("%Y-%m-%d")}
+                %center
+                  = link_to "了解详情",  mobile_shop_branch_scrachpad_path(@current_shop.slug, @current_branch, scrachpad), :class=>"btn btn-default"

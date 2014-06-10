@@ -1,0 +1,35 @@
+<tr data-branch-position="<%= branch.position -%>">
+	<td><%= link_to branch.name, "#{branch.is_branch? ? backend_shop_branch_path(@current_shop, branch) : backend_shop_brand_chain_path(@current_shop, branch)}" %></td>
+	<td><% if branch.is_open %>正常营业<%else%>暂停营业<%end%></td>
+	<td>
+		<% if branch.charge_method == Branch::CHARGE_METHOD_BY_ORDER_COUNT %>
+			剩余订单数：<%= branch.left_order_count %>
+		<%elsif branch.charge_method == Branch::CHARGE_METHOD_BY_TIME %>
+			到期时间：<%= branch.expiration_time.strftime('%Y-%m-%d') %>
+		<%end%>
+	<td><%= branch.telephone||"<空>" %></td>
+	<td>
+		<% if branches.size > 1 %>
+		<div class="btn-group">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+				排序<span class="caret"></span>
+			</button>
+        	<ul class="dropdown-menu" role="menu">
+        		<% unless index == 0 %>
+			    <li><a href="<%= exchange_position_backend_shop_branches_path(@current_shop.slug, branch_ids:[branches[index-1].id, branch.id])%>" data-method="put" data-remote="true"><i class='glyphicon glyphicon-arrow-up'></i>向上移一位</a></li>
+			    <%end%>
+			    <% unless index == branches.size-1 %>
+			    <li><a href="<%= exchange_position_backend_shop_branches_path(@current_shop.slug, branch_ids:[branch.id, branches[index+1].id])%>" data-method="put" data-remote="true"><i class='glyphicon glyphicon-arrow-down'></i>向下移一位</a></li>
+			    <%end%>
+			</ul>
+		</div>
+		<%end%>
+		<%= link_to '管理商户', backend_shop_branch_path(@current_shop.slug, branch), :class => "btn btn-default" %>
+		<%= link_to '产品管理', backend_shop_branch_products_path(@current_shop.slug, branch), :class => "btn btn-default" %>
+		<% if current_account.is_admin? || current_account.is_boss? %>
+			<% if controller_name == "branches" or controller_name == "base_branches"%>
+				<%= link_to t('Destroy'), backend_shop_branch_path(@current_shop.slug, branch), method: :delete, data: { confirm: '确定要删除吗？' }, :class => "btn btn-danger" %>
+			<%end%>
+		<% end %>
+		</td>
+</tr>

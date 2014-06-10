@@ -1,0 +1,19 @@
+<div class="panel panel-default">
+	<div class="panel panel-heading">
+		<%= t('Editing user')%>
+	</div>
+	<div class="panel panel-body">
+
+		<%= form_for(@user, url: (@current_branch.present? ? backend_shop_branch_user_path(@current_shop, @current_branch, @user) : backend_shop_user_path(@current_shop, @user)), :html => {:class => "form-horizontal", :role=>"form"}) do |f| %>
+		<%= render 'form', {f:f} %>
+		<% end %>
+	</div>
+</div>
+
+
+<%= link_to t('Show'), get_user_path(@user), :class=>"btn btn-default" %> |
+
+<%= link_to t('Back'), get_users_path , :class=>"btn btn-default"%>
+<% if @user.is_vip? %>
+  <%= link_to '会员充值', vip_edit_backend_shop_user_path(@current_shop.slug, @user), class:"btn btn-default"%>
+<% end %>

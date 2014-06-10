@@ -1,0 +1,1 @@
+$("#material_<%= @material.id%> .event_list").html("<%= escape_javascript(render 'backend/materials/event_list', {material: @material} )%>")

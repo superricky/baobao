@@ -1,0 +1,11 @@
+:javascript
+  $(".back_to_category").click(function(){
+    $(".sub_category").hide();
+    $(".category").fadeIn();
+  });
+
+  $(".to_sub_category_btn").click(function(){
+    var id = $(this).attr("data-id");
+    $(".category").hide();
+    $("#sub_categories_in_category_"+id.toString()).fadeIn();
+  });

@@ -1,0 +1,50 @@
+<%= subscribe_to "/messages/accounts/#{@current_account.id}"%>
+<script type = "text/javascript">
+$(document).ready(function(){
+  <% if @current_account.is_boss? or (@current_account.is_worker? && @current_branch.present?) %>
+    PrivatePub.subscribe("/messages/accounts/<%= @current_account.id%>", notifyNewMsg);
+  <%end%>
+
+  var oldTitle = document.title;
+  var interval = null;
+  var isOldTitle = true;
+  var newTitle = null;
+  var link = null;
+  //$('#messages').on('click', function(){
+  //  $('#messages').fadeOut();
+  //});
+  function notifyNewMsg(data, channel) {
+    //$('#messages').fadeIn();
+    newTitle = data.msg.title;
+    content = data.msg.content;
+    link = data.msg.link;
+    //$('#message_title').text(newTitle);
+    //$('#message_content').text(content);
+    //$('#message_link').attr('href', link);
+    interval = setInterval(changeTitle, 700);
+    soundPlay();
+  }
+
+  function changeTitle() {
+    document.title = isOldTitle ? oldTitle : newTitle;
+    isOldTitle = !isOldTitle;
+  }
+
+  var soundEmbed = null;
+  //======================================================================
+  function soundPlay() {
+    var which_mp3 = "<%= audio_url "new_message.mp3" %>"
+    var which_ogg = "<%= audio_url "new_message.ogg" %>"
+    document.getElementById("sound").innerHTML='<audio controls autoplay="autoplay"><source src="'
+      + which_ogg
+      + '" type="audio/ogg" /><source src="'
+      + which_mp3
+      + '" type="audio/mpeg" /></audio>';
+    }
+
+  $(window).focus(function () {
+    clearInterval(interval);
+    document.title = oldTitle;
+  });
+});
+</script>

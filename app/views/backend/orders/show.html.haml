@@ -1,0 +1,149 @@
+- unless notice.nil?
+  #notice.row.alert.alert-success{:style => "text-align:center;"}
+    %strong= notice
+.panel.panel-default
+  .panel-heading 订单详情
+  .panel-body
+    %table.table.table-bordered
+      - if @order.order_items.empty?
+        %tr
+          %td 购物车为空，请返回选择您要购买的商品
+      - else
+        - @order.order_items.each_with_index do |order_item, index|
+          %tr{:class => cycle("success", "active",  "warning")}
+            %td= index+1
+            %td
+              %strong= order_item.name
+            %td
+              = number_to_currency(order_item.price, :unit=>@current_shop.current_currency_symbol)
+              \/#{order_item.product_unit} x #{order_item.quantity}
+    %table.table
+      %tr
+        %td.col-xs-3
+          %strong
+            = Order.human_attribute_name("order_type")
+            \:
+        %td.col-xs-9= @order.order_type_name
+      %tr
+        %td.col-xs-3
+          %strong
+            = Order.human_attribute_name("name")
+            \:
+        %td.col-xs-9
+          - if @order.user.is_a? User
+            = link_to @order.name||@order.user.fake_user_name, [:backend, @current_shop, @order.branch, @order.user]
+          - else
+            = @order.name||@order.user.name
+      - if @order.order_type == Order::ORDERTYPE_DELIVERY or @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+        %tr
+          %td.col-xs-3
+            %strong
+              = Order.human_attribute_name("phone")
+              \:
+          %td.col-xs-9= @order.phone
+      - if @order.order_type == Order::ORDERTYPE_DELIVERY
+        %tr
+          %td.col-xs-3
+            %strong
+              = Order.human_attribute_name("delivery_zone")
+          %td.col-xs-3
+            = @order.delivery_zone.zone_name rescue nil
+        - if @order.delivery_period
+          %tr
+            %td.col-xs-3
+              %strong
+                = Order.human_attribute_name("delivery_period")
+            %td.col-xs-3
+              = @order.delivery_period
+        %tr
+          %td.col-xs-3
+            %strong
+              = Order.human_attribute_name("address")
+              \:
+          %td.col-xs-9= @order.address
+        - if @order.delivery_time.present?
+          %tr
+            %td.col-xs-3
+              %strong
+                = Order.human_attribute_name("delivery_time")
+                \:
+            %td.col-xs-9= @order.delivery_time.strftime('%Y-%m-%d %H:%M')
+      - if @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+        - if @order.arrive_time.present?
+          %tr
+            %td.col-xs-3
+              %strong
+                = Order.human_attribute_name("arrive_time")
+                \:
+            %td.col-xs-9= @order.arrive_time.strftime('%Y-%m-%d %H:%M')
+      - if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL or @order.order_type == Order::ORDERTYPE_ORDER_SEAT
+        %tr
+          %td.col-xs-3
+            %strong
+              = Order.human_attribute_name("guest_num")
+              \:
+          %td.col-xs-9= @order.guest_num
+      - if @order.order_type == Order::ORDERTYPE_EAT_IN_HALL
+        %tr
+          %td.col-xs-3
+            %strong
+              = Order.human_attribute_name("desk_no")
+              \:
+          %td.col-xs-9
+            = @order.desk_no
+            号桌
+      %tr
+        %td.col-xs-3
+          %strong
+            = Order.human_attribute_name("amount")
+            \:
+        %td.col-xs-9= number_to_currency(@order.amount, :unit=>'¥')
+      - if @order.consume_credit > 0
+        %tr
+          %td.col-xs-3
+            消耗积分
+          %td.col-xs-9= "#{@order.consume_credit}个"
+        %tr
+          %td.col-xs-3
+            积分抵扣
+          %td.col-xs-9= "-#{number_to_currency(OrderStrategy.new.money_exchange_from_credits(@current_shop, @order.consume_credit), :unit=>@current_shop.current_currency_symbol)}"
+      - if @order.consume_wallet > 0
+        %tr
+          %td.col-xs-3
+            %strong
+              余额抵扣
+          %td.col-xs-9= "-#{@order.consume_wallet}"
+      %tr
+        %td.col-xs-3
+          %strong
+            实付金额
+        %td.col-xs-9= number_to_currency((@order.cash_amount || 0), :unit=>@current_shop.current_currency_symbol)
+      - if @current_shop.use_credits
+        %tr
+          %td.col-xs-3
+            %strong
+              = Order.human_attribute_name("credits")
+              \:
+          %td.col-xs-9= @order.credits
+      %tr
+        %td.col-xs-3
+          %strong
+            = Order.human_attribute_name("state")
+            \:
+        %td.col-xs-9= @order.state_name
+      %tr
+        %td.col-xs-3
+          %strong
+            = Order.human_attribute_name("note")
+            \:
+        %td.col-xs-9
+          - unless @order.note.present?
+            用户没有备注
+          - else
+            = @order.note
+      - if @order.form_contents.present?
+        - @order.form_contents.each do |form_content|
+          %tr
+            %td.col-xs-3= form_content.label
+            %td.col-xs-9= form_content.content
+%div= link_to t('Back'), backend_shop_branch_orders_path(state: Order::WAIT_CONFIRMED), class: 'btn btn-default'

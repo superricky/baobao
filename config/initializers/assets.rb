@@ -1,0 +1,1 @@
+Rails.application.config.assets.precompile += %w{compatibility_alert.js html5shiv.js respond.min.js json3.min.js}

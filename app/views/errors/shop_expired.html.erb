@@ -1,0 +1,25 @@
+<% content_for :header do%>
+商户合约到期
+<%end %>
+<% content_for :content do %>
+<div class="alert alert-danger" style="margin-top:30px;">
+	<strong>对不起!</strong><%= msg_title %>服务期限已到或订单配额已耗尽，请管理员
+  <% if @current_shop.support_auto_buy_service %>
+    <%= link_to "续费", backend_shop_service_products_path(@current_shop), :class=>"btn btn-default" %>
+  <% else %>
+  续费
+  <% end %>
+  后继续使用，谢谢您对融商的支持！售后服务：0731-89903595!
+	<div>服务电话：0731-89903595</div>
+</div>
+<%end %>
+
+<div class="alert alert-danger" style="margin-top:30px;">
+	<strong>对不起!</strong><%= msg_title%>服务期限已到或订单配额已耗尽，请管理员
+  <% if @current_shop.support_auto_buy_service %>
+    <%= link_to "续费", backend_shop_service_products_path(@current_shop), :class=>"btn btn-default" %>
+  <% else %>
+  续费
+  <% end %>后继续使用，谢谢您对融商的支持！售后服务：0731-89903595!
+	<div>服务电话：0731-89903595</div>
+</div>

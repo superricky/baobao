@@ -1,0 +1,29 @@
+!!!
+%html
+  %head
+    %meta{charset: "utf-8"}
+    %meta{name: "keywords", content: ""}
+    %meta{name: "description", content: ""}
+    %meta{name: "author", content: ""}
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    = csrf_meta_tags
+    = stylesheet_link_tag "webstore/application", media: "all", data: {turbolinks: {track: true}}
+    /[if lt IE 9]
+      = javascript_include_tag "html5shiv"
+      = javascript_include_tag "respond.min"
+      = javascript_include_tag "json3.min"
+    %title= @current_shop.name
+  %body
+    %header
+      = render "layouts/webstore/header"
+      = render "header" rescue nil
+    .container
+      .row= yield
+    %footer= render "layouts/webstore/footer"
+    %section.bg
+    = javascript_include_tag "webstore/application"
+:javascript
+  $(document).ready(function(){
+    $.cookie();
+    #{set_cart_cookie};
+  });

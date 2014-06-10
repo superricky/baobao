@@ -1,0 +1,42 @@
+.col-xs-12
+  .widget-box.transparent
+    .widget-header
+      %h4
+        %i.icon-rss.star.orange
+        7日内最受关注商户排行榜
+      .widget-toolbar
+        %a{:href=>"#", :data=>{:action=>"collapse"}}
+          %i.icon-chevron-up
+    .widget-body
+      .widget-body-inner
+        .widget-main.no-padding
+          %table.table.table-bordered.table-striped
+            %thead.thin-border-bottom
+              %tr
+                %th
+                  %i.icon-caret-right.blue
+                  排名
+                %th
+                  %i.icon-caret-right.blue
+                  商户名称
+                %th
+                  %i.icon-caret-right.blue
+                  用户浏览次数
+            %tbody
+              - @popular_branches.each_with_index do |branch, index|
+                %tr
+                  %td= index+1
+                  %td
+                    %small
+                      %s.red
+                    %b.green= branch.name
+                  %td
+                    - if index % 4 == 0
+                      %span.label.label-info.arrowed.arrowed-right= @popular_branch_access_times[index][1]
+                    - elsif index % 4 == 1
+                      %span.label.label-warning.arrowed.arrowed-right= @popular_branch_access_times[index][1]
+                    - elsif index % 4 == 2
+                      %span.label.label-danger.arrowed.arrowed-right= @popular_branch_access_times[index][1]
+                    - elsif index % 4 == 3
+                      %span.label.label-success.arrowed.arrowed-right= @popular_branch_access_times[index][1]
+

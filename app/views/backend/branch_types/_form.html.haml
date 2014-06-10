@@ -1,0 +1,14 @@
+= form_for [:backend, @current_shop, @branch_type], remote: remote, html: {class: "form-horizontal", role: "form"}  do |f|
+  - if @branch_type.errors.any?
+    #error_explanation
+      %h2= "#{@branch_type.errors.count} 个错误导致无法正确保存店铺类型:"
+      %ul
+        - @branch_type.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.label :name , class: "col-sm-3 control-label"
+    .col-sm-4
+      = f.text_field :name, class: "form-control"
+  .form-group
+    .col-sm-offset-3.col-sm-10
+      = f.submit '保存', :class=>"btn btn-default"

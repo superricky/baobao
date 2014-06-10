@@ -1,0 +1,10 @@
+<h1>界面个性化设置</h1>
+<div class="panel panel-default">
+  <div class="panel-heading">界面个性化信息</div>
+
+  <div class="panel-body">
+<%= render 'form' %>
+	</div>
+	</div>
+
+<%= link_to t('Back'), backend_shop_branch_custom_ui_setting_path(@current_shop.slug, @current_branch), :class=>"btn btn-default"  %>

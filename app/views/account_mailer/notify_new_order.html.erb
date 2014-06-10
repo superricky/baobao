@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style type="text/css">
+    	#tuodanbao-body {
+    		font-size:20px;
+    		font-family: "微软雅黑"
+    	}
+    	#tuodanbao-body p{
+			padding-top: 5px;
+			padding-bottom:5px;
+			margin:0px;
+			border-collapse: collapse;
+			width: 100%;
+    	}
+
+    	#tuodanbao-body table
+		  {
+		  border-collapse:collapse;
+		  width: 100%;
+		  }
+
+		#tuodanbao-body table,
+		#tuodanbao-body td,
+		#tuodanbao-body th
+		  {
+    		font-size:20px;
+		  	text-align:left;
+		  	border:1px solid black;
+		  }
+    </style>
+  </head>
+  <body>
+  	<div id="tuodanbao-body">
+
+    <p>您的<%= @shop.hide_support_company? ? @shop.name : "" %>商户 <storng><%= @branch.name %></storng>又有新的订单了</p>
+    <p>
+    	订单编号:<%= @order.id%>
+    </p>
+    <p>点单方式:<%= @order.order_type_name %>
+    </p>
+    <p>订购时间:<%= @order.created_at.strftime('%Y-%m-%d %H:%M:%S')%>
+    </p>
+
+      <% if @order.order_type == Order::ORDERTYPE_DELIVERY %>
+      <p>客户姓名：<%= @order.name %>  </p>
+    <p>联系电话：<%= @order.phone %> </p>
+    <p>配送区域：<%= @order.delivery_zone.zone_name rescue nil%></p>
+    <p>送货地址：<%= @order.address %> </p>
+    <% if @order.form_contents.present? %>
+      <% @order.form_contents.each do |record|%>
+        <p><%= record.label %>：<%= record.content %></p>
+      <% end %>
+    <% end %>
+    <% if @order.delivery_time %>
+      <p>配送时间：<%= @order.delivery_time.strftime('%Y-%m-%d %H:%M') %> </p>
+    <% end %>
+    <% if @order.delivery_period.present? %>
+      <p>配送时间段：<%= @order.delivery_period%></p>
+    <% end %>
+    <% elsif @order.order_type == Order::ORDERTYPE_EAT_IN_HALL%>
+    <p>桌号：<%= @order.desk_no %> </p>
+    <p>就餐人数：<%= @order.guest_num %> </p>
+    <%elsif @order.order_type == Order::ORDERTYPE_ORDER_SEAT%>
+    <p>客户姓名：<%= @order.name %>  </p>
+    <p>联系电话：<a href="tel:<%= @order.phone %>"><%= @order.phone %></a></p>
+    <p>用餐人数：<%= @order.guest_num %> </p>
+    <% if @order.arrive_time.present? %>
+    <p>到店时间：<%= @order.arrive_time.strftime('%Y-%m-%d %H:%M') %> </p>
+    <%end%>
+    <%end%>
+    <table>
+    	<thead><tr><th>商品名称</th><th>单价</th><th>数量</th><th>小计</th></tr></thead>
+    	<tbody>
+    		<% @order.order_items.each do |order_item| %>
+          <tr>
+          	<td><%= order_item.name %></td>
+          	<td><%= number_to_currency(order_item.price, :unit=>@shop.current_currency_symbol)%>/<%= order_item.product_unit%></td>
+          	<td><%= order_item.quantity %></td>
+          	<td><%= number_to_currency(order_item.price * order_item.quantity, :unit=>@shop.current_currency_symbol)%></td>
+          </tr>
+          <%end%>
+    	</tbody>
+    </table>
+    <p>备注: <%= @order.note%>
+    </p>
+    <p>是否首次下单：<%= @order.is_first_order_of_user%>
+    </p>
+    <% if @order.scrachpad.present?%>
+    <p>刮刮奖结果：<span style="color:red;font-weight:bold;"><%= @order.scrachpad.card_result%></span>
+    </p>
+    <%end%>
+    <p>订单编号:<%= @order.id%>
+    </p>
+    <p>合计：<strong style="color: red"><%= number_to_currency(@order.amount, :unit=>@shop.current_currency_symbol)%></strong>
+    </p>
+    <% if @order.consume_credit > 0 %>
+      <% order_strategy = OrderStrategy.new %>
+      <p>消耗积分：
+        <strong style="color: red"><%= @order.consume_credit %>个</strong>
+      </p>
+      <p>积分抵扣：
+        <strong style="color: red">
+          -<%= number_to_currency(order_strategy.money_exchange_from_credits(@shop, @order.consume_credit), :unit=>"¥") %>
+        </strong>
+      </p>
+    <% end %>
+    <% if @order.consume_wallet > 0 %>
+      <p>余额抵扣：
+        <strong style="color: red"> -<%= @order.consume_wallet %></strong>
+      </p>
+    <% end %>
+    <p>实付金额：
+      <strong style="color: red"> <%= number_to_currency((@order.cash_amount || 0), :unit=>@shop.current_currency_symbol) %></strong>
+    </p>
+    <p>如有任何疑问，请直接拨打<%= @shop.hide_support_company? ? @shop.telephone : "0731-89903595" %>
+      与我们取得联系，谢谢！</p>
+  	</div>
+  </body>
+</html>

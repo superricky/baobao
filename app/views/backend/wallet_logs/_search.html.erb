@@ -1,0 +1,12 @@
+<%= search_form_for @q, url: search_backend_shop_wallet_logs_path(@current_shop.slug), class: "navbar-form", method: :post do |f|%>
+  <div class="form-group">
+    <%= f.text_field :user_name_cont, class: "form-control", placeholder: User.human_attribute_name("name") %>
+  </div>
+  <div class="form-group">
+    <%= f.select :wallet_log_type_eq, options_for_select(get_wallet_logs_type_array, selected: (params[:q][:wallet_log_type_eq] rescue nil)), {prompt: "选择流水类型" }, {class: "form-control"} %>
+  </div>
+
+  <div class="form-group">
+    <%= f.submit "搜索", class: "btn btn-default" %>
+  </div>
+<% end %>

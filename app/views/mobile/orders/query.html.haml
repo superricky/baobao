@@ -1,0 +1,21 @@
+-content_for :title do
+  订单列表
+.orders-history
+  .m-1
+    - content_for :header do
+      订单列表
+    - if (not flash[:error].nil?) and (not flash[:error].empty?)
+      .alert.alert-danger
+        = flash[:error]
+    #order-error.alert.alert-danger{:style => "display:none;"}
+      %ul.list-unstyled
+    - unless notice.nil?
+      .alert.alert-success
+        = notice
+    -if @orders.length == 0
+      %h3
+        %center= "您还没有该订单!"
+    %table.center
+      %tbody
+        - @orders.each_with_index do |order, i|
+          = render :partial => "mobile_order", locals:{order:order, i:i}

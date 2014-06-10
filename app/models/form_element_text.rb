@@ -1,0 +1,2 @@
+class FormElementText < FormElement
+end

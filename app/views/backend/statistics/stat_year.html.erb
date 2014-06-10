@@ -1,0 +1,145 @@
+<% if @current_branch.nil? %>
+  <%= render partial: "search", locals: {month_url: backend_shop_statistics_month_path(@current_shop), year_url: backend_shop_statistics_year_path(@current_shop.slug)}%>
+<% else%>
+  <%= render partial: "search", locals: {month_url: backend_shop_branch_statistics_month_path(@current_shop, @current_branch), year_url: backend_shop_branch_statistics_year_path(@current_shop, @current_branch)}%>
+<% end %>
+<div id="amounts" style="min-width: 310px; height: 400px; margin: 0 auto">
+</div>
+
+<div id="orders" style="min-width: 310px; height: 400px; margin: 0 auto">
+</div>
+
+<% if @current_branch.nil? %>
+<div id="users" style="min-width: 310px; height: 400px; margin: 0 auto">
+</div>
+<%end%>
+
+<script>
+$(function(){
+  $('#orders').highcharts({
+    chart: {
+      type: 'area'
+    },
+      title: {
+          text: "本年订单统计",
+          x: -20 //center
+      },
+      subtitle: {
+          text: "统计周期为：<%= @first_month %>月——<%= @last_month %>月",
+          x: -20
+      },
+      xAxis: {
+          categories: <%= raw @x_axis%>
+      },
+      yAxis: {
+
+          title: {
+              text: '订单笔数'
+          },
+          minPadding: 1,
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }]
+      },
+      tooltip: {
+          valueSuffix: '笔'
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+      },
+      series: [{
+          name: '新订单',
+          data: <%= raw @y_axis_orders%>
+      }]
+  });
+  $('#amounts').highcharts({
+    chart: {
+      type: 'area'
+    },
+      title: {
+          text: '本年订单销售额统计',
+          x: -20 //center
+      },
+      subtitle: {
+          text: "统计周期为：<%= @first_month %>月——<%= @last_month %>月",
+          x: -20
+      },
+      xAxis: {
+          categories: <%= raw @x_axis%>
+      },
+      yAxis: {
+
+          title: {
+              text: '销售额（元）'
+          },
+          minPadding: 1,
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }]
+      },
+      tooltip: {
+          valueSuffix: '元'
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+      },
+      series: [{
+        name: '销售额',
+        data: <%= raw @y_axis_amounts%>
+      }]
+  });
+  <% if @current_branch.nil? %>
+  $('#users').highcharts({
+    chart: {
+      type: 'area'
+    },
+      title: {
+          text: '本年新增用户',
+          x: -20 //center
+      },
+      subtitle: {
+          text: "统计周期为：<%= @first_month %>月——<%= @last_month %>月",
+          x: -20
+      },
+      xAxis: {
+          categories: <%= raw @x_axis%>
+      },
+      yAxis: {
+
+          title: {
+              text: '数量（位）'
+          },
+          minPadding: 1,
+          plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#808080'
+          }]
+      },
+      tooltip: {
+          valueSuffix: '位'
+      },
+      legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+      },
+      series: [{
+          name: '新增用户',
+          data: <%= raw @y_axis_users%>
+      }]
+  });
+  <% end %>
+});
+</script>

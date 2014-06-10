@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="wx_article">
+    <h3 class="title"><%= @article.title %></h3>
+    <div class="wx_article_picture">
+      <%= image_tag get_absolute_url_for_path(@article.image.medium.url), class: "img-rounded", width: "100%"%>
+    </div>
+    <div class="wx_article_description">
+      <p><%= sanitize @article.description%></p>
+    </div>
+    <div class="wx_link">
+      <a href="<%= @url.present? ? @url : "javascript:void(0)"%>" class="btn btn-primary btn-lg btn-block" id="share">分享给好友</a>
+      <a href="javascript:void(0)" class="btn btn-primary btn-lg btn-block" id="follow">关注公众帐号</a>
+    </div>
+  </div>
+</div>
+<div class="<%= @url.present? ? 'follow_account' : 'share_article' %>" id="prompt_layer">
+  <a href="javascript:void(0)" id="i_know">知道了</a>
+</div>
+<% content_for :footer do %>
+  <%= render "/mobile_footer" %>
+<% end %>
+<script>
+  document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+    WeixinJSBridge.call('hideToolbar');
+  });
+
+  $(function(){
+    $("a#i_know").on("click", function(){
+      $("#prompt_layer").hide()
+    });
+    $("a#follow").on("click", function(event){
+      event.preventDefault(event);
+      $("#prompt_layer").removeClass("share_article").addClass("follow_account").show()
+    });
+    <% unless @url.present? %>
+      $("a#share").on("click", function(event){
+        event.preventDefault(event);
+        $("#prompt_layer").removeClass("follow_account").addClass("share_article").show()
+      });
+    <% end %>
+  });
+</script>
+

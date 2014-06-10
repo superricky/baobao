@@ -1,0 +1,7 @@
+%h1 修改商户推荐幻灯片
+
+= render 'form'
+
+= link_to t('Show'), backend_shop_branch_slider_path(@current_shop.slug, @branch_slider)
+\|
+= link_to t('Back'), backend_shop_branch_sliders_path(@current_shop.slug)
