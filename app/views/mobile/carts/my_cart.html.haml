@@ -8,7 +8,7 @@
       %table.carts
         %tbody#product-list
           - @cart.line_items.each do |line_item|
-            = render partial: "mobile/products/product", locals:{product: line_item.product, quantity:line_item.quantity}
+            = render partial: "mobile/products/product", locals:{product: line_item.product, quantity: line_item.quantity}
       = render 'quantity'
       = link_to "清空购物车", mobile_shop_branch_clear_my_cart_path(@current_shop.slug, @current_branch), class: "btn btn-default"
 -if !@cart.line_items.empty?

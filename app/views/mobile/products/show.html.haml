@@ -7,6 +7,10 @@
     %h1= @product.name
     %strong= number_to_currency(@product.price(@current_user), :unit=>currency_symbol)
     %strong{id: "quantity_#{@product.id}"}
+    %strong
+      %button.minus-to-cart{data: {id: @product.id}} -
+      %span.count= @quantity
+      %button.add-to-cart{data: {id: @product.id}} +
     %center
       = link_to "继续购物", list_mobile_shop_branch_products_path(@current_shop, @current_branch), class: "btn btn-default", style: "width:30%;display:inline-block;font-size:10pt;line-height:3em;"
       = link_to "加入购物车", "javascript:void(0);", class: "btn btn-commit add-to-cart", data: {id: @product.id}, id: "buy_botton", style: "width:30%;display:inline-block;font-size:10pt;line-height:3em;"
@@ -25,6 +29,7 @@
       暂无产品描述
 :javascript
   document.ready = function(){
+    var q = #{@quantity};
     $(".add-to-cart").click(function(){
       var product_id = $(this).data('id');
       var new_count = 1;
@@ -36,8 +41,31 @@
       }).success(function(line_item){
         var qid = "#quantity_"+line_item.product_id.toString();
         $(qid).html("x"+line_item.quantity.toString()+"份");
+        $(".count").html(line_item.quantity.toString());
         $(".number_of_product_in_cart").html(line_item.quantity);
         number_of_product_in_cart_monitor();
+        q = line_item.quantity;
+      });
+    });
+
+    $(".minus-to-cart").click(function(){
+      var product_id = $(this).data('id');
+      q--;
+      if(q==0){
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: "#{mobile_shop_branch_line_items_path(@current_shop.slug, @current_branch)}",
+        data: {"line_items": {"product_id": product_id, "quantity": q}},
+        dataType: 'json'
+      }).success(function(line_item){
+        var qid = "#quantity_"+line_item.product_id.toString();
+        $(qid).html("x"+line_item.quantity.toString()+"份");
+        $(".count").html(line_item.quantity.toString());
+        $(".number_of_product_in_cart").html(line_item.quantity);
+        number_of_product_in_cart_monitor();
+        q = line_item.quantity;
       });
     });
   }

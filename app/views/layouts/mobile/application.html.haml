@@ -17,6 +17,7 @@
     %footer= render "/mobile_footer"
     = javascript_include_tag "mobile/application"
     = render "js" rescue nil
+    = yield :js
 :javascript
     $(document).ready(function(){
         number_of_product_in_cart_monitor();

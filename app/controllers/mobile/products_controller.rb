@@ -13,6 +13,9 @@ class Mobile::ProductsController < MobileApplicationController
 
   def show
     @product = @current_branch.products.find params[:id]
+    cart = @current_branch.carts.find(current_cart.id)
+    line_item = cart.line_items.select{|l| l.product_id == @product.id}.first
+    @quantity = line_item.quantity if line_item
   end
 
   def categories
