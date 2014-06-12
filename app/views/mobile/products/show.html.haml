@@ -6,10 +6,10 @@
   %section
     %h1= @product.name
     %strong= number_to_currency(@product.price(@current_user), :unit=>currency_symbol)
-    %strong{id: "quantity_#{@product.id}"}
+    %strong{id: "quantity_#{@product.id}"}= "x#{@quantity || 0}份"
     %strong
       %button.minus-to-cart{data: {id: @product.id}} -
-      %span.count= @quantity
+      %span.count= @quantity || 0
       %button.add-to-cart{data: {id: @product.id}} +
     %center
       = link_to "继续购物", list_mobile_shop_branch_products_path(@current_shop, @current_branch), class: "btn btn-default", style: "width:30%;display:inline-block;font-size:10pt;line-height:3em;"
@@ -29,7 +29,7 @@
       暂无产品描述
 :javascript
   document.ready = function(){
-    var q = #{@quantity};
+    var q = #{@quantity || 0};
     $(".add-to-cart").click(function(){
       var product_id = $(this).data('id');
       var new_count = 1;
@@ -51,7 +51,7 @@
     $(".minus-to-cart").click(function(){
       var product_id = $(this).data('id');
       q--;
-      if(q==0){
+      if(q<0){
         return;
       }
       $.ajax({

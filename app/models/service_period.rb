@@ -12,7 +12,7 @@ class ServicePeriod < ActiveRecord::Base
           errors.add(:base, '时间段设置有重叠！')
         end
       end
-    end
+    end if self.branch.present?
   end
 
   def is_in_service_time?(now)
