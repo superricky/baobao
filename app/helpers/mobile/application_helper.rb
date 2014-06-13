@@ -1,6 +1,5 @@
 #encoding:utf-8;
 module Mobile::ApplicationHelper
-
   def group_products(products = @products)
     return [] unless products
     groups = []
@@ -58,5 +57,9 @@ module Mobile::ApplicationHelper
 
   def monile_zones
     @current_shop.zones.includes(:branches)
+  end
+
+  def is_mobile_home_page?
+    controller.controller_name == "products" && controller.action_name == "list"
   end
 end

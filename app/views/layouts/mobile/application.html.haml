@@ -10,8 +10,8 @@
     = stylesheet_link_tag  "mobile/application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
-    %header= render "header" rescue nil
-    %section.body= yield
+    %header{style: "position:fixed;width:100%;z-index:99999;"}= render "header" rescue nil
+    %section.body{style: "padding-top:46px;"}= yield
     - if content_for :footer
       = yield :footer
     %footer= render "/mobile_footer"
