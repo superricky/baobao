@@ -11,7 +11,7 @@
     = csrf_meta_tags
   %body
     %header{style: "position:fixed;width:100%;z-index:99999;"}= render "header" rescue nil
-    %section.body{style: "padding-top:46px;"}= yield
+    %section.body{style: (is_mobile_home_page? ? "" : "padding-top:40px;")}= yield
     - if content_for :footer
       = yield :footer
     %footer= render "/mobile_footer"

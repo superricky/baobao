@@ -60,6 +60,6 @@ module Mobile::ApplicationHelper
   end
 
   def is_mobile_home_page?
-    controller.controller_name == "products" && controller.action_name == "list"
+    controller.controller_name == "branches" && controller.action_name == "list"
   end
 end
