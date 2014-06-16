@@ -1,0 +1,168 @@
+- content_for :style do
+  :css
+    .bottom_panel {
+      height: 4.3em;
+      width: 100%;
+      border-top: 1px solid #dcdcdc;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f8f8f8), color-stop(100%, #eaeaec));
+      background-image: -webkit-linear-gradient(#f8f8f8,#eaeaec);
+      background-image: -moz-linear-gradient(#f8f8f8,#eaeaec);
+      background-image: -o-linear-gradient(#f8f8f8,#eaeaec);
+      background-image: linear-gradient(#f8f8f8,#eaeaec);
+      -webkit-box-shadow: rgba(0,0,0,0.2) 0 -0.05em 0.3em,#fff 0 1px 0 0 inset;
+      -moz-box-shadow: rgba(0,0,0,0.2) 0 -0.05em 0.3em,#fff 0 1px 0 0 inset;
+      box-shadow: rgba(0,0,0,0.2) 0 -0.05em 0.3em,#fff 0 1px 0 0 inset;
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 0;
+      }
+    .settle_panel {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-box;
+      display: box;
+      -webkit-box-align: center;
+      -moz-box-align: center;
+      -ms-box-align: center;
+      box-align: center;
+      height: 100%;
+      width: 100%;
+      }
+    .settle_panel .settle_btn {
+      width: 10.4em;
+      margin-right: 1em;
+    }
+    .settle_panel .goods_amount {
+      -webkit-box-flex: 1;
+      -moz-box-flex: 1;
+      -ms-box-flex: 1;
+      box-flex: 1;
+      margin-left: 1em;
+    }
+    .button.active_button {
+      color: #fff;
+      background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fc7000), color-stop(100%, #e45000));
+      background-image: -webkit-linear-gradient(#fc7000,#e45000);
+      background-image: -moz-linear-gradient(#fc7000,#e45000);
+      background-image: -o-linear-gradient(#fc7000,#e45000);
+      background-image: linear-gradient(#fc7000,#e45000);
+      -webkit-box-shadow: rgba(0,0,0,0.1) 0 0.02941em 0.11765em 0 inset;
+      -moz-box-shadow: rgba(0,0,0,0.1) 0 0.02941em 0.11765em 0 inset;
+      box-shadow: rgba(0,0,0,0.1) 0 0.02941em 0.11765em 0 inset;
+      border-top-color: #db6100;
+      border-left-color: #e56000;
+      border-right-color: #e56000;
+      border-bottom-color: #df4d00;
+      }
+    .button {
+      font-size: 1.4em;
+      display: block;
+      font-weight: 700;
+      text-align: center;
+      line-height: 2em;
+      -webkit-border-radius: 0.23529em;
+      -moz-border-radius: 0.23529em;
+      -ms-border-radius: 0.23529em;
+      -o-border-radius: 0.23529em;
+      border-radius: 0.23529em;
+      overflow: hidden;
+      border-width: 1px;
+      border-style: solid;
+      text-shadow: rgba(0,0,0,0.3) 0 -1px 0;
+    }
+    .settle_panel .goods_amount .price{
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #51545b;
+    }
+    .settle_panel .goods_amount .price strong {
+      margin-left: 0.29412em;
+      color: #ec6008;
+    }
+    a a.hover a.active {
+      text-decoration: none;
+      color: #333!important;
+    }
+    a.button{
+      outline: 0;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+    }
+    .order_info{
+      background: white;
+      font-family:"Times New Roman", "Microsoft YaHei";
+      font-size: 12pt;
+      padding:2em;
+    }
+    ul {
+      list-style: none;
+      padding-left:0px;
+    }
+    .alert{
+      margin: 10px 0 0 0 ;
+      padding: 1em;
+    }
+    .alert ul {
+      margin:0px;
+    }
+    .alert-danger{
+      background-color: #f2dede;
+      border-color: #ebccd1;
+      color: #a94442;
+    }
+    .alert-success{
+      background-color: #dff0d8;
+      border-color: #d6e9c6;
+      color: #3c763d;
+    }
+    .order_info > ul > li{
+      border-bottom: 1px dashed #e5e5e5;
+      margin-top:10px;
+      margin-bottom: 10px;
+    }
+    .order_info span.order_label {
+      font-weight:bold;
+      margin-right:1em;
+    }
+    .header {
+      width: 100%;
+      height: 60px;
+      background: #f4f4f4;
+      position: relative;
+    }
+    .button.button-danger {
+      width: 50%;
+      margin: auto;
+      color: #fff;
+      background-color: #d2322d;
+    }
+
+%div.header
+  %a{:href=>client_weixinpay_path(@current_shop), :style=>"line-height: 60px;"}
+    %i.flaticon-simple45
+-if @order.errors.any?
+  %div.alert.alert-danger
+    %ul
+      - @order.errors.full_messages.each do |msg|
+        %li= msg
+- if flash[:success].present?
+  %div.alert.alert-success
+    %ul
+      %li= flash[:success]
+%div.order_info= raw order_detail_in_html(@order)
+- if @order.allow_change_state_for_user?.include?(Order::CANCELED)
+  %div.action
+    %a.button.button-danger{:href=>cancel_client_order_path(@current_shop, @order), :data=>{:method=>"put"}} 取消订单
+%div
+  %a.button.active_button{href: "tel:#{@order.branch.telephone}", style: "width:50%;margin:auto;margin-top:20px;"} 拨打电话
+%div{:style=>"min-height:100px;"}
+
+- if @order.is_online_pay? and !@order.is_paid?
+  .bottom_panel
+    .settle_panel
+      .goods_amount
+        .price
+          %span 应付总额:
+          %strong= number_to_currency(@order.cash_amount, :unit=> @current_shop.current_currency_symbol)
+      .settle_btn
+        %a.button.active_button{:href=>"#{pay_url(@order)}"} 立即支付

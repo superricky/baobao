@@ -90,6 +90,21 @@ Rails.application.routes.draw do
       post 'notify'
     end
 
+    namespace :client do
+      resources :orders do
+        collection do
+          get 'send_validation_code'
+          get 'validation_code'
+          get 'query'
+        end
+        member do
+          get 'mobile_alipay'
+          match 'cancel', to: :cancel, via: [:put, :patch, :get]
+          match 'reminder', to: :reminder, via: [:get]
+        end
+      end
+    end
+
     get "line_items/index"
     resources :user, only: :none do
       get '/oauth' => 'messages#oauth', as: :oauth
