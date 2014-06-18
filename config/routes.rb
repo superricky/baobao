@@ -1,5 +1,57 @@
 Rails.application.routes.draw do
 
+  namespace :m2 do
+  get 'orders/cart'
+  end
+
+  namespace :m2 do
+  get 'orders/create'
+  end
+
+  namespace :m2 do
+  get 'orders/index'
+  end
+
+  namespace :m2 do
+  get 'users/new'
+  end
+
+  namespace :m2 do
+  get 'users/edit'
+  end
+
+  namespace :m2 do
+  get 'users/integral'
+  end
+
+  namespace :m2 do
+  get 'users/coupon'
+  end
+
+  namespace :m2 do
+  get 'rd/number_of_people'
+  end
+
+  namespace :m2 do
+  get 'rd/rendom_product'
+  end
+
+  namespace :m2 do
+  get 'products/index'
+  end
+
+  namespace :m2 do
+  get 'products/show'
+  end
+
+  namespace :m2 do
+  get 'products/detail'
+  end
+
+  namespace :m2 do
+  get 'branches/index'
+  end
+
   captcha_route
   #TODO: add by xie subin, will be deleted in future
   scope "/weixinpay" do
